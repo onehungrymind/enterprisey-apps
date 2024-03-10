@@ -11,7 +11,10 @@
     "serve:users-app": "npx nx serve users --port 4300 --open",
     "serve:users-api": "npx nx serve users-api",
     "serve:users-json": "json-server server/users.json --routes=server/routes.json --port=3400",
-    "serve:users-feature": "concurrently \"npm run serve:users-api\" \"npm run serve:users-app\""
+    "serve:users-feature": "concurrently \"npm run serve:users-api\" \"npm run serve:users-app\"",
+    "serve:challenges-json": "json-server server/challenges.json --routes=server/routes.json --port=3100",
+    "serve:flashcards-json": "json-server server/flashcards.json --routes=server/routes.json --port=3200",
+    "serve:notes-json": "json-server server/notes.json --routes=server/routes.json --port=3300"
   },
   "private": true,
   "dependencies": {

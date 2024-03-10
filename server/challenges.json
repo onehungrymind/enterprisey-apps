@@ -1,0 +1,44 @@
+{
+  "challenges": [
+    {
+      "title": "Challenge 1",
+      "description": "Description for Challenge 1",
+      "completed": false,
+      "repo_url": "https://github.com/challenge1",
+      "comment": "Comment for Challenge 1",
+      "user_id": "user1"
+    },
+    {
+      "title": "Challenge 2",
+      "description": "Description for Challenge 2",
+      "completed": true,
+      "repo_url": "https://github.com/challenge2",
+      "comment": "Comment for Challenge 2",
+      "user_id": "user2"
+    },
+    {
+      "title": "Challenge 3",
+      "description": "Description for Challenge 3",
+      "completed": false,
+      "repo_url": "https://github.com/challenge3",
+      "comment": "Comment for Challenge 3",
+      "user_id": "user3"
+    },
+    {
+      "title": "Challenge 4",
+      "description": "Description for Challenge 4",
+      "completed": true,
+      "repo_url": "https://github.com/challenge4",
+      "comment": "Comment for Challenge 4",
+      "user_id": "user4"
+    },
+    {
+      "title": "Challenge 5",
+      "description": "Description for Challenge 5",
+      "completed": false,
+      "repo_url": "https://github.com/challenge5",
+      "comment": "Comment for Challenge 5",
+      "user_id": "user5"
+    }
+  ]
+}

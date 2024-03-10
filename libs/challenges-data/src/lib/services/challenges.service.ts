@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Challenge } from '@proto/api-interfaces';
 
 // TEMPORARY
-const API_URL = 'http://localhost:3400/api';
+const API_URL = 'http://localhost:3100/api';
 
 @Injectable({
   providedIn: 'root',

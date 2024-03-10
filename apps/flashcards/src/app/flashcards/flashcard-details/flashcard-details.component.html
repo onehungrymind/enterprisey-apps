@@ -1,1 +1,65 @@
-<p>flashcard-details works!</p>
+<mat-card>
+  <mat-card-content>
+    <mat-card-title>
+      <span *ngIf="currentFlashcard.id; else elseBlock">
+        Editing {{ originalTitle | titlecase }}
+      </span>
+      <ng-template #elseBlock> Select Flashcard </ng-template>
+    </mat-card-title>
+    <form #form="ngForm" (ngSubmit)="saved.emit(currentFlashcard)">
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          placeholder="Enter a title"
+          [(ngModel)]="currentFlashcard.title"
+          type="input"
+          name="title"
+          required="true"
+        />
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          placeholder="Enter a description"
+          [(ngModel)]="currentFlashcard.description"
+          type="input"
+          name="description"
+        />
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          placeholder="Enter a question"
+          [(ngModel)]="currentFlashcard.question"
+          type="input"
+          name="question"
+          required="true"
+        />
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          placeholder="Enter an answer"
+          [(ngModel)]="currentFlashcard.answer"
+          type="input"
+          name="answer"
+          required="true"
+        />
+      </mat-form-field>
+
+      <mat-card-actions>
+        <button
+          [disabled]="form.invalid"
+          type="submit"
+          mat-button
+          color="primary"
+        >
+          Save
+        </button>
+        <button type="button" mat-button (click)="cancelled.emit()">
+          Cancel
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>

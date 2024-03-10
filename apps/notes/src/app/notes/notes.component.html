@@ -1,1 +1,14 @@
-<p>notes works!</p>
+<div class="flex m-20">
+  <div class="w-1/2 mr-10">
+    <proto-notes-list
+      [notes]="(notes$ | async)!"
+      (selected)="selectNote($event)"
+      (deleted)="deleteNote($event)"></proto-notes-list>
+  </div>
+  <div class="w-1/2 ml-10">
+    <proto-note-details
+      [note]="selectedNote$ | async"
+      (saved)="saveNote($event)"
+      (cancelled)="reset()"></proto-note-details>
+  </div>
+</div>

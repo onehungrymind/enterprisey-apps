@@ -1,1 +1,14 @@
-<p>challenges works!</p>
+<div class="flex m-20">
+  <div class="w-1/2 mr-10">
+    <proto-challenges-list
+      [challenges]="(challenges$ | async)!"
+      (selected)="selectChallenge($event)"
+      (deleted)="deleteChallenge($event)"></proto-challenges-list>
+  </div>
+  <div class="w-1/2 ml-10">
+    <proto-challenge-details
+      [challenge]="selectedChallenge$ | async"
+      (saved)="saveChallenge($event)"
+      (cancelled)="reset()"></proto-challenge-details>
+  </div>
+</div>

@@ -1,1 +1,64 @@
-<p>challenge-details works!</p>
+<mat-card>
+  <mat-card-content>
+    <mat-card-title>
+      <span *ngIf="currentChallenge.id; else elseBlock">
+        Editing {{ originalTitle | titlecase }}
+      </span>
+      <ng-template #elseBlock> Select Challenge </ng-template>
+    </mat-card-title>
+    <form #form="ngForm" (ngSubmit)="saved.emit(currentChallenge)">
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          placeholder="Enter a title"
+          [(ngModel)]="currentChallenge.title"
+          type="input"
+          name="title"
+          required="true" />
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          placeholder="Enter a description"
+          [(ngModel)]="currentChallenge.description"
+          type="input"
+          name="description" />
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          placeholder="Enter a new password"
+          [(ngModel)]="currentChallenge.repo_url"
+          type="input"
+          name="repo_url" />
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          placeholder="Enter a comment"
+          [(ngModel)]="currentChallenge.comment"
+          type="input"
+          name="comment" />
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-checkbox
+          [(ngModel)]="currentChallenge.completed"
+          class="checkbox-margin"
+          name="completed">Completed</mat-checkbox>
+      </mat-form-field>
+
+      <mat-card-actions>
+        <button
+          [disabled]="form.invalid"
+          type="submit"
+          mat-button
+          color="primary">
+          Save
+        </button>
+        <button type="button" mat-button (click)="cancelled.emit()">
+          Cancel
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>

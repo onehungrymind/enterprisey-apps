@@ -1,1 +1,17 @@
-<p>challenges-list works!</p>
+<mat-card>
+  <mat-card-content>
+    <mat-card-title>
+      Challenges
+    </mat-card-title>
+    <mat-list>
+      <mat-list-item *ngFor="let challenge of challenges" class="mat-list-option" (click)="selected.emit(challenge)">
+        <span matLine>{{ challenge.title }}</span>
+        <button *ngIf="!readonly" mat-icon-button matListItemMeta
+          (click)="deleted.emit(challenge); $event.stopImmediatePropagation()"
+          type="button" color="warn">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>

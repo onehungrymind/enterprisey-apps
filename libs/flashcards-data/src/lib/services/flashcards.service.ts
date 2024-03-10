@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Flashcard } from '@proto/api-interfaces';
 
 // TEMPORARY
-const API_URL = 'http://localhost:3400/api';
+const API_URL = 'http://localhost:3200/api';
 
 @Injectable({
   providedIn: 'root',
