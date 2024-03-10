@@ -1,0 +1,121 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "password": "password123",
+      "role": "admin",
+      "session_token": "token123",
+      "company_id": "1"
+    },
+    {
+      "id": "2",
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "email": "jane.smith@example.com",
+      "password": "password456",
+      "role": "user",
+      "session_token": "token456",
+      "company_id": "2"
+    },
+    {
+      "id": "3",
+      "firstName": "Alice",
+      "lastName": "Johnson",
+      "email": "alice.johnson@example.com",
+      "password": "password789",
+      "role": "user",
+      "session_token": "token789",
+      "company_id": "3"
+    },
+    {
+      "id": "4",
+      "firstName": "Bob",
+      "lastName": "Williams",
+      "email": "bob.williams@example.com",
+      "password": "passwordabc",
+      "role": "user",
+      "session_token": "tokenabc",
+      "company_id": "3"
+    },
+    {
+      "id": "5",
+      "firstName": "Sarah",
+      "lastName": "Brown",
+      "email": "sarah.brown@example.com",
+      "password": "passworddef",
+      "role": "user",
+      "session_token": "tokendef",
+      "company_id": "2"
+    },
+    {
+      "id": "6",
+      "firstName": "Michael",
+      "lastName": "Davis",
+      "email": "michael.davis@example.com",
+      "password": "passwordghi",
+      "role": "user",
+      "session_token": "tokenghi",
+      "company_id": "1"
+    },
+    {
+      "id": "7",
+      "firstName": "Emily",
+      "lastName": "Wilson",
+      "email": "emily.wilson@example.com",
+      "password": "passwordjkl",
+      "role": "user",
+      "session_token": "tokenjkl",
+      "company_id": "1"
+    },
+    {
+      "id": "8",
+      "firstName": "David",
+      "lastName": "Anderson",
+      "email": "david.anderson@example.com",
+      "password": "passwordmno",
+      "role": "user",
+      "session_token": "tokenmno",
+      "company_id": "2"
+    },
+    {
+      "id": "9",
+      "firstName": "Olivia",
+      "lastName": "Thomas",
+      "email": "olivia.thomas@example.com",
+      "password": "passwordpqr",
+      "role": "user",
+      "session_token": "tokenpqr",
+      "company_id": "3"
+    },
+    {
+      "id": "10",
+      "firstName": "Daniel",
+      "lastName": "Robinson",
+      "email": "daniel.robinson@example.com",
+      "password": "passwordstu",
+      "role": "user",
+      "session_token": "tokenstu",
+      "company_id": "1"
+    }
+  ],
+  "companies": [
+    {
+      "id": "1",
+      "name": "Company A",
+      "description": "This is Company A"
+    },
+    {
+      "id": "2",
+      "name": "Company B",
+      "description": "This is Company B"
+    },
+    {
+      "id": "3",
+      "name": "Company C",
+      "description": "This is Company C"
+    }
+  ]
+}

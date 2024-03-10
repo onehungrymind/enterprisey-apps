@@ -1,0 +1,285 @@
+@use '@angular/material' as mat;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can add global styles to this file, and also import other style files */
+
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+@import 'codemirror/lib/codemirror';
+@import 'codemirror/theme/material-darker';
+@import 'codemirror/addon/fold/foldgutter';
+@import 'codemirror/addon/lint/lint';
+
+$light-grey: #eceff1;
+
+$grey: #5d6061;
+$grey-light: #8a8d8e;
+$grey-dark: #343637;
+
+$orange: #ff671d;
+$orange-light: #ff994e;
+$orange-dark: #c43400;
+
+$blue: #53ffff;
+$blue-light: #cbffff;
+$blue-dark: #29ffff;
+
+$success-primary: #43a047;
+$success-dark: #00701a;
+$success-light: #76d275;
+
+$error-primary: #e53935;
+$error-dark: #ab000d;
+$error-light: #ff6f60;
+
+$font-light: whitesmoke;
+$font-medium: #ababab;
+
+$app-footer-height: 41px;
+
+$font-sizes: (
+  smallest: 0.75rem,
+  small: 0.85rem,
+  smaller: 0.9rem,
+  normal: 1rem,
+  larger: 1.15rem,
+  large: 1.35rem,
+  largest: 1.65rem,
+);
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  tab-size: 2;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.flex-child {
+  flex: 1;
+}
+
+.example-form {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.example-card {
+  min-height: 400px;
+  margin: 10px;
+
+  .mat-mdc-card-title {
+    margin-bottom: 10px;
+  }
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+.container {
+  flex: 1 1 100%;
+  height: 100vh;
+
+  .mat-mdc-list-item {
+    display: flex !important;
+  }
+
+  .mat-mdc-card-title {
+    margin: 10px;
+  }
+
+  .list-card {
+    height: calc(100vh - 30px);
+    max-height: calc(100vh - 30px);
+    box-sizing: border-box;
+    overflow-y: auto;
+
+    mat-icon {
+      height: 20px;
+      width: 20px;
+      font-size: 20px;
+      margin-right: 5px;
+    }
+  }
+}
+
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-list-item:hover {
+  cursor: pointer;
+  background: whitesmoke;
+}
+
+mat-list-item:not(:first-of-type) {
+  border-top: 1px solid #efefef;
+}
+
+.CodeMirror {
+  border: 1px solid #eee;
+  height: auto;
+  font-size: 16px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.cm-wrap {
+  height: 100%;
+}
+.cm-scroller {
+  overflow: auto;
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-ellipses {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+.mat-mdc-card-actions {
+  .mdc-button {
+    margin: 10px;
+  }
+}
+
+.d-flex {
+  display: flex !important;
+}
+
+.flex-row-reverse {
+  flex-direction: row-reverse !important;
+}
+
+.align-items-baseline {
+  align-items: baseline !important;
+}
+
+.justify-content-between {
+  justify-content: space-between !important;
+}
+
+.w-100 {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.flex {
+  display: flex !important;
+
+  &--column {
+    @extend .flex;
+    flex-direction: column;
+  }
+}
+
+.justify-content-between {
+  @extend .flex;
+  justify-content: space-between;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+/** highlightjs */
+
+pre {
+  display: flex;
+  margin-top: 0;
+  margin-bottom: 0;
+  word-wrap: break-word;
+
+  code {
+    flex: 1;
+    line-height: 1.5em;
+    font-size: 14px;
+    min-height: 100%;
+    padding: 1em 1.2em;
+
+    &.hljs-line-numbers {
+      padding: 0 !important;
+    }
+  }
+}
+
+/** Line numbers styles */
+.hljs {
+  margin: 0 1em;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 4px;
+  transition: border ease 1s;
+}
+
+.hljs-ln {
+  padding: 8px 0;
+
+  tr {
+    &:first-child td {
+      padding-top: 8px !important;
+    }
+
+    &:last-child td {
+      padding-bottom: 8px !important;
+    }
+  }
+}
+
+/* for block of numbers */
+td.hljs-ln-numbers {
+  user-select: none;
+  text-align: center;
+  border-right: 1px solid gray;
+  vertical-align: top;
+  padding-right: 8px !important;
+  padding-left: 8px !important;
+}
+
+/* for block of code */
+td.hljs-ln-code {
+  padding-left: 8px !important;
+}
