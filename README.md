@@ -32,7 +32,6 @@ npm start
 
 
 ## TODO FRONTEND
-- [ ] Load all four features into the dashboard
 - [ ] Fix the unit tests for the data features
 - [ ] Fix the unit tests for the state features
 - [ ] Fix the unit tests for the app features
@@ -44,13 +43,14 @@ npm start
 - [ ] Set up auth workflow
 - [ ] Set up deployment
 - [ ] Add tooling for performance
+- [x] Load all four features into the dashboard
 
 ## TODO API
 - [ ] Set up authentication 
-- [ ] Create data seeders
 - [ ] Create E2E tests for APIs
 - [ ] Add docker images
 - [ ] Add in supergraph
+- [x] Create data seeders
 
 ## TODO WORKSHOP
 - [ ] Get portal concept working

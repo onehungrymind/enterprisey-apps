@@ -35,5 +35,10 @@
       "users/Routes": ["apps/users/src/app/remote-entry/entry.routes.ts"]
     }
   },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  },
   "exclude": ["node_modules", "tmp"]
 }
