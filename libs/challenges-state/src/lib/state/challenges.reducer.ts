@@ -1,49 +1,66 @@
+import { createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { createReducer, on, Action } from '@ngrx/store';
+import { Challenge } from '@proto/api-interfaces';
+import { ChallengesActions } from './challenges.actions';
 
-import * as ChallengesActions from './challenges.actions';
-import { ChallengesEntity } from './challenges.models';
-
-export const CHALLENGES_FEATURE_KEY = 'challenges';
-
-export interface ChallengesState extends EntityState<ChallengesEntity> {
-  selectedId?: string | number; // which Challenges record has been selected
-  loaded: boolean; // has the Challenges list been loaded
-  error?: string | null; // last known error (if any)
+export interface ChallengesState extends EntityState<Challenge> {
+  selectedId?: string | undefined;
+  error?: string | null;
+  loaded: boolean;
 }
 
-export interface ChallengesPartialState {
-  readonly [CHALLENGES_FEATURE_KEY]: ChallengesState;
-}
+export const challengesAdapter: EntityAdapter<Challenge> = createEntityAdapter<Challenge>();
 
-export const challengesAdapter: EntityAdapter<ChallengesEntity> =
-  createEntityAdapter<ChallengesEntity>();
+export const initialChallengesState: ChallengesState = challengesAdapter.getInitialState({
+  loaded: false,
+});
 
-export const initialChallengesState: ChallengesState =
-  challengesAdapter.getInitialState({
-    // set initial required properties
-    loaded: false,
-  });
+const onFailure = (state: ChallengesState, { error }: any) => ({ ...state, error });
 
-const reducer = createReducer(
+export const reducer = createReducer(
   initialChallengesState,
-  on(ChallengesActions.initChallenges, (state) => ({
+  // TBD
+  on(ChallengesActions.loadChallenges, (state) => ({
     ...state,
     loaded: false,
     error: null,
   })),
+  on(ChallengesActions.loadChallenge, (state) => ({
+    ...state,
+    loaded: false,
+    error: null,
+  })),
+  // RESET
+  on(ChallengesActions.selectChallenge, (state, { selectedId }) =>
+    Object.assign({}, state, { selectedId })
+  ),
+  on(ChallengesActions.resetSelectedChallenge, (state) =>
+    Object.assign({}, state, { selectedId: null })
+  ),
+  on(ChallengesActions.resetChallenges, (state) => challengesAdapter.removeAll(state)),
+  // CRUD
   on(ChallengesActions.loadChallengesSuccess, (state, { challenges }) =>
     challengesAdapter.setAll(challenges, { ...state, loaded: true })
   ),
-  on(ChallengesActions.loadChallengesFailure, (state, { error }) => ({
-    ...state,
-    error,
-  }))
+  on(ChallengesActions.loadChallengeSuccess, (state, { challenge }) =>
+    challengesAdapter.upsertOne(challenge, { ...state, loaded: true })
+  ),
+  on(ChallengesActions.createChallengeSuccess, (state, { challenge }) =>
+    challengesAdapter.addOne(challenge, state)
+  ),
+  on(ChallengesActions.updateChallengeSuccess, (state, { challenge }) =>
+    challengesAdapter.updateOne({ id: challenge.id || '', changes: challenge }, state)
+  ),
+  on(ChallengesActions.deleteChallengeSuccess, (state, { challenge }) =>
+    challengesAdapter.removeOne(challenge?.id ?? '', state)
+  ),
+  // FAILURE
+  on(
+    ChallengesActions.loadChallengesFailure,
+    ChallengesActions.loadChallengeFailure,
+    ChallengesActions.createChallengeFailure,
+    ChallengesActions.createChallengeFailure,
+    ChallengesActions.createChallengeFailure,
+    onFailure
+  )
 );
-
-export function challengesReducer(
-  state: ChallengesState | undefined,
-  action: Action
-) {
-  return reducer(state, action);
-}

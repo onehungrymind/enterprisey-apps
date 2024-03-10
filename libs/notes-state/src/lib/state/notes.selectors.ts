@@ -1,39 +1,34 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { NOTES_FEATURE_KEY, NotesState, notesAdapter } from './notes.reducer';
+import { createSelector } from '@ngrx/store';
+import { getNotesState } from './state';
+import { NotesState, notesAdapter } from './notes.reducer';
 
-// Lookup the 'Notes' feature state managed by NgRx
-export const selectNotesState =
-  createFeatureSelector<NotesState>(NOTES_FEATURE_KEY);
+const {
+  selectIds,
+  selectEntities,
+  selectAll,
+  selectTotal,
+} = notesAdapter.getSelectors();
 
-const { selectAll, selectEntities } = notesAdapter.getSelectors();
+const getNotesSlice = createSelector(getNotesState, (state) => state.notes);
 
-export const selectNotesLoaded = createSelector(
-  selectNotesState,
+export const getNoteIds = createSelector(getNotesSlice, selectIds);
+export const getNotesEntities = createSelector(getNotesSlice, selectEntities);
+export const getAllNotes = createSelector(getNotesSlice, selectAll);
+export const getNotesTotal = createSelector(getNotesSlice, selectTotal);
+export const getSelectedNoteId = createSelector(getNotesSlice, (state: NotesState) => state.selectedId);
+
+export const getNotesLoaded = createSelector(
+  getNotesSlice,
   (state: NotesState) => state.loaded
 );
 
-export const selectNotesError = createSelector(
-  selectNotesState,
+export const getNotesError = createSelector(
+  getNotesSlice,
   (state: NotesState) => state.error
 );
 
-export const selectAllNotes = createSelector(
-  selectNotesState,
-  (state: NotesState) => selectAll(state)
-);
-
-export const selectNotesEntities = createSelector(
-  selectNotesState,
-  (state: NotesState) => selectEntities(state)
-);
-
-export const selectSelectedId = createSelector(
-  selectNotesState,
-  (state: NotesState) => state.selectedId
-);
-
-export const selectEntity = createSelector(
-  selectNotesEntities,
-  selectSelectedId,
-  (entities, selectedId) => (selectedId ? entities[selectedId] : undefined)
+export const getSelectedNote = createSelector(
+  getNotesEntities,
+  getSelectedNoteId,
+  (entities, selectedId) => selectedId && entities[selectedId]
 );

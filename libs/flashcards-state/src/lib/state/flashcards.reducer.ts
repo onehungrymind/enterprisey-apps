@@ -1,49 +1,66 @@
+import { createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { createReducer, on, Action } from '@ngrx/store';
+import { Flashcard } from '@proto/api-interfaces';
+import { FlashcardsActions } from './flashcards.actions';
 
-import * as FlashcardsActions from './flashcards.actions';
-import { FlashcardsEntity } from './flashcards.models';
-
-export const FLASHCARDS_FEATURE_KEY = 'flashcards';
-
-export interface FlashcardsState extends EntityState<FlashcardsEntity> {
-  selectedId?: string | number; // which Flashcards record has been selected
-  loaded: boolean; // has the Flashcards list been loaded
-  error?: string | null; // last known error (if any)
+export interface FlashcardsState extends EntityState<Flashcard> {
+  selectedId?: string | undefined;
+  error?: string | null;
+  loaded: boolean;
 }
 
-export interface FlashcardsPartialState {
-  readonly [FLASHCARDS_FEATURE_KEY]: FlashcardsState;
-}
+export const flashcardsAdapter: EntityAdapter<Flashcard> = createEntityAdapter<Flashcard>();
 
-export const flashcardsAdapter: EntityAdapter<FlashcardsEntity> =
-  createEntityAdapter<FlashcardsEntity>();
+export const initialFlashcardsState: FlashcardsState = flashcardsAdapter.getInitialState({
+  loaded: false,
+});
 
-export const initialFlashcardsState: FlashcardsState =
-  flashcardsAdapter.getInitialState({
-    // set initial required properties
-    loaded: false,
-  });
+const onFailure = (state: FlashcardsState, { error }: any) => ({ ...state, error });
 
-const reducer = createReducer(
+export const reducer = createReducer(
   initialFlashcardsState,
-  on(FlashcardsActions.initFlashcards, (state) => ({
+  // TBD
+  on(FlashcardsActions.loadFlashcards, (state) => ({
     ...state,
     loaded: false,
     error: null,
   })),
+  on(FlashcardsActions.loadFlashcard, (state) => ({
+    ...state,
+    loaded: false,
+    error: null,
+  })),
+  // RESET
+  on(FlashcardsActions.selectFlashcard, (state, { selectedId }) =>
+    Object.assign({}, state, { selectedId })
+  ),
+  on(FlashcardsActions.resetSelectedFlashcard, (state) =>
+    Object.assign({}, state, { selectedId: null })
+  ),
+  on(FlashcardsActions.resetFlashcards, (state) => flashcardsAdapter.removeAll(state)),
+  // CRUD
   on(FlashcardsActions.loadFlashcardsSuccess, (state, { flashcards }) =>
     flashcardsAdapter.setAll(flashcards, { ...state, loaded: true })
   ),
-  on(FlashcardsActions.loadFlashcardsFailure, (state, { error }) => ({
-    ...state,
-    error,
-  }))
+  on(FlashcardsActions.loadFlashcardSuccess, (state, { flashcard }) =>
+    flashcardsAdapter.upsertOne(flashcard, { ...state, loaded: true })
+  ),
+  on(FlashcardsActions.createFlashcardSuccess, (state, { flashcard }) =>
+    flashcardsAdapter.addOne(flashcard, state)
+  ),
+  on(FlashcardsActions.updateFlashcardSuccess, (state, { flashcard }) =>
+    flashcardsAdapter.updateOne({ id: flashcard.id || '', changes: flashcard }, state)
+  ),
+  on(FlashcardsActions.deleteFlashcardSuccess, (state, { flashcard }) =>
+    flashcardsAdapter.removeOne(flashcard?.id ?? '', state)
+  ),
+  // FAILURE
+  on(
+    FlashcardsActions.loadFlashcardsFailure,
+    FlashcardsActions.loadFlashcardFailure,
+    FlashcardsActions.createFlashcardFailure,
+    FlashcardsActions.createFlashcardFailure,
+    FlashcardsActions.createFlashcardFailure,
+    onFailure
+  )
 );
-
-export function flashcardsReducer(
-  state: FlashcardsState | undefined,
-  action: Action
-) {
-  return reducer(state, action);
-}

@@ -1,44 +1,34 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import {
-  CHALLENGES_FEATURE_KEY,
-  ChallengesState,
-  challengesAdapter,
-} from './challenges.reducer';
+import { createSelector } from '@ngrx/store';
+import { getChallengesState } from './state';
+import { ChallengesState, challengesAdapter } from './challenges.reducer';
 
-// Lookup the 'Challenges' feature state managed by NgRx
-export const selectChallengesState = createFeatureSelector<ChallengesState>(
-  CHALLENGES_FEATURE_KEY
-);
+const {
+  selectIds,
+  selectEntities,
+  selectAll,
+  selectTotal,
+} = challengesAdapter.getSelectors();
 
-const { selectAll, selectEntities } = challengesAdapter.getSelectors();
+const getChallengesSlice = createSelector(getChallengesState, (state) => state.challenges);
 
-export const selectChallengesLoaded = createSelector(
-  selectChallengesState,
+export const getChallengeIds = createSelector(getChallengesSlice, selectIds);
+export const getChallengesEntities = createSelector(getChallengesSlice, selectEntities);
+export const getAllChallenges = createSelector(getChallengesSlice, selectAll);
+export const getChallengesTotal = createSelector(getChallengesSlice, selectTotal);
+export const getSelectedChallengeId = createSelector(getChallengesSlice, (state: ChallengesState) => state.selectedId);
+
+export const getChallengesLoaded = createSelector(
+  getChallengesSlice,
   (state: ChallengesState) => state.loaded
 );
 
-export const selectChallengesError = createSelector(
-  selectChallengesState,
+export const getChallengesError = createSelector(
+  getChallengesSlice,
   (state: ChallengesState) => state.error
 );
 
-export const selectAllChallenges = createSelector(
-  selectChallengesState,
-  (state: ChallengesState) => selectAll(state)
-);
-
-export const selectChallengesEntities = createSelector(
-  selectChallengesState,
-  (state: ChallengesState) => selectEntities(state)
-);
-
-export const selectSelectedId = createSelector(
-  selectChallengesState,
-  (state: ChallengesState) => state.selectedId
-);
-
-export const selectEntity = createSelector(
-  selectChallengesEntities,
-  selectSelectedId,
-  (entities, selectedId) => (selectedId ? entities[selectedId] : undefined)
+export const getSelectedChallenge = createSelector(
+  getChallengesEntities,
+  getSelectedChallengeId,
+  (entities, selectedId) => selectedId && entities[selectedId]
 );

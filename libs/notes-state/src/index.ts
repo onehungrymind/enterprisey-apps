@@ -1,6 +1,8 @@
-export * from './lib/state/notes.facade';
-export * from './lib/state/notes.models';
-export * from './lib/state/notes.selectors';
-export * from './lib/state/notes.reducer';
-export * from './lib/state/notes.actions';
-export * from './lib/notes-state.module';
+/*
+ * Public API Surface of notes-state
+ */
+import * as NotesState from './lib/state/state';
+
+export { NotesFacade } from './lib/state/notes.facade';
+export * as NotesEffects from './lib/state/notes.effects';
+export { NotesState };

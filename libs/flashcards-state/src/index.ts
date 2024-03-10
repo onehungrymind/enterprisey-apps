@@ -1,6 +1,8 @@
-export * from './lib/state/flashcards.facade';
-export * from './lib/state/flashcards.models';
-export * from './lib/state/flashcards.selectors';
-export * from './lib/state/flashcards.reducer';
-export * from './lib/state/flashcards.actions';
-export * from './lib/flashcards-state.module';
+/*
+ * Public API Surface of flashcards-state
+ */
+import * as FlashcardsState from './lib/state/state';
+
+export { FlashcardsFacade } from './lib/state/flashcards.facade';
+export * as FlashcardsEffects from './lib/state/flashcards.effects';
+export { FlashcardsState };

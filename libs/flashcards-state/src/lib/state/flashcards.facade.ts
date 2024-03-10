@@ -1,31 +1,56 @@
 import { Injectable, inject } from '@angular/core';
-import { select, Store, Action } from '@ngrx/store';
-
-import * as FlashcardsActions from './flashcards.actions';
-import * as FlashcardsFeature from './flashcards.reducer';
+import { Action, Store, select } from '@ngrx/store';
+import { Flashcard } from '@proto/api-interfaces';
+import { FlashcardsActions } from './flashcards.actions';
 import * as FlashcardsSelectors from './flashcards.selectors';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class FlashcardsFacade {
   private readonly store = inject(Store);
 
-  /**
-   * Combine pieces of state using createSelector,
-   * and expose them as observables through the facade.
-   */
-  loaded$ = this.store.pipe(select(FlashcardsSelectors.selectFlashcardsLoaded));
-  allFlashcards$ = this.store.pipe(
-    select(FlashcardsSelectors.selectAllFlashcards)
-  );
-  selectedFlashcards$ = this.store.pipe(
-    select(FlashcardsSelectors.selectEntity)
-  );
+  loaded$ = this.store.pipe(select(FlashcardsSelectors.getFlashcardsLoaded));
+  allFlashcards$ = this.store.pipe(select(FlashcardsSelectors.getAllFlashcards));
+  selectedFlashcard$ = this.store.pipe(select(FlashcardsSelectors.getSelectedFlashcard));
 
-  /**
-   * Use the initialization action to perform one
-   * or more tasks in your Effects.
-   */
-  init() {
-    this.store.dispatch(FlashcardsActions.initFlashcards());
+  resetSelectedFlashcard() {
+    this.dispatch(FlashcardsActions.resetSelectedFlashcard());
+  }
+
+  selectFlashcard(selectedId: string) {
+    this.dispatch(FlashcardsActions.selectFlashcard({ selectedId }));
+  }
+
+  loadFlashcards() {
+    this.dispatch(FlashcardsActions.loadFlashcards());
+  }
+
+  loadFlashcard(flashcardId: string) {
+    this.dispatch(FlashcardsActions.loadFlashcard({ flashcardId }));
+  }
+
+  saveFlashcard(flashcard: Flashcard) {
+    if (flashcard.id) {
+      this.updateFlashcard(flashcard);
+    } else {
+      this.createFlashcard(flashcard);
+    }
+  }
+
+  createFlashcard(flashcard: Flashcard) {
+    this.dispatch(FlashcardsActions.createFlashcard({ flashcard }));
+  }
+
+  updateFlashcard(flashcard: Flashcard) {
+    this.dispatch(FlashcardsActions.updateFlashcard({ flashcard }));
+  }
+
+  deleteFlashcard(flashcard: Flashcard) {
+    this.dispatch(FlashcardsActions.deleteFlashcard({ flashcard }));
+  }
+
+  dispatch(action: Action) {
+    this.store.dispatch(action);
   }
 }

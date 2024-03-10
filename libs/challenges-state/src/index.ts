@@ -1,6 +1,8 @@
-export * from './lib/state/challenges.facade';
-export * from './lib/state/challenges.models';
-export * from './lib/state/challenges.selectors';
-export * from './lib/state/challenges.reducer';
-export * from './lib/state/challenges.actions';
-export * from './lib/challenges-state.module';
+/*
+ * Public API Surface of challenges-state
+ */
+import * as ChallengesState from './lib/state/state';
+
+export { ChallengesFacade } from './lib/state/challenges.facade';
+export * as ChallengesEffects from './lib/state/challenges.effects';
+export { ChallengesState };

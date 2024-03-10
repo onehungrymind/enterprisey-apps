@@ -1,44 +1,34 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import {
-  FLASHCARDS_FEATURE_KEY,
-  FlashcardsState,
-  flashcardsAdapter,
-} from './flashcards.reducer';
+import { createSelector } from '@ngrx/store';
+import { getFlashcardsState } from './state';
+import { FlashcardsState, flashcardsAdapter } from './flashcards.reducer';
 
-// Lookup the 'Flashcards' feature state managed by NgRx
-export const selectFlashcardsState = createFeatureSelector<FlashcardsState>(
-  FLASHCARDS_FEATURE_KEY
-);
+const {
+  selectIds,
+  selectEntities,
+  selectAll,
+  selectTotal,
+} = flashcardsAdapter.getSelectors();
 
-const { selectAll, selectEntities } = flashcardsAdapter.getSelectors();
+const getFlashcardsSlice = createSelector(getFlashcardsState, (state) => state.flashcards);
 
-export const selectFlashcardsLoaded = createSelector(
-  selectFlashcardsState,
+export const getFlashcardIds = createSelector(getFlashcardsSlice, selectIds);
+export const getFlashcardsEntities = createSelector(getFlashcardsSlice, selectEntities);
+export const getAllFlashcards = createSelector(getFlashcardsSlice, selectAll);
+export const getFlashcardsTotal = createSelector(getFlashcardsSlice, selectTotal);
+export const getSelectedFlashcardId = createSelector(getFlashcardsSlice, (state: FlashcardsState) => state.selectedId);
+
+export const getFlashcardsLoaded = createSelector(
+  getFlashcardsSlice,
   (state: FlashcardsState) => state.loaded
 );
 
-export const selectFlashcardsError = createSelector(
-  selectFlashcardsState,
+export const getFlashcardsError = createSelector(
+  getFlashcardsSlice,
   (state: FlashcardsState) => state.error
 );
 
-export const selectAllFlashcards = createSelector(
-  selectFlashcardsState,
-  (state: FlashcardsState) => selectAll(state)
-);
-
-export const selectFlashcardsEntities = createSelector(
-  selectFlashcardsState,
-  (state: FlashcardsState) => selectEntities(state)
-);
-
-export const selectSelectedId = createSelector(
-  selectFlashcardsState,
-  (state: FlashcardsState) => state.selectedId
-);
-
-export const selectEntity = createSelector(
-  selectFlashcardsEntities,
-  selectSelectedId,
-  (entities, selectedId) => (selectedId ? entities[selectedId] : undefined)
+export const getSelectedFlashcard = createSelector(
+  getFlashcardsEntities,
+  getSelectedFlashcardId,
+  (entities, selectedId) => selectedId && entities[selectedId]
 );
