@@ -1,6 +1,7 @@
 {
   "challenges": [
     {
+      "id": "challenge1",
       "title": "Challenge 1",
       "description": "Description for Challenge 1",
       "completed": false,
@@ -9,6 +10,7 @@
       "user_id": "user1"
     },
     {
+      "id": "challenge2",
       "title": "Challenge 2",
       "description": "Description for Challenge 2",
       "completed": true,
@@ -17,6 +19,7 @@
       "user_id": "user2"
     },
     {
+      "id": "challenge3",
       "title": "Challenge 3",
       "description": "Description for Challenge 3",
       "completed": false,
@@ -25,6 +28,7 @@
       "user_id": "user3"
     },
     {
+      "id": "challenge4",
       "title": "Challenge 4",
       "description": "Description for Challenge 4",
       "completed": true,
@@ -33,6 +37,7 @@
       "user_id": "user4"
     },
     {
+      "id": "challenge5",
       "title": "Challenge 5",
       "description": "Description for Challenge 5",
       "completed": false,

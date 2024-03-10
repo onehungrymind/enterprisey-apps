@@ -1,60 +1,70 @@
 {
   "notes": [
     {
+      "id": "note1",
       "title": "Note 1",
       "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
       "type": "text",
       "user_id": "user1"
     },
     {
+      "id": "note2",
       "title": "Note 2",
       "content": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       "type": "text",
       "user_id": "user2"
     },
     {
+      "id": "note3",
       "title": "Note 3",
       "content": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       "type": "text",
       "user_id": "user3"
     },
     {
+      "id": "note4",
       "title": "Note 4",
       "content": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
       "type": "text",
       "user_id": "user4"
     },
     {
+      "id": "note5",
       "title": "Note 5",
       "content": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       "type": "text",
       "user_id": "user5"
     },
     {
+      "id": "note6",
       "title": "Note 6",
       "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
       "type": "text",
       "user_id": "user6"
     },
     {
+      "id": "note7",
       "title": "Note 7",
       "content": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       "type": "text",
       "user_id": "user7"
     },
     {
+      "id": "note8",
       "title": "Note 8",
       "content": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       "type": "text",
       "user_id": "user8"
     },
     {
+      "id": "note9",
       "title": "Note 9",
       "content": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
       "type": "text",
       "user_id": "user9"
     },
     {
+      "id": "note10",
       "title": "Note 10",
       "content": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       "type": "text",

@@ -34,7 +34,7 @@ export class ChallengesService {
   }
 
   private getUrl() {
-    return `/${this.model}`;
+    return `${API_URL}/${this.model}`;
   }
 
   private getUrlWithId(id: string | undefined | null) {

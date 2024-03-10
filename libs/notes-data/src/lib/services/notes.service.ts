@@ -14,6 +14,7 @@ export class NotesService {
   constructor(private http: HttpClient) {}
 
   all() {
+    console.log('HELLO NOTES!', this.getUrl())
     return this.http.get<Note[]>(this.getUrl());
   }
 
@@ -34,7 +35,7 @@ export class NotesService {
   }
 
   private getUrl() {
-    return `/${this.model}`;
+    return `${API_URL}/${this.model}`;
   }
 
   private getUrlWithId(id: string | undefined | null) {
