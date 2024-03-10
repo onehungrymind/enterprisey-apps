@@ -19,7 +19,7 @@
               matSuffix
               mat-icon-button
               aria-label="update"
-              (click)="generateBaseTemplate(keyword.value)">
+              (click)="generateBaseTemplate(keyword.value);generateTemplates()">
               <mat-icon>update</mat-icon>
             </button>
           </mat-form-field>
@@ -78,7 +78,6 @@
               (matChipInputTokenEnd)="add($event)" />
           </mat-chip-grid>
         </mat-form-field>
-
         <!-- TABLE -->
         <table mat-table [dataSource]="schemas" class="mat-elevation-z8">
           <!-- Model Column -->
@@ -119,13 +118,5 @@
       </pre>
       </mat-card-content>
     </mat-card>
-  </div>
-</div>
-
-<div class="flex-container">
-  <div class="flex-child">
-
-
-
   </div>
 </div>

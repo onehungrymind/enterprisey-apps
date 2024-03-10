@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NxWelcomeComponent } from './nx-welcome.component';
+import { ChallengesComponent } from '../challenges/challenges.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, NxWelcomeComponent],
+  imports: [CommonModule, ChallengesComponent],
   selector: 'proto-challenges-entry',
-  template: `<proto-nx-welcome></proto-nx-welcome>`,
+  template: `<proto-challenges></proto-challenges>`,
 })
 export class RemoteEntryComponent {}

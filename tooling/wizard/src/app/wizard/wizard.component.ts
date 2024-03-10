@@ -58,7 +58,26 @@ export class WizardComponent {
   baseKeywords = [];
   baseTemplate = '';
 
-  schemas: Schema[] = [];
+  schemas: Schema[] = [
+    {
+      "model": "challenge",
+      "modelPlural": "challenges",
+      "visible": true,
+      "props": []
+    },
+    {
+      "model": "flashcard",
+      "modelPlural": "flashcards",
+      "visible": true,
+      "props": []
+    },
+    {
+      "model": "note",
+      "modelPlural": "notes",
+      "visible": true,
+      "props": []
+    }
+  ];
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
@@ -96,11 +115,16 @@ export class WizardComponent {
         { model: value, modelPlural, visible: true, props: [] },
       ];
 
-      this.templates = this.generate(this.baseTemplate, this.schemas);
+      this.generateTemplates();
     }
 
     // Clear the input value
     event.chipInput?.clear();
+  }
+
+  // This is definitely NOT functional ¯\_(ツ)_/¯
+  generateTemplates() {
+    this.templates = this.generate(this.baseTemplate, this.schemas);
   }
 
   remove(schema: Schema): void {
@@ -192,16 +216,3 @@ export class WizardComponent {
     });
   }
 }
-
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'proto-wizard',
-//   standalone: true,
-//   imports: [],
-//   templateUrl: './wizard.component.html',
-//   styleUrl: './wizard.component.scss'
-// })
-// export class WizardComponent {
-
-// }
