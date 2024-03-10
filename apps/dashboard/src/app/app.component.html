@@ -1,8 +1,58 @@
-<ul class="remote-menu">
-  <li><a routerLink="/">Home</a></li>
-  <li><a routerLink="users">Users</a></li>
-  <li><a routerLink="challenges">Challenges</a></li>
-  <li><a routerLink="flashcards">Flashcards</a></li>
-  <li><a routerLink="notes">Notes</a></li>
-</ul>
-<router-outlet></router-outlet>
+<!-- Header -->
+<header class="bg-white shadow-lg">
+  <div class="container mx-auto py-4 flex justify-between items-center">
+    <a href="#" class="text-xl font-semibold text-gray-900">Enterprisey</a>
+    <nav>
+      <ul class="flex space-x-4">
+        <li><a routerLink="/" class="hover:text-blue-600">Home</a></li>
+        <li><a routerLink="challenges" class="hover:text-blue-600">Challenges</a></li>
+        <li><a routerLink="flashcards" class="hover:text-blue-600">Flashcards</a></li>
+        <li><a routerLink="notes" class="hover:text-blue-600">Notes</a></li>
+        <li><a routerLink="users" class="hover:text-blue-600">Users</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero Section -->
+<section class="bg-gray-900 text-white py-20">
+  <div class="container mx-auto text-center">
+    <h1 class="text-4xl font-semibold mb-4">Welcome to the Enterprisey Dashboard</h1>
+    <p class="text-lg mb-8">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-full inline-block">Get Started</a>
+  </div>
+</section>
+
+<!-- Featured Section -->
+<section class="bg-gray-50 py-20">
+  <div class="container mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="bg-white shadow-lg rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-2">Featured Event</h2>
+        <p class="text-gray-700 mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <a href="#" class="text-blue-600 hover:text-blue-700">Learn More</a>
+      </div>
+      <div class="bg-white shadow-lg rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-2">Featured Product</h2>
+        <p class="text-gray-700 mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <a href="#" class="text-blue-600 hover:text-blue-700">View Product</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Feature Section -->
+<section class="bg-gray-50 py-20">
+  <div class="container mx-auto">
+    <router-outlet></router-outlet>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-8">
+  <div class="container mx-auto text-center">
+    <p>&copy; Enterprisy Industries. No rights reserved.</p>
+  </div>
+</footer>
+

@@ -1,1 +1,50 @@
-/* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: #fff;
+  --secondary-color: #000;
+  --black-color: #000;
+  --white-color: #fff;
+  --lime-color: #bdff69;
+  --grey-color: #595a5c;
+  --coral-color: #ff6969;
+  --red-color: #ff3030;
+  --green-color: #8fff00;
+  --grey-dark-color: #272727;
+  --grey-mid-color: #595a5c
+}
+
+.checkbox-margin {
+  margin: 0 10px;
+}
+
+.mdc-list-item {
+  display: flex !important;
+}
+
+.mdc-list-item:hover {
+  cursor: pointer !important;
+  background: whitesmoke;
+}
+
+.mdc-list-item:not(:first-of-type) {
+  border-top: 1px solid #efefef;
+}
+
+.mat-mdc-card-title {
+  margin: 10px;
+}
+
+.mat-mdc-card-actions {
+  .mdc-button {
+    margin: 10px;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
