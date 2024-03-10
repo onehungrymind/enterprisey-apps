@@ -1,17 +1,14 @@
-<div class="grid grid-cols-2 gap-4">
-  <!-- FIRST COLUMN-->
-  <div>
+<div class="flex m-20">
+  <div class="w-1/2 mr-10">
     <proto-users-list
-    [users]="(users$ | async)!"
-    (selected)="selectUser($event)"
-    (deleted)="deleteUser($event)"></proto-users-list>
+      [users]="(users$ | async)!"
+      (selected)="selectUser($event)"
+      (deleted)="deleteUser($event)"></proto-users-list>
   </div>
-  <div class="divider" role="separator" aria-label="Divider"></div>
-  <!-- SECOND COLUMN-->
-  <div>
+  <div class="w-1/2 ml-10">
     <proto-user-details
-    [user]="selectedUser$ | async"
-    (saved)="saveUser($event)"
-    (cancelled)="reset()"></proto-user-details>
+      [user]="selectedUser$ | async"
+      (saved)="saveUser($event)"
+      (cancelled)="reset()"></proto-user-details>
   </div>
 </div>
