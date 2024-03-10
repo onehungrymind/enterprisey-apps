@@ -1,0 +1,6 @@
+{
+  "users": "http://localhost:4201",
+  "challenges": "http://localhost:4202",
+  "flashcards": "http://localhost:4203",
+  "notes": "http://localhost:4204"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "users-state",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/users-state/src",
+  "prefix": "proto",
+  "tags": [],
+  "projectType": "library",
+  "targets": {}
+}

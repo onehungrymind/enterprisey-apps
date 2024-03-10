@@ -2,7 +2,7 @@
   "name": "portal",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "prefix": "enterprisey",
+  "prefix": "proto",
   "sourceRoot": "apps/portal/src",
   "tags": [],
   "targets": {

@@ -14,7 +14,26 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@proto/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@proto/challenges-data": ["libs/challenges-data/src/index.ts"],
+      "@proto/challenges-state": ["libs/challenges-state/src/index.ts"],
+      "@proto/flashcards-data": ["libs/flashcards-data/src/index.ts"],
+      "@proto/flashcards-state": ["libs/flashcards-state/src/index.ts"],
+      "@proto/material": ["libs/material/src/index.ts"],
+      "@proto/notes-data": ["libs/notes-data/src/index.ts"],
+      "@proto/notes-state": ["libs/notes-state/src/index.ts"],
+      "@proto/users-data": ["libs/users-data/src/index.ts"],
+      "@proto/users-state": ["libs/users-state/src/index.ts"],
+      "challenges/Routes": [
+        "apps/challenges/src/app/remote-entry/entry.routes.ts"
+      ],
+      "flashcards/Routes": [
+        "apps/flashcards/src/app/remote-entry/entry.routes.ts"
+      ],
+      "notes/Routes": ["apps/notes/src/app/remote-entry/entry.routes.ts"],
+      "users/Routes": ["apps/users/src/app/remote-entry/entry.routes.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
