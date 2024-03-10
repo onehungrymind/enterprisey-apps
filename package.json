@@ -10,7 +10,7 @@
     "start": "npm run serve:full-dashboard",
     "serve:users-app": "npx nx serve users --port 4300 --open",
     "serve:users-api": "npx nx serve users-api",
-    "serve:users-json": "json-server server/users.json --routes routes.json --port=3400",
+    "serve:users-json": "json-server server/users.json --routes=server/routes.json --port=3400",
     "serve:users-feature": "concurrently \"npm run serve:users-api\" \"npm run serve:users-app\""
   },
   "private": true,
