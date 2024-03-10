@@ -7,8 +7,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 const configureSwagger = (app) => {
   const options = new DocumentBuilder()
-    .setTitle('Challenges Api')
-    .setDescription('API for Challenges')
+    .setTitle('Features Api')
+    .setDescription('API for Features')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, options);
@@ -18,7 +18,7 @@ const configureSwagger = (app) => {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
-  const port = process.env.PORT || 3100;
+  const port = process.env.PORT || 3000;
 
   app.enableCors();
   app.setGlobalPrefix(globalPrefix);
@@ -26,6 +26,7 @@ async function bootstrap() {
   configureSwagger(app);
 
   await app.listen(port);
+
   Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`,
   );

@@ -7,8 +7,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 const configureSwagger = (app) => {
   const options = new DocumentBuilder()
-    .setTitle('Dashboard Api')
-    .setDescription('API for Dashboard')
+    .setTitle('Users Api')
+    .setDescription('API for Users')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, options);

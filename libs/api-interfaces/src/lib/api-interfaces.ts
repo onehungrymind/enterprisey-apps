@@ -33,16 +33,15 @@ export interface Flashcard extends BaseEntity {
   user_id: string;
 }
 
-export interface Remote extends BaseEntity {
-  slug: string;
+export interface Feature extends BaseEntity {
   title: string;
   description: string;
-  uri: string;
+  remote_uri: string;
+  api_uri: string;
   healthy: boolean;
-  active: boolean;
 }
 
-export interface CompanyRemotes extends BaseEntity {
+export interface CompanyFeatures extends BaseEntity {
   company_id: string;
   remote_id: string;
 }
@@ -60,6 +59,7 @@ export enum UserRoleEnum {
   ADMIN = 'admin',
   MENTOR = 'mentor',
   APPRENTICE = 'apprentice',
+  USER = 'user',
 }
 
 export interface Company extends BaseEntity {
