@@ -22,6 +22,14 @@ The underlying NPM commands for a feature, are as follows.
 
 We are currently serving the data for the feature from `json-server` but you could change the top-level command to use the Nest implementation if you wanted.
 
+To run the dashboard, make sure the feature apps are up and running and then execute this command.
+
+```
+npx nx serve dashboard --open 
+// or you can run which wraps the command above
+npm start
+```
+
 
 ## TODO FRONTEND
 - [ ] Load all four features into the dashboard

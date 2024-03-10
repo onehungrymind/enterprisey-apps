@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "start": "npm run serve:full-dashboard",
+    "start": "npx nx serve dashboard --open",
     "_challenges": "-------------------------------------------------------------------------------",
     "serve:challenges-app": "npx nx serve challenges --open",
     "serve:challenges-api": "npx nx serve challenges-api",
