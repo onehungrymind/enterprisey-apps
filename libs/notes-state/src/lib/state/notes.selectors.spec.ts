@@ -1,64 +1,60 @@
-import { NotesEntity } from './notes.models';
-import {
-  notesAdapter,
-  NotesPartialState,
-  initialNotesState,
-} from './notes.reducer';
+import { Note } from '@proto/api-interfaces';
+import { mockNote } from '@proto/testing';
+
+import { initialNotesState, notesAdapter, NotesState } from './notes.reducer';
 import * as NotesSelectors from './notes.selectors';
 
 describe('Notes Selectors', () => {
   const ERROR_MSG = 'No Error Available';
-  const getNotesId = (it: NotesEntity) => it.id;
-  const createNotesEntity = (id: string, name = '') =>
-    ({
-      id,
-      name: name || `name-${id}`,
-    } as NotesEntity);
+  const getNotesId = (note: Note) => note['id'];
+  const createNote = (id: string, name = '') =>
+    ({ ...mockNote, id: id } as Note);
 
-  let state: NotesPartialState;
+  let state: NotesState;
 
   beforeEach(() => {
-    state = {
-      notes: notesAdapter.setAll(
-        [
-          createNotesEntity('PRODUCT-AAA'),
-          createNotesEntity('PRODUCT-BBB'),
-          createNotesEntity('PRODUCT-CCC'),
-        ],
-        {
-          ...initialNotesState,
-          selectedId: 'PRODUCT-BBB',
-          error: ERROR_MSG,
-          loaded: true,
-        }
-      ),
-    };
+    state = notesAdapter.setAll(
+      [
+        createNote('PRODUCT-AAA'),
+        createNote('PRODUCT-BBB'),
+        createNote('PRODUCT-CCC'),
+      ],
+      {
+        ...initialNotesState,
+        selectedId: 'PRODUCT-BBB',
+        error: ERROR_MSG,
+        loaded: true,
+      }
+    );
   });
 
   describe('Notes Selectors', () => {
-    it('selectAllNotes() should return the list of Notes', () => {
-      const results = NotesSelectors.selectAllNotes(state);
+    it('getAllNotes() should return the list of Notes', () => {
+      const results = NotesSelectors.getAllNotes.projector(state);
       const selId = getNotesId(results[1]);
 
       expect(results.length).toBe(3);
       expect(selId).toBe('PRODUCT-BBB');
     });
 
-    it('selectEntity() should return the selected Entity', () => {
-      const result = NotesSelectors.selectEntity(state) as NotesEntity;
-      const selId = getNotesId(result);
+    it('getSelected() should return the selected schema', () => {
+      const result = NotesSelectors.getSelectedNote.projector(
+        state.entities,
+        state.selectedId
+      );
+      const selId = getNotesId(result as Note);
 
       expect(selId).toBe('PRODUCT-BBB');
     });
 
-    it('selectNotesLoaded() should return the current "loaded" status', () => {
-      const result = NotesSelectors.selectNotesLoaded(state);
+    it("getNotesLoaded() should return the current 'loaded' status", () => {
+      const result = NotesSelectors.getNotesLoaded.projector(state);
 
       expect(result).toBe(true);
     });
 
-    it('selectNotesError() should return the current "error" state', () => {
-      const result = NotesSelectors.selectNotesError(state);
+    it("getNotesError() should return the current 'error' state", () => {
+      const result = NotesSelectors.getNotesError.projector(state);
 
       expect(result).toBe(ERROR_MSG);
     });

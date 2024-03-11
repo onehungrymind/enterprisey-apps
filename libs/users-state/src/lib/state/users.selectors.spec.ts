@@ -1,64 +1,60 @@
-import { UsersEntity } from './users.models';
-import {
-  usersAdapter,
-  UsersPartialState,
-  initialUsersState,
-} from './users.reducer';
+import { User } from '@proto/api-interfaces';
+import { mockUser } from '@proto/testing';
+
+import { initialUsersState, usersAdapter, UsersState } from './users.reducer';
 import * as UsersSelectors from './users.selectors';
 
 describe('Users Selectors', () => {
   const ERROR_MSG = 'No Error Available';
-  const getUsersId = (it: UsersEntity) => it.id;
-  const createUsersEntity = (id: string, name = '') =>
-    ({
-      id,
-      name: name || `name-${id}`,
-    } as UsersEntity);
+  const getUsersId = (user: User) => user['id'];
+  const createUser = (id: string, name = '') =>
+    ({ ...mockUser, id: id } as User);
 
-  let state: UsersPartialState;
+  let state: UsersState;
 
   beforeEach(() => {
-    state = {
-      users: usersAdapter.setAll(
-        [
-          createUsersEntity('PRODUCT-AAA'),
-          createUsersEntity('PRODUCT-BBB'),
-          createUsersEntity('PRODUCT-CCC'),
-        ],
-        {
-          ...initialUsersState,
-          selectedId: 'PRODUCT-BBB',
-          error: ERROR_MSG,
-          loaded: true,
-        }
-      ),
-    };
+    state = usersAdapter.setAll(
+      [
+        createUser('PRODUCT-AAA'),
+        createUser('PRODUCT-BBB'),
+        createUser('PRODUCT-CCC'),
+      ],
+      {
+        ...initialUsersState,
+        selectedId: 'PRODUCT-BBB',
+        error: ERROR_MSG,
+        loaded: true,
+      }
+    );
   });
 
   describe('Users Selectors', () => {
-    it('selectAllUsers() should return the list of Users', () => {
-      const results = UsersSelectors.selectAllUsers(state);
+    it('getAllUsers() should return the list of Users', () => {
+      const results = UsersSelectors.getAllUsers.projector(state);
       const selId = getUsersId(results[1]);
 
       expect(results.length).toBe(3);
       expect(selId).toBe('PRODUCT-BBB');
     });
 
-    it('selectEntity() should return the selected Entity', () => {
-      const result = UsersSelectors.selectEntity(state) as UsersEntity;
-      const selId = getUsersId(result);
+    it('getSelected() should return the selected schema', () => {
+      const result = UsersSelectors.getSelectedUser.projector(
+        state.entities,
+        state.selectedId
+      );
+      const selId = getUsersId(result as User);
 
       expect(selId).toBe('PRODUCT-BBB');
     });
 
-    it('selectUsersLoaded() should return the current "loaded" status', () => {
-      const result = UsersSelectors.selectUsersLoaded(state);
+    it("getUsersLoaded() should return the current 'loaded' status", () => {
+      const result = UsersSelectors.getUsersLoaded.projector(state);
 
       expect(result).toBe(true);
     });
 
-    it('selectUsersError() should return the current "error" state', () => {
-      const result = UsersSelectors.selectUsersError(state);
+    it("getUsersError() should return the current 'error' state", () => {
+      const result = UsersSelectors.getUsersError.projector(state);
 
       expect(result).toBe(ERROR_MSG);
     });
