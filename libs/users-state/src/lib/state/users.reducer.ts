@@ -1,6 +1,7 @@
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { User } from '@proto/api-interfaces';
+
 import { UsersActions } from './users.actions';
 
 export interface UsersState extends EntityState<User> {
@@ -15,7 +16,10 @@ export const initialUsersState: UsersState = usersAdapter.getInitialState({
   loaded: false,
 });
 
-const onFailure = (state: UsersState, { error }: any) => ({ ...state, error });
+const onFailure = (state: UsersState, { error }: any) => {
+  console.log(error);
+  return { ...state, error };
+};
 
 export const reducer = createReducer(
   initialUsersState,
@@ -61,6 +65,8 @@ export const reducer = createReducer(
     UsersActions.createUserFailure,
     UsersActions.createUserFailure,
     UsersActions.createUserFailure,
+    UsersActions.updateUserFailure,
+    UsersActions.deleteUserFailure,
     onFailure
   )
 );

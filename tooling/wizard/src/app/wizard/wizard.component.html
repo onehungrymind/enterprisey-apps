@@ -13,13 +13,15 @@
               matInput
               name="baseKeyword"
               type="text"
-              value="{{ baseKeyword }}" />
+              value="{{ baseKeyword }}"
+            />
             <button
               *ngIf="keyword.value"
               matSuffix
               mat-icon-button
               aria-label="update"
-              (click)="generateBaseTemplate(keyword.value);generateTemplates()">
+              (click)="generateBaseTemplate(keyword.value); generateTemplates()"
+            >
               <mat-icon>update</mat-icon>
             </button>
           </mat-form-field>
@@ -29,7 +31,8 @@
           [(ngModel)]="refTemplate"
           name="refTemplate"
           [options]="editorOptions"
-          #refTemplateEditor="ngModel">
+          #refTemplateEditor="ngModel"
+        >
         </ngx-codemirror>
       </mat-card-content>
     </mat-card>
@@ -64,7 +67,8 @@
               *ngFor="let schema of schemas"
               (removed)="remove(schema)"
               [editable]="true"
-              (edited)="edit(schema, $event)">
+              (edited)="edit(schema, $event)"
+            >
               {{ schema.model }}
               <button matChipRemove [attr.aria-label]="'remove ' + schema">
                 <mat-icon>cancel</mat-icon>
@@ -75,7 +79,8 @@
               [matChipInputFor]="chipGrid"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               [matChipInputAddOnBlur]="addOnBlur"
-              (matChipInputTokenEnd)="add($event)" />
+              (matChipInputTokenEnd)="add($event)"
+            />
           </mat-chip-grid>
         </mat-form-field>
         <!-- TABLE -->
@@ -107,15 +112,16 @@
       <mat-card-header>
         <mat-card-title>Generated Templates</mat-card-title>
       </mat-card-header>
-      <mat-card-content>
-        <pre *ngFor="let template of templates">
-        <code
-          [highlight]="template"
-          [languages]="['typescript']"
-          (highlighted)="onHighlight($event)"
-          [lineNumbers]="true"
-        ></code>
-      </pre>
+      <mat-card-content class="space-y-2">
+        <pre *ngFor="let template of templates" class="flex flex-col gap-2">
+          <button mat-raised-button color="primary" [cdkCopyToClipboard]="template">Copy</button>
+          <code
+            [highlight]="template"
+            [languages]="['typescript']"
+            (highlighted)="onHighlight($event)"
+            [lineNumbers]="true"
+          ></code>
+        </pre>
       </mat-card-content>
     </mat-card>
   </div>

@@ -1,6 +1,7 @@
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Note } from '@proto/api-interfaces';
+
 import { NotesActions } from './notes.actions';
 
 export interface NotesState extends EntityState<Note> {
@@ -61,6 +62,8 @@ export const reducer = createReducer(
     NotesActions.createNoteFailure,
     NotesActions.createNoteFailure,
     NotesActions.createNoteFailure,
+    NotesActions.updateNoteFailure,
+    NotesActions.deleteNoteFailure,
     onFailure
   )
 );

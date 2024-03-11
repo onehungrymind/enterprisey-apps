@@ -1,98 +1,96 @@
-import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule, Store } from '@ngrx/store';
-import { readFirst } from '@nx/angular/testing';
+import { ActionsSubject } from '@ngrx/store';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { mockNote } from '@proto/testing';
 
-import * as NotesActions from './notes.actions';
-import { NotesEffects } from './notes.effects';
+import { NotesActions } from './notes.actions';
 import { NotesFacade } from './notes.facade';
-import { NotesEntity } from './notes.models';
-import {
-  NOTES_FEATURE_KEY,
-  NotesState,
-  initialNotesState,
-  notesReducer,
-} from './notes.reducer';
-import * as NotesSelectors from './notes.selectors';
-
-interface TestSchema {
-  notes: NotesState;
-}
+import { initialNotesState } from './notes.reducer';
 
 describe('NotesFacade', () => {
   let facade: NotesFacade;
-  let store: Store<TestSchema>;
-  const createNotesEntity = (id: string, name = ''): NotesEntity => ({
-    id,
-    name: name || `name-${id}`,
+  let store: MockStore;
+
+  const mockActionsSubject = new ActionsSubject();
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        NotesFacade,
+        provideMockStore({ initialState: initialNotesState }),
+        { provide: ActionsSubject, useValue: mockActionsSubject },
+      ],
+    });
+
+    facade = TestBed.inject(NotesFacade);
+    store = TestBed.inject(MockStore);
   });
 
-  describe('used in NgModule', () => {
-    beforeEach(() => {
-      @NgModule({
-        imports: [
-          StoreModule.forFeature(NOTES_FEATURE_KEY, notesReducer),
-          EffectsModule.forFeature([NotesEffects]),
-        ],
-        providers: [NotesFacade],
-      })
-      class CustomFeatureModule {}
+  it('should be created', () => {
+    expect(facade).toBeTruthy();
+  });
 
-      @NgModule({
-        imports: [
-          StoreModule.forRoot({}),
-          EffectsModule.forRoot([]),
-          CustomFeatureModule,
-        ],
-      })
-      class RootModule {}
-      TestBed.configureTestingModule({ imports: [RootModule] });
+  describe('should dispatch', () => {
+    it('select on select(note.id)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
 
-      store = TestBed.inject(Store);
-      facade = TestBed.inject(NotesFacade);
+      facade.selectNote(mockNote.id as string);
+
+      const action = NotesActions.selectNote({
+        selectedId: mockNote.id as string,
+      });
+
+      expect(spy).toHaveBeenCalledWith(action);
     });
 
-    /**
-     * The initially generated facade::loadAll() returns empty array
-     */
-    it('loadAll() should return empty list with loaded == true', async () => {
-      let list = await readFirst(facade.allNotes$);
-      let isLoaded = await readFirst(facade.loaded$);
+    it('loadNotes on loadNotes()', () => {
+      const spy = jest.spyOn(store, 'dispatch');
 
-      expect(list.length).toBe(0);
-      expect(isLoaded).toBe(false);
+      facade.loadNotes();
 
-      facade.init();
+      const action = NotesActions.loadNotes();
 
-      list = await readFirst(facade.allNotes$);
-      isLoaded = await readFirst(facade.loaded$);
-
-      expect(list.length).toBe(0);
-      expect(isLoaded).toBe(true);
+      expect(spy).toHaveBeenCalledWith(action);
     });
 
-    /**
-     * Use `loadNotesSuccess` to manually update list
-     */
-    it('allNotes$ should return the loaded list; and loaded flag == true', async () => {
-      let list = await readFirst(facade.allNotes$);
-      let isLoaded = await readFirst(facade.loaded$);
+    it('loadNote on loadNote(note.id)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
 
-      expect(list.length).toBe(0);
-      expect(isLoaded).toBe(false);
+      facade.loadNote(mockNote.id as string);
 
-      store.dispatch(
-        NotesActions.loadNotesSuccess({
-          notes: [createNotesEntity('AAA'), createNotesEntity('BBB')],
-        })
-      );
+      const action = NotesActions.loadNote({ noteId: mockNote.id as string });
 
-      list = await readFirst(facade.allNotes$);
-      isLoaded = await readFirst(facade.loaded$);
+      expect(spy).toHaveBeenCalledWith(action);
+    });
 
-      expect(list.length).toBe(2);
-      expect(isLoaded).toBe(true);
+    it('createNote on createNote(note)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+
+      facade.createNote(mockNote);
+
+      const action = NotesActions.createNote({ note: mockNote });
+
+      expect(spy).toHaveBeenCalledWith(action);
+    });
+
+    it('updateNote on updateNote(note)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+
+      facade.updateNote(mockNote);
+
+      const action = NotesActions.updateNote({ note: mockNote });
+
+      expect(spy).toHaveBeenCalledWith(action);
+    });
+
+    it('delete on delete(model)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+
+      facade.deleteNote(mockNote);
+
+      const action = NotesActions.deleteNote({ note: mockNote });
+
+      expect(spy).toHaveBeenCalledWith(action);
     });
   });
 });

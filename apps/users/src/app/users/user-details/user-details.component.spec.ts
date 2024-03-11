@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { mockUser } from '@proto/testing';
 
 import { UserDetailsComponent } from './user-details.component';
 
@@ -8,12 +10,12 @@ describe('UserDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserDetailsComponent]
-    })
-    .compileComponents();
-    
+      imports: [UserDetailsComponent, NoopAnimationsModule],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(UserDetailsComponent);
     component = fixture.componentInstance;
+    component.user = mockUser;
     fixture.detectChanges();
   });
 
