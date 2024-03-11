@@ -108,14 +108,15 @@
         <mat-card-title>Generated Templates</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <pre *ngFor="let template of templates">
-        <code
-          [highlight]="template"
-          [languages]="['typescript']"
-          (highlighted)="onHighlight($event)"
-          [lineNumbers]="true"
-        ></code>
-      </pre>
+        <pre *ngFor="let template of templates" class="flex flex-col gap-2">
+          <button mat-raised-button color="primary" [cdkCopyToClipboard]="template">Copy</button>
+          <code
+            [highlight]="template"
+            [languages]="['typescript']"
+            (highlighted)="onHighlight($event)"
+            [lineNumbers]="true"
+          ></code>
+        </pre>
       </mat-card-content>
     </mat-card>
   </div>
