@@ -1,6 +1,7 @@
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Flashcard } from '@proto/api-interfaces';
+
 import { FlashcardsActions } from './flashcards.actions';
 
 export interface FlashcardsState extends EntityState<Flashcard> {
@@ -9,13 +10,18 @@ export interface FlashcardsState extends EntityState<Flashcard> {
   loaded: boolean;
 }
 
-export const flashcardsAdapter: EntityAdapter<Flashcard> = createEntityAdapter<Flashcard>();
+export const flashcardsAdapter: EntityAdapter<Flashcard> =
+  createEntityAdapter<Flashcard>();
 
-export const initialFlashcardsState: FlashcardsState = flashcardsAdapter.getInitialState({
-  loaded: false,
+export const initialFlashcardsState: FlashcardsState =
+  flashcardsAdapter.getInitialState({
+    loaded: false,
+  });
+
+const onFailure = (state: FlashcardsState, { error }: any) => ({
+  ...state,
+  error,
 });
-
-const onFailure = (state: FlashcardsState, { error }: any) => ({ ...state, error });
 
 export const reducer = createReducer(
   initialFlashcardsState,
@@ -37,7 +43,9 @@ export const reducer = createReducer(
   on(FlashcardsActions.resetSelectedFlashcard, (state) =>
     Object.assign({}, state, { selectedId: null })
   ),
-  on(FlashcardsActions.resetFlashcards, (state) => flashcardsAdapter.removeAll(state)),
+  on(FlashcardsActions.resetFlashcards, (state) =>
+    flashcardsAdapter.removeAll(state)
+  ),
   // CRUD
   on(FlashcardsActions.loadFlashcardsSuccess, (state, { flashcards }) =>
     flashcardsAdapter.setAll(flashcards, { ...state, loaded: true })
@@ -49,7 +57,10 @@ export const reducer = createReducer(
     flashcardsAdapter.addOne(flashcard, state)
   ),
   on(FlashcardsActions.updateFlashcardSuccess, (state, { flashcard }) =>
-    flashcardsAdapter.updateOne({ id: flashcard.id || '', changes: flashcard }, state)
+    flashcardsAdapter.updateOne(
+      { id: flashcard.id || '', changes: flashcard },
+      state
+    )
   ),
   on(FlashcardsActions.deleteFlashcardSuccess, (state, { flashcard }) =>
     flashcardsAdapter.removeOne(flashcard?.id ?? '', state)
@@ -61,6 +72,8 @@ export const reducer = createReducer(
     FlashcardsActions.createFlashcardFailure,
     FlashcardsActions.createFlashcardFailure,
     FlashcardsActions.createFlashcardFailure,
+    FlashcardsActions.updateFlashcardFailure,
+    FlashcardsActions.deleteFlashcardFailure,
     onFailure
   )
 );

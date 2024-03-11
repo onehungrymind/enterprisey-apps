@@ -1,6 +1,7 @@
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Challenge } from '@proto/api-interfaces';
+
 import { ChallengesActions } from './challenges.actions';
 
 export interface ChallengesState extends EntityState<Challenge> {
@@ -9,13 +10,18 @@ export interface ChallengesState extends EntityState<Challenge> {
   loaded: boolean;
 }
 
-export const challengesAdapter: EntityAdapter<Challenge> = createEntityAdapter<Challenge>();
+export const challengesAdapter: EntityAdapter<Challenge> =
+  createEntityAdapter<Challenge>();
 
-export const initialChallengesState: ChallengesState = challengesAdapter.getInitialState({
-  loaded: false,
+export const initialChallengesState: ChallengesState =
+  challengesAdapter.getInitialState({
+    loaded: false,
+  });
+
+const onFailure = (state: ChallengesState, { error }: any) => ({
+  ...state,
+  error,
 });
-
-const onFailure = (state: ChallengesState, { error }: any) => ({ ...state, error });
 
 export const reducer = createReducer(
   initialChallengesState,
@@ -37,7 +43,9 @@ export const reducer = createReducer(
   on(ChallengesActions.resetSelectedChallenge, (state) =>
     Object.assign({}, state, { selectedId: null })
   ),
-  on(ChallengesActions.resetChallenges, (state) => challengesAdapter.removeAll(state)),
+  on(ChallengesActions.resetChallenges, (state) =>
+    challengesAdapter.removeAll(state)
+  ),
   // CRUD
   on(ChallengesActions.loadChallengesSuccess, (state, { challenges }) =>
     challengesAdapter.setAll(challenges, { ...state, loaded: true })
@@ -49,7 +57,10 @@ export const reducer = createReducer(
     challengesAdapter.addOne(challenge, state)
   ),
   on(ChallengesActions.updateChallengeSuccess, (state, { challenge }) =>
-    challengesAdapter.updateOne({ id: challenge.id || '', changes: challenge }, state)
+    challengesAdapter.updateOne(
+      { id: challenge.id || '', changes: challenge },
+      state
+    )
   ),
   on(ChallengesActions.deleteChallengeSuccess, (state, { challenge }) =>
     challengesAdapter.removeOne(challenge?.id ?? '', state)
@@ -61,6 +72,8 @@ export const reducer = createReducer(
     ChallengesActions.createChallengeFailure,
     ChallengesActions.createChallengeFailure,
     ChallengesActions.createChallengeFailure,
+    ChallengesActions.updateChallengeFailure,
+    ChallengesActions.deleteChallengeFailure,
     onFailure
   )
 );
