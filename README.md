@@ -30,13 +30,33 @@ npx nx serve dashboard --open
 npm start
 ```
 
+## WIP: The Portal
+
+The portal is designed to load in the remote URIs that an MFE is hosted at as well as the API URI. 
+
+You can get to the portal by running
+
+```
+npm run serve:portal-feature
+```
+
+## The Wizard
+
+There is a tool that you can use to help accelerate development across features. It allows you to quickly pull code from one feature and generate an equivalent version for other features.
+
+You can see the tool by running
+
+```
+npm run wizard
+```
+
 # Action Items
 
 ## The Frontend
 - [x] Load all four features into the dashboard
-- [ ] Fix the unit tests for the data features
-- [ ] Fix the unit tests for the state features
-- [ ] Fix the unit tests for the app features
+- [X] Fix the unit tests for the data features
+- [X] Fix the unit tests for the state features
+- [X] Fix the unit tests for the app features
 - [ ] Create a basic Cypress test for each app
 - [ ] Integrate Cucumber into Cypress tests
 - [ ] Create a functional set of E2E tests for each feature
