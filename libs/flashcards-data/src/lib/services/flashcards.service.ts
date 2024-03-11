@@ -38,6 +38,6 @@ export class FlashcardsService {
   }
 
   private getUrlWithId(id: string | undefined | null) {
-    return `${this.getUrl()}/`;
+    return `${this.getUrl()}/${id}`;
   }
 }

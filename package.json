@@ -9,6 +9,7 @@
     "test": "ng test",
     "start": "npx nx serve dashboard --open",
     "serve:auth": "node server/server.js",
+    "wizard": "npx nx serve wizard --port 4800 --open",
     "_portal": "-------------------------------------------------------------------------------",
     "serve:portal-app": "npx nx serve portal --open",
     "serve:features-api": "npx nx serve features-api",

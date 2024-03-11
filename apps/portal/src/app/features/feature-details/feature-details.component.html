@@ -1,0 +1,64 @@
+<mat-card>
+  <mat-card-content>
+    <mat-card-title>
+      <span *ngIf="currentFeature.id; else elseBlock">
+        Editing {{ originalTitle | titlecase }}
+      </span>
+      <ng-template #elseBlock> Select Feature </ng-template>
+    </mat-card-title>
+    <form #form="ngForm" (ngSubmit)="saved.emit(currentFeature)">
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          placeholder="Enter a title"
+          [(ngModel)]="currentFeature.title"
+          type="input"
+          name="title"
+          required="true" />
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          placeholder="Enter a description"
+          [(ngModel)]="currentFeature.description"
+          type="input"
+          name="description" />
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          placeholder="Enter the remote URI"
+          [(ngModel)]="currentFeature.remote_uri"
+          type="input"
+          name="remote_uri" />
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          placeholder="Enter a API URI"
+          [(ngModel)]="currentFeature.api_uri"
+          type="input"
+          name="api_uri" />
+      </mat-form-field>
+      <div class="full-width">
+        <mat-checkbox
+          [(ngModel)]="currentFeature.healthy"
+          class="checkbox-margin"
+          name="healthy">Healthy</mat-checkbox>
+      </div>
+
+      <mat-card-actions>
+        <button
+          [disabled]="form.invalid"
+          type="submit"
+          mat-button
+          color="primary">
+          Save
+        </button>
+        <button type="button" mat-button (click)="cancelled.emit()">
+          Cancel
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -38,6 +38,6 @@ export class ChallengesService {
   }
 
   private getUrlWithId(id: string | undefined | null) {
-    return `${this.getUrl()}/`;
+    return `${this.getUrl()}/${id}`;
   }
 }

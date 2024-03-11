@@ -8,16 +8,26 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/portal",
         "index": "apps/portal/src/index.html",
         "browser": "apps/portal/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "apps/portal/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/portal/src/favicon.ico", "apps/portal/src/assets"],
-        "styles": ["apps/portal/src/styles.scss"],
+        "assets": [
+          "apps/portal/src/favicon.ico",
+          "apps/portal/src/assets"
+        ],
+        "styles": [
+          "@angular/material/prebuilt-themes/indigo-pink.css",
+          "apps/portal/src/styles.scss"
+        ],
         "scripts": [],
         "server": "apps/portal/src/main.server.ts",
         "prerender": true,

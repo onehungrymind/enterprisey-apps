@@ -30,28 +30,29 @@ npx nx serve dashboard --open
 npm start
 ```
 
+# Action Items
 
-## TODO FRONTEND
+## The Frontend
+- [x] Load all four features into the dashboard
 - [ ] Fix the unit tests for the data features
 - [ ] Fix the unit tests for the state features
 - [ ] Fix the unit tests for the app features
 - [ ] Create a basic Cypress test for each app
 - [ ] Integrate Cucumber into Cypress tests
-- [ ] Create a functional set of suites for each feature
+- [ ] Create a functional set of E2E tests for each feature
 - [ ] Style the application
 - [ ] Animate the application
 - [ ] Set up auth workflow
 - [ ] Set up deployment
 - [ ] Add tooling for performance
-- [x] Load all four features into the dashboard
 
-## TODO API
+## The API
+- [X] Create data seeders
 - [ ] Set up authentication 
 - [ ] Create E2E tests for APIs
 - [ ] Add docker images
 - [ ] Add in supergraph
-- [x] Create data seeders
 
-## TODO WORKSHOP
-- [ ] Get portal concept working
+## The Workshop
+- [X] Get portal concept working
 - [ ] Break down steps to build portal in workshop

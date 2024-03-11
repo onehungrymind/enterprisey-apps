@@ -76,7 +76,13 @@ export class WizardComponent {
       "modelPlural": "notes",
       "visible": true,
       "props": []
-    }
+    },
+    {
+      "model": "user",
+      "modelPlural": "users",
+      "visible": true,
+      "props": []
+    },
   ];
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
