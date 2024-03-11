@@ -1,101 +1,104 @@
-import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule, Store } from '@ngrx/store';
-import { readFirst } from '@nx/angular/testing';
+import { ActionsSubject } from '@ngrx/store';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { mockFlashcard } from '@proto/testing';
 
-import * as FlashcardsActions from './flashcards.actions';
-import { FlashcardsEffects } from './flashcards.effects';
+import { FlashcardsActions } from './flashcards.actions';
 import { FlashcardsFacade } from './flashcards.facade';
-import { FlashcardsEntity } from './flashcards.models';
-import {
-  FLASHCARDS_FEATURE_KEY,
-  FlashcardsState,
-  initialFlashcardsState,
-  flashcardsReducer,
-} from './flashcards.reducer';
-import * as FlashcardsSelectors from './flashcards.selectors';
-
-interface TestSchema {
-  flashcards: FlashcardsState;
-}
+import { initialFlashcardsState } from './flashcards.reducer';
 
 describe('FlashcardsFacade', () => {
   let facade: FlashcardsFacade;
-  let store: Store<TestSchema>;
-  const createFlashcardsEntity = (id: string, name = ''): FlashcardsEntity => ({
-    id,
-    name: name || `name-${id}`,
+  let store: MockStore;
+
+  const mockActionsSubject = new ActionsSubject();
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        FlashcardsFacade,
+        provideMockStore({ initialState: initialFlashcardsState }),
+        { provide: ActionsSubject, useValue: mockActionsSubject },
+      ],
+    });
+
+    facade = TestBed.inject(FlashcardsFacade);
+    store = TestBed.inject(MockStore);
   });
 
-  describe('used in NgModule', () => {
-    beforeEach(() => {
-      @NgModule({
-        imports: [
-          StoreModule.forFeature(FLASHCARDS_FEATURE_KEY, flashcardsReducer),
-          EffectsModule.forFeature([FlashcardsEffects]),
-        ],
-        providers: [FlashcardsFacade],
-      })
-      class CustomFeatureModule {}
+  it('should be created', () => {
+    expect(facade).toBeTruthy();
+  });
 
-      @NgModule({
-        imports: [
-          StoreModule.forRoot({}),
-          EffectsModule.forRoot([]),
-          CustomFeatureModule,
-        ],
-      })
-      class RootModule {}
-      TestBed.configureTestingModule({ imports: [RootModule] });
+  describe('should dispatch', () => {
+    it('select on select(flashcard.id)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
 
-      store = TestBed.inject(Store);
-      facade = TestBed.inject(FlashcardsFacade);
+      facade.selectFlashcard(mockFlashcard.id as string);
+
+      const action = FlashcardsActions.selectFlashcard({
+        selectedId: mockFlashcard.id as string,
+      });
+
+      expect(spy).toHaveBeenCalledWith(action);
     });
 
-    /**
-     * The initially generated facade::loadAll() returns empty array
-     */
-    it('loadAll() should return empty list with loaded == true', async () => {
-      let list = await readFirst(facade.allFlashcards$);
-      let isLoaded = await readFirst(facade.loaded$);
+    it('loadFlashcards on loadFlashcards()', () => {
+      const spy = jest.spyOn(store, 'dispatch');
 
-      expect(list.length).toBe(0);
-      expect(isLoaded).toBe(false);
+      facade.loadFlashcards();
 
-      facade.init();
+      const action = FlashcardsActions.loadFlashcards();
 
-      list = await readFirst(facade.allFlashcards$);
-      isLoaded = await readFirst(facade.loaded$);
-
-      expect(list.length).toBe(0);
-      expect(isLoaded).toBe(true);
+      expect(spy).toHaveBeenCalledWith(action);
     });
 
-    /**
-     * Use `loadFlashcardsSuccess` to manually update list
-     */
-    it('allFlashcards$ should return the loaded list; and loaded flag == true', async () => {
-      let list = await readFirst(facade.allFlashcards$);
-      let isLoaded = await readFirst(facade.loaded$);
+    it('loadFlashcard on loadFlashcard(flashcard.id)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
 
-      expect(list.length).toBe(0);
-      expect(isLoaded).toBe(false);
+      facade.loadFlashcard(mockFlashcard.id as string);
 
-      store.dispatch(
-        FlashcardsActions.loadFlashcardsSuccess({
-          flashcards: [
-            createFlashcardsEntity('AAA'),
-            createFlashcardsEntity('BBB'),
-          ],
-        })
-      );
+      const action = FlashcardsActions.loadFlashcard({
+        flashcardId: mockFlashcard.id as string,
+      });
 
-      list = await readFirst(facade.allFlashcards$);
-      isLoaded = await readFirst(facade.loaded$);
+      expect(spy).toHaveBeenCalledWith(action);
+    });
 
-      expect(list.length).toBe(2);
-      expect(isLoaded).toBe(true);
+    it('createFlashcard on createFlashcard(flashcard)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+
+      facade.createFlashcard(mockFlashcard);
+
+      const action = FlashcardsActions.createFlashcard({
+        flashcard: mockFlashcard,
+      });
+
+      expect(spy).toHaveBeenCalledWith(action);
+    });
+
+    it('updateFlashcard on updateFlashcard(flashcard)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+
+      facade.updateFlashcard(mockFlashcard);
+
+      const action = FlashcardsActions.updateFlashcard({
+        flashcard: mockFlashcard,
+      });
+
+      expect(spy).toHaveBeenCalledWith(action);
+    });
+
+    it('delete on delete(model)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+
+      facade.deleteFlashcard(mockFlashcard);
+
+      const action = FlashcardsActions.deleteFlashcard({
+        flashcard: mockFlashcard,
+      });
+
+      expect(spy).toHaveBeenCalledWith(action);
     });
   });
 });

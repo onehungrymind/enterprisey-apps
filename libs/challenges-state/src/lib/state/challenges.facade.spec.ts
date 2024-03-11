@@ -1,101 +1,104 @@
-import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule, Store } from '@ngrx/store';
-import { readFirst } from '@nx/angular/testing';
+import { ActionsSubject } from '@ngrx/store';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { mockChallenge } from '@proto/testing';
 
-import * as ChallengesActions from './challenges.actions';
-import { ChallengesEffects } from './challenges.effects';
+import { ChallengesActions } from './challenges.actions';
 import { ChallengesFacade } from './challenges.facade';
-import { ChallengesEntity } from './challenges.models';
-import {
-  CHALLENGES_FEATURE_KEY,
-  ChallengesState,
-  initialChallengesState,
-  challengesReducer,
-} from './challenges.reducer';
-import * as ChallengesSelectors from './challenges.selectors';
-
-interface TestSchema {
-  challenges: ChallengesState;
-}
+import { initialChallengesState } from './challenges.reducer';
 
 describe('ChallengesFacade', () => {
   let facade: ChallengesFacade;
-  let store: Store<TestSchema>;
-  const createChallengesEntity = (id: string, name = ''): ChallengesEntity => ({
-    id,
-    name: name || `name-${id}`,
+  let store: MockStore;
+
+  const mockActionsSubject = new ActionsSubject();
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        ChallengesFacade,
+        provideMockStore({ initialState: initialChallengesState }),
+        { provide: ActionsSubject, useValue: mockActionsSubject },
+      ],
+    });
+
+    facade = TestBed.inject(ChallengesFacade);
+    store = TestBed.inject(MockStore);
   });
 
-  describe('used in NgModule', () => {
-    beforeEach(() => {
-      @NgModule({
-        imports: [
-          StoreModule.forFeature(CHALLENGES_FEATURE_KEY, challengesReducer),
-          EffectsModule.forFeature([ChallengesEffects]),
-        ],
-        providers: [ChallengesFacade],
-      })
-      class CustomFeatureModule {}
+  it('should be created', () => {
+    expect(facade).toBeTruthy();
+  });
 
-      @NgModule({
-        imports: [
-          StoreModule.forRoot({}),
-          EffectsModule.forRoot([]),
-          CustomFeatureModule,
-        ],
-      })
-      class RootModule {}
-      TestBed.configureTestingModule({ imports: [RootModule] });
+  describe('should dispatch', () => {
+    it('select on select(challenge.id)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
 
-      store = TestBed.inject(Store);
-      facade = TestBed.inject(ChallengesFacade);
+      facade.selectChallenge(mockChallenge.id as string);
+
+      const action = ChallengesActions.selectChallenge({
+        selectedId: mockChallenge.id as string,
+      });
+
+      expect(spy).toHaveBeenCalledWith(action);
     });
 
-    /**
-     * The initially generated facade::loadAll() returns empty array
-     */
-    it('loadAll() should return empty list with loaded == true', async () => {
-      let list = await readFirst(facade.allChallenges$);
-      let isLoaded = await readFirst(facade.loaded$);
+    it('loadChallenges on loadChallenges()', () => {
+      const spy = jest.spyOn(store, 'dispatch');
 
-      expect(list.length).toBe(0);
-      expect(isLoaded).toBe(false);
+      facade.loadChallenges();
 
-      facade.init();
+      const action = ChallengesActions.loadChallenges();
 
-      list = await readFirst(facade.allChallenges$);
-      isLoaded = await readFirst(facade.loaded$);
-
-      expect(list.length).toBe(0);
-      expect(isLoaded).toBe(true);
+      expect(spy).toHaveBeenCalledWith(action);
     });
 
-    /**
-     * Use `loadChallengesSuccess` to manually update list
-     */
-    it('allChallenges$ should return the loaded list; and loaded flag == true', async () => {
-      let list = await readFirst(facade.allChallenges$);
-      let isLoaded = await readFirst(facade.loaded$);
+    it('loadChallenge on loadChallenge(challenge.id)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
 
-      expect(list.length).toBe(0);
-      expect(isLoaded).toBe(false);
+      facade.loadChallenge(mockChallenge.id as string);
 
-      store.dispatch(
-        ChallengesActions.loadChallengesSuccess({
-          challenges: [
-            createChallengesEntity('AAA'),
-            createChallengesEntity('BBB'),
-          ],
-        })
-      );
+      const action = ChallengesActions.loadChallenge({
+        challengeId: mockChallenge.id as string,
+      });
 
-      list = await readFirst(facade.allChallenges$);
-      isLoaded = await readFirst(facade.loaded$);
+      expect(spy).toHaveBeenCalledWith(action);
+    });
 
-      expect(list.length).toBe(2);
-      expect(isLoaded).toBe(true);
+    it('createChallenge on createChallenge(challenge)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+
+      facade.createChallenge(mockChallenge);
+
+      const action = ChallengesActions.createChallenge({
+        challenge: mockChallenge,
+      });
+
+      expect(spy).toHaveBeenCalledWith(action);
+    });
+
+    it('updateChallenge on updateChallenge(challenge)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+
+      facade.updateChallenge(mockChallenge);
+
+      const action = ChallengesActions.updateChallenge({
+        challenge: mockChallenge,
+      });
+
+      expect(spy).toHaveBeenCalledWith(action);
+    });
+
+    it('delete on delete(model)', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+
+      facade.deleteChallenge(mockChallenge);
+
+      const action = ChallengesActions.deleteChallenge({
+        challenge: mockChallenge,
+      });
+
+      expect(spy).toHaveBeenCalledWith(action);
     });
   });
 });
