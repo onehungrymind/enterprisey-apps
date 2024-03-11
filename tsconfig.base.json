@@ -23,6 +23,7 @@
       "@proto/material": ["libs/material/src/index.ts"],
       "@proto/notes-data": ["libs/notes-data/src/index.ts"],
       "@proto/notes-state": ["libs/notes-state/src/index.ts"],
+      "@proto/testing": ["libs/testing/src/index.ts"],
       "@proto/users-data": ["libs/users-data/src/index.ts"],
       "@proto/users-state": ["libs/users-state/src/index.ts"],
       "challenges/Routes": [
