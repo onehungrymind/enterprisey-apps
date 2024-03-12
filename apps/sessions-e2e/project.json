@@ -1,0 +1,9 @@
+{
+  "name": "sessions-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/sessions-e2e/src",
+  "targets": {},
+  "tags": [],
+  "implicitDependencies": ["sessions"]
+}

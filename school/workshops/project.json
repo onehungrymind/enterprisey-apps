@@ -1,0 +1,89 @@
+{
+  "name": "workshops",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "proto",
+  "sourceRoot": "school/workshops/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/school/workshops",
+        "index": "school/workshops/src/index.html",
+        "main": "school/workshops/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "school/workshops/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "school/workshops/src/favicon.ico",
+          "school/workshops/src/assets"
+        ],
+        "styles": ["school/workshops/src/styles.scss"],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "school/workshops/webpack.config.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "school/workshops/webpack.prod.config.ts"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nx/angular:module-federation-dev-server",
+      "options": {
+        "port": 4200,
+        "publicHost": "http://localhost:4200"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "workshops:build:production"
+        },
+        "development": {
+          "buildTarget": "workshops:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "workshops:build"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "workshops:build",
+        "port": 4200
+      }
+    }
+  }
+}

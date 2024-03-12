@@ -39,6 +39,7 @@
         "apps/flashcards/src/app/remote-entry/entry.routes.ts"
       ],
       "notes/Routes": ["apps/notes/src/app/remote-entry/entry.routes.ts"],
+      "sessions/Routes": ["apps/sessions/src/app/remote-entry/entry.routes.ts"],
       "users/Routes": ["apps/users/src/app/remote-entry/entry.routes.ts"]
     }
   },

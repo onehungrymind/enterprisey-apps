@@ -1,0 +1,96 @@
+{
+  "name": "sessions",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "proto",
+  "sourceRoot": "apps/sessions/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/sessions",
+        "index": "apps/sessions/src/index.html",
+        "main": "apps/sessions/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/sessions/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/sessions/src/favicon.ico", "apps/sessions/src/assets"],
+        "styles": ["apps/sessions/src/styles.scss"],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/sessions/webpack.config.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/sessions/webpack.prod.config.ts"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nx/angular:dev-server",
+      "options": {
+        "port": 4205,
+        "publicHost": "http://localhost:4205"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "sessions:build:production"
+        },
+        "development": {
+          "buildTarget": "sessions:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "sessions:build"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "defaultConfiguration": "production",
+      "options": {
+        "buildTarget": "sessions:build",
+        "port": 4205,
+        "watch": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "sessions:build:development"
+        },
+        "production": {
+          "buildTarget": "sessions:build:production"
+        }
+      }
+    }
+  }
+}
