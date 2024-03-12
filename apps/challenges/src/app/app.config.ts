@@ -11,9 +11,12 @@ import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { appRoutes } from './app.routes';
 import { provideEffects } from '@ngrx/effects';
+import { ChallengesFacade } from '@proto/challenges-state';
+import { ChallengesLocalFacade } from '@proto/challenges-local-state';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    { provide: ChallengesFacade, useClass: ChallengesLocalFacade },
     provideClientHydration(),
     provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
     provideEffects(),

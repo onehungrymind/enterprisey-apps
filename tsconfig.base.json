@@ -17,6 +17,9 @@
     "paths": {
       "@proto/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@proto/challenges-data": ["libs/challenges-data/src/index.ts"],
+      "@proto/challenges-local-state": [
+        "libs/challenges-local-state/src/index.ts"
+      ],
       "@proto/challenges-state": ["libs/challenges-state/src/index.ts"],
       "@proto/features-data": ["libs/features-data/src/index.ts"],
       "@proto/features-state": ["libs/features-state/src/index.ts"],
