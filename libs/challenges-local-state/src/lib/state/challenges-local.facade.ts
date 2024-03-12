@@ -54,14 +54,12 @@ export class ChallengesLocalFacade {
   allChallenges$ = this.challenges.asObservable();
   selectedChallenge$ = this.selectedChallenge.asObservable();
 
-  resetSelectedChallenge() {
-   this.selectedChallenge.next(Object.assign({}, mockChallenge));
-  }
+  resetSelectedChallenge() {}
 
   selectChallenge(selectedId: string) {
     const challenge =
       this.challenges.value.find((challenge) => challenge.id == selectedId) ||
-      Object.assign({}, mockChallenge);
+      mockChallenge;
     this.selectedChallenge.next(challenge);
   }
 
@@ -72,7 +70,7 @@ export class ChallengesLocalFacade {
   loadChallenge(challengeId: string) {
     const challenge =
       this.challenges.value.find((challenge) => challenge.id == challengeId) ||
-      Object.assign({}, mockChallenge);
+      mockChallenge;
     this.selectedChallenge.next(challenge);
   }
 
