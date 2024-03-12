@@ -1,3 +1,8 @@
-export const getGreeting = () => cy.get('h1');
 
-export const getReferenceTitle = () => cy.get('[data-test="reference-title"]');
+const page = {
+  referenceTitle: '[data-test="reference-title"]',
+  referenceLabel: 'Reference Template'
+}
+
+export const getReferenceTitle = () => cy.get(page.referenceTitle);
+export const checkReferenceTitle = () => getReferenceTitle().contains(page.referenceTitle);

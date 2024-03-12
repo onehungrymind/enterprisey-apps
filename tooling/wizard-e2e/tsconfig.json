@@ -3,8 +3,9 @@
   "compilerOptions": {
     "allowJs": true,
     "outDir": "../../dist/out-tsc",
-    "module": "commonjs",
     "types": ["cypress", "node"],
+    "esModuleInterop": true,
+    "module": "nodenext",
     "sourceMap": false,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
