@@ -1,0 +1,31 @@
+{
+  "workshops": [
+    {
+      "id": "challenge1",
+      "title": "Local Challenge 01",
+      "description": "Local challenge description",
+      "comment": "Nice work!",
+      "repo_url": "enterprisey.apps",
+      "completed": true,
+      "user_id": "user1"
+    },
+    {
+      "id": "challenge2",
+      "title": "Local Challenge 02",
+      "description": "Local challenge description",
+      "comment": "Hooray!",
+      "repo_url": "enterprisey.apps",
+      "completed": true,
+      "user_id": "user1"
+    },
+    {
+      "id": "challenge3",
+      "title": "Local Challenge 03",
+      "description": "Local challenge description",
+      "comment": "See comments",
+      "repo_url": "enterprisey.apps",
+      "completed": false,
+      "user_id": "user1"
+    }
+  ]
+}
