@@ -1,0 +1,9 @@
+{
+  "name": "workshops-state",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/workshops-state/src",
+  "prefix": "proto",
+  "tags": [],
+  "projectType": "library",
+  "targets": {}
+}

@@ -35,6 +35,7 @@
       "@proto/users-data": ["libs/users-data/src/index.ts"],
       "@proto/users-state": ["libs/users-state/src/index.ts"],
       "@proto/workshops-data": ["libs/workshops-data/src/index.ts"],
+      "@proto/workshops-state": ["libs/workshops-state/src/index.ts"],
       "challenges/Routes": [
         "apps/challenges/src/app/remote-entry/entry.routes.ts"
       ],
