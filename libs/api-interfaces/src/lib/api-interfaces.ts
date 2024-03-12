@@ -66,3 +66,11 @@ export interface Company extends BaseEntity {
   name: string;
   description: string;
 }
+
+export interface Workshop extends BaseEntity {
+  title: string;
+  description: string;
+  date: Date;
+  topic: string;
+  instructor_id: string;
+}
