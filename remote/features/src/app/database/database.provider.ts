@@ -9,7 +9,7 @@ export const databaseProviders = [
     useFactory: () =>
       new DataSource({
         type: 'sqlite',
-        database: './databases/challenges.sqlite',
+        database: './databases/features.sqlite',
         synchronize: true,
         logging: false,
         entities: getMetadataArgsStorage().tables.map((tbl) => tbl.target),
