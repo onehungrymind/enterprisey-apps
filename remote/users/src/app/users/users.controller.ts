@@ -34,7 +34,6 @@ export class UsersController {
 
   @Post()
   create(@Body() user: User): Promise<User> {
-    // TODO: if the data provided in the api call is invalid, the server will crash with a 500 error. Need graceful error handling.
     return this.usersService.create(user);
   }
 
