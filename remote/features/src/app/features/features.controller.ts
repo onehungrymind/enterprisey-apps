@@ -1,42 +1,41 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
+import { Feature } from '../database/entities/feature.entity';
 import { FeaturesService } from './features.service';
-import { CreateFeatureDto } from './dto/create-feature.dto';
-import { UpdateFeatureDto } from './dto/update-feature.dto';
 
 @Controller('features')
 export class FeaturesController {
   constructor(private readonly featuresService: FeaturesService) {}
 
   @Post()
-  create(@Body() createFeatureDto: CreateFeatureDto) {
-    return this.featuresService.create(createFeatureDto);
+  create(@Body() feature: Feature): Promise<Feature> {
+    return this.featuresService.create(feature);
   }
 
   @Get()
-  findAll() {
+  findAll(): Promise<Feature[]> {
     return this.featuresService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.featuresService.findOne(+id);
+  findOne(@Param('id') id: string): Promise<Feature> {
+    return this.featuresService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFeatureDto: UpdateFeatureDto) {
-    return this.featuresService.update(+id, updateFeatureDto);
+  update(@Param('id') id: string, @Body() feature: Feature) {
+    return this.featuresService.update(feature);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.featuresService.remove(+id);
+    return this.featuresService.remove(id);
   }
 }

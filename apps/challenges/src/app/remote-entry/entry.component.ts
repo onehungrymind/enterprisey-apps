@@ -4,7 +4,10 @@ import { ChallengesComponent } from '../challenges/challenges.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, ChallengesComponent],
+  imports: [
+    CommonModule,
+    ChallengesComponent,
+  ],
   selector: 'proto-challenges-entry',
   template: `<proto-challenges></proto-challenges>`,
 })
