@@ -52,6 +52,31 @@ You can get to the portal by running
 npm run serve:portal-feature
 ```
 
+## Authentication
+** This feature uses the Users API to create and authenticate users. Start the service with `npm run s:users-api ` **
+
+Via curl, you can create a user like so:
+```bash
+curl -X 'POST' \
+  'http://localhost:3400/api/users' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+"firstName": "test",
+"lastName": "test last",
+"email": "test@test.com",
+"password": "test",
+"role": "tester",
+"company_id": "test"
+}
+'
+```
+Once the user is created, you can log in like so:
+```bash
+curl -X POST http://localhost:3400/api/users/auth/login -d '{"email": "test@test.com", "password": "test"}' -H "Content-Type: application/json"
+```
+You will receive a token in the response. You can use this token to authenticate requests to the API.
+
 ## The Wizard
 
 There is a tool that you can use to help accelerate development across features. It allows you to quickly pull code from one feature and generate an equivalent version for other features.

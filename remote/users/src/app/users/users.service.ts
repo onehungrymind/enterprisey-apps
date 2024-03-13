@@ -38,15 +38,26 @@ export class UsersService {
   }
 
   async create(user: User): Promise<User>  {
-    return await bcrypt.hash(user.password, 10, (err: Error, hash: string) => {
-      const userWithHashedPassword: User = {
-        ...user,
-        password: hash,
-      };
 
-      if (err) throw new Error(err.message);
+    return new Promise((resolve, reject) => {
+      bcrypt.hash(user.password, 10, async (err: Error, hash: string) => {
+        try {
+        const userWithHashedPassword: User = {
+          ...user,
+          password: hash,
+        };
 
-      return this.usersRepository.save(userWithHashedPassword);
+        const db_user = await this.usersRepository.save(userWithHashedPassword)
+
+        if (err) reject(err.message)
+
+        resolve(db_user)
+        } catch (err) {
+          reject(err.message)
+        }
+      });
     });
-  }
 }
+
+  }
+
