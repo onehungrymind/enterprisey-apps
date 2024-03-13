@@ -1,7 +1,7 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { Repository, DeleteResult } from 'typeorm';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import { DeleteResult, Repository } from 'typeorm';
 import { User } from '../database/entities/user.entity';
-
 @Injectable()
 export class UsersService {
   constructor(
@@ -23,10 +23,6 @@ export class UsersService {
     return user;
   }
 
-  async create(user: User): Promise<User> {
-    return await this.usersRepository.save(user);
-  }
-
   async update(user: User): Promise<User> {
     return await this.usersRepository.save(user);
   }
@@ -35,5 +31,22 @@ export class UsersService {
     const user = await this.usersRepository.findOneBy({ id });
     if (!user) throw new NotFoundException();
     return await this.usersRepository.delete(id);
+  }
+
+  async findByEmail(email: string): Promise<User | undefined> {
+    return await this.usersRepository.findOneBy({ email });
+  }
+
+  async create(user: User): Promise<User>  {
+    return await bcrypt.hash(user.password, 10, (err: Error, hash: string) => {
+      const userWithHashedPassword: User = {
+        ...user,
+        password: hash,
+      };
+
+      if (err) throw new Error(err.message);
+
+      return this.usersRepository.save(userWithHashedPassword);
+    });
   }
 }

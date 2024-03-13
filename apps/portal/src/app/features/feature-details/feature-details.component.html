@@ -40,6 +40,14 @@
           type="input"
           name="api_uri" />
       </mat-form-field>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          placeholder="Enter a slug"
+          [(ngModel)]="currentFeature.slug"
+          type="input"
+          name="slug" />
+      </mat-form-field>
       <div class="full-width">
         <mat-checkbox
           [(ngModel)]="currentFeature.healthy"
