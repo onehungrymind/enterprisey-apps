@@ -1,5 +1,17 @@
 # Enterprisey Workshop POC
 
+## Setup Instructions
+
+> [!NOTE]
+> Node Version 20.x.x is recommended for this project.
+
+```bash
+git clone https://github.com/onehungrymind/enterprisey-apps.git
+cd enterprisey-apps
+npm install
+npm start
+```
+
 There are four features (challenges, flashcards, notes, users) that will serve as remotes for the host application (dashboard).
 
 To serve a feature, run the corresponding command.
