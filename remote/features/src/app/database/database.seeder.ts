@@ -10,9 +10,12 @@ import {
 
 import { Feature } from './entities/feature.entity';
 
+const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+
 export const FeaturesFactory = setSeederFactory(Feature, (faker: Faker) => {
   const feature = new Feature();
-  feature.title = faker.person.jobTitle();
+  feature.slug = faker.word.noun();
+  feature.title = capitalizeFirstLetter(feature.slug);
   feature.description = faker.lorem.sentence();
   feature.remote_uri = faker.internet.url();
   feature.api_uri = faker.lorem.sentences(3);

@@ -18,5 +18,8 @@ export class Feature {
   api_uri: string;
 
   @Column()
+  slug: string;
+
+  @Column()
   healthy: boolean;
 }

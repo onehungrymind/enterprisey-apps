@@ -38,6 +38,7 @@ export interface Feature extends BaseEntity {
   description: string;
   remote_uri: string;
   api_uri: string;
+  slug: string;
   healthy: boolean;
 }
 
