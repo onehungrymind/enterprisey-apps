@@ -1,0 +1,17 @@
+services:
+  challenges:
+    image: app-challenges
+    ports:
+      - "3000:3500"
+  flashcards:
+    image: app-flashcards
+    ports:
+      - "3100:3500"
+  notes:
+    image: app-notes
+    ports:
+      - "3200:3500"
+  users:
+    image: app-users
+    ports:
+      - "3300:3500"
