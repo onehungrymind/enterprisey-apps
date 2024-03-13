@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 import { User } from '../database/entities/user.entity';
 import { UsersService } from './users.service';
-import { LocalAuthGuard } from '../auth/guards/local-auth.guard';
 import { AuthService } from '../auth/auth.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
@@ -21,7 +21,7 @@ export class UsersController {
     private readonly authService: AuthService,
   ) {}
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(AuthGuard('local'))
   @Post('auth/login')
   async login(@Req() req) {
     return this.authService.login(req.body);
@@ -34,6 +34,7 @@ export class UsersController {
 
   @Post()
   create(@Body() user: User): Promise<User> {
+    // TODO: if the data provided in the api call is invalid, the server will crash with a 500 error. Need graceful error handling.
     return this.usersService.create(user);
   }
 
