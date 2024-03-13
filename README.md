@@ -87,6 +87,24 @@ You can see the tool by running
 npm run wizard
 ```
 
+## Running the remote services with docker
+### Build a single service by passing the name to the build command.
+```
+npm run docker:build-remote <service name> (users, notes, flashcards, challenges)
+```
+
+### Build all services (this will take a while, as it will build all the remote services in the monorepo.)
+```
+npm run docker:build-remote
+```
+
+### Run with docker-compose
+After building all the images, run the full stack with the following command.
+```
+npm run docker:run-remote
+```
+
+
 # Action Items
 
 ## The Frontend
