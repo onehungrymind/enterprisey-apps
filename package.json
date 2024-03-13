@@ -12,6 +12,7 @@
     "wizard": "npx nx serve wizard --port 4800 --open",
     "_portal": "-------------------------------------------------------------------------------",
     "s:portal-app": "npx nx serve portal --open",
+    "s:features-api": "npx nx serve features-api",
     "s:features-json": "json-server server/features.json --routes=server/routes.json --port=3000",
     "s:portal-feature": "concurrently \"npm run s:features-json\" \"npm run s:portal-app\"",
     "_challenges": "-------------------------------------------------------------------------------",

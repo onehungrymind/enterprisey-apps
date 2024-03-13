@@ -36,6 +36,15 @@ export interface Flashcard extends BaseEntity {
 export interface Feature extends BaseEntity {
   title: string;
   description: string;
+  slug: string;
+  remote_uri: string;
+  api_uri: string;
+  healthy: boolean;
+}
+
+export interface Feature extends BaseEntity {
+  title: string;
+  description: string;
   remote_uri: string;
   api_uri: string;
   slug: string;
