@@ -3,11 +3,13 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
   Req,
   UseGuards,
+  HttpStatus
 } from '@nestjs/common';
 import { User } from '../database/entities/user.entity';
 import { UsersService } from './users.service';
@@ -17,6 +19,12 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
   ) {}
+
+  @Post('login')
+  signIn(@Body() signInDto: Record<string, any>) {
+    console.log('SIGN IN DTO:', signInDto);
+    return this.usersService.signIn(signInDto.username, signInDto.password);
+  }
 
   @Get('email/:email')
   findByEmail(@Param('email') email: string): Promise<User> {
