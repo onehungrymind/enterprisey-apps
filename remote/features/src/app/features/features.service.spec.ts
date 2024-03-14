@@ -1,4 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { mockEmptyFeature, mockFeature } from '@proto/testing';
 import { DeleteResult, Repository } from 'typeorm';
@@ -16,6 +17,7 @@ describe('FeaturesService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
+        ConfigService,
         FeaturesService,
         {
           provide: 'FEATURE_REPOSITORY',

@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { mockEmptyFeature, mockFeature } from '@proto/testing';
 import { DeleteResult, Repository } from 'typeorm';
@@ -17,6 +18,7 @@ describe('FeaturesController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [FeaturesController],
       providers: [
+        ConfigService,
         FeaturesService,
         {
           provide: 'FEATURE_REPOSITORY',
