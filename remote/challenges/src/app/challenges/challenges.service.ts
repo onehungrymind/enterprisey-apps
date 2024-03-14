@@ -1,12 +1,13 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { Repository, DeleteResult } from 'typeorm';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { DeleteResult, Repository } from 'typeorm';
+
 import { Challenge } from '../database/entities/challenge.entity';
 
 @Injectable()
 export class ChallengesService {
   constructor(
     @Inject('CHALLENGE_REPOSITORY')
-    private challengesRepository: Repository<Challenge>,
+    private challengesRepository: Repository<Challenge>
   ) {}
 
   async findAll(): Promise<Challenge[]> {

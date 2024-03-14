@@ -1,12 +1,13 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { Repository, DeleteResult } from 'typeorm';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { DeleteResult, Repository } from 'typeorm';
+
 import { Note } from '../database/entities/note.entity';
 
 @Injectable()
 export class NotesService {
   constructor(
     @Inject('NOTE_REPOSITORY')
-    private notesRepository: Repository<Note>,
+    private notesRepository: Repository<Note>
   ) {}
 
   async findAll(): Promise<Note[]> {
@@ -37,4 +38,3 @@ export class NotesService {
     return await this.notesRepository.delete(id);
   }
 }
-

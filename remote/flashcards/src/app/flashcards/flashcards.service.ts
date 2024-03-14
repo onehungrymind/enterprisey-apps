@@ -1,12 +1,13 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { Repository, DeleteResult } from 'typeorm';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { DeleteResult, Repository } from 'typeorm';
+
 import { Flashcard } from '../database/entities/flashcard.entity';
 
 @Injectable()
 export class FlashcardsService {
   constructor(
     @Inject('FLASHCARD_REPOSITORY')
-    private flashcardsRepository: Repository<Flashcard>,
+    private flashcardsRepository: Repository<Flashcard>
   ) {}
 
   async findAll(): Promise<Flashcard[]> {
