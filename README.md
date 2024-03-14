@@ -53,9 +53,12 @@ npm run serve:portal-feature
 ```
 
 ## Authentication
-** This feature uses the Users API to create and authenticate users. Start the service with `npm run s:users-api ` **
+This feature uses the Users API to create and authenticate users. 
+
+Start the service with `npm run s:users-api`.
 
 Via curl, you can create a user like so:
+
 ```bash
 curl -X 'POST' \
   'http://localhost:3400/api/users' \
@@ -68,13 +71,15 @@ curl -X 'POST' \
 "password": "test",
 "role": "tester",
 "company_id": "test"
-}
-'
+}'
 ```
+
 Once the user is created, you can log in like so:
+
 ```bash
 curl -X POST http://localhost:3400/api/users/auth/login -d '{"email": "test@test.com", "password": "test"}' -H "Content-Type: application/json"
 ```
+
 You will receive a token in the response. You can use this token to authenticate requests to the API.
 
 ## The Wizard
@@ -112,20 +117,23 @@ npm run docker:run-remote
 - [X] Fix the unit tests for the data features
 - [X] Fix the unit tests for the state features
 - [X] Fix the unit tests for the app features
-- [ ] Create a basic Cypress test for each app
-- [ ] Integrate Cucumber into Cypress tests
-- [ ] Create a functional set of E2E tests for each feature
+
+- [ ] Set up auth workflow
+
+- [ ] Get Cypress working for each app
+- [ ] Mock out API in Cypress using Cy.intercept
+- [ ] Create suite of tests on a feature for CRUD
+- [ ] Set up deployment
+
+- [ ] BONUS: Integrate Cucumber into Cypress tests
 - [ ] Style the application
 - [ ] Animate the application
-- [ ] Set up auth workflow
-- [ ] Set up deployment
-- [ ] Add tooling for performance
 
 ## The API
 - [X] Create data seeders
-- [ ] Set up authentication 
-- [ ] Create E2E tests for APIs
-- [ ] Add docker images
+- [X] Create E2E tests for APIs
+- [X] Add docker images
+- [ ] Set up a route guard
 - [ ] Add in supergraph
 
 ## The Workshop

@@ -14,6 +14,18 @@ export class UsersFacade {
   allUsers$ = this.store.pipe(select(UsersSelectors.getAllUsers));
   selectedUser$ = this.store.pipe(select(UsersSelectors.getSelectedUser));
 
+  login(email:string, password: string) {
+    this.dispatch(UsersActions.loginUser({ email, password}));
+  }
+
+  logout() {
+    this.dispatch(UsersActions.logoutUser());
+  }
+
+  loadLoggedInUser(email: string) {
+    this.dispatch(UsersActions.loadLoggedInUser({ email }));
+  }
+
   resetSelectedUser() {
     this.dispatch(UsersActions.resetSelectedUser());
   }

@@ -4,7 +4,14 @@ import { User } from '@proto/api-interfaces';
 export const UsersActions = createActionGroup({
   source: 'Users API',
   events: {
+    'Logout User': emptyProps(),
+    'Login User': props<{ email: string; password: string }>(),
+    'Login User Success': props<{ user: User }>(),
+    'Login User Failure': props<{ error: any }>(),
     'Select User': props<{ selectedId: string }>(),
+    'Load Logged In User': props<{ email: string }>(),
+    'Load Logged In User Success': props<{ user: User }>(),
+    'Load Logged In User Failure': props<{ error: any }>(),
     'Reset Selected User': emptyProps(),
     'Reset Users': emptyProps(),
     'Load Users': emptyProps(),
@@ -26,5 +33,5 @@ export const UsersActions = createActionGroup({
     'Upsert User': props<{ user: User }>(),
     'Upsert User Success': props<{ user: User }>(),
     'Upsert User Failure': props<{ error: any }>(),
-  }
+  },
 });

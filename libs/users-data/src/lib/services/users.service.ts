@@ -13,6 +13,14 @@ export class UsersService {
 
   constructor(private http: HttpClient) {}
 
+  login(email: string, password: string) {
+    return this.http.post<User>(this.getLoginUrl(), { email, password });
+  }
+
+  findByEmail(email: string) {
+    return this.http.get<User>(this.getUrlWithEmail(email));
+  }
+
   all() {
     return this.http.get<User[]>(this.getUrl());
   }
@@ -37,7 +45,15 @@ export class UsersService {
     return `${API_URL}/${this.model}`;
   }
 
-  private getUrlWithId(id: string | undefined | null) {
+  private getUrlWithId(id: string | null | undefined) {
     return `${this.getUrl()}/${id}`;
+  }
+
+  private getLoginUrl() {
+    return `${API_URL}/auth/login`;
+  }
+
+  private getUrlWithEmail(email: string) {
+    return `${this.getUrl()}/email/${email}`;
   }
 }
