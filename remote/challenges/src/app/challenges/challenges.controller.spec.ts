@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { mockChallenge, mockEmptyChallenge } from '@proto/testing';
 import { DeleteResult, Repository } from 'typeorm';
 
@@ -13,7 +12,6 @@ describe('ChallengesController', () => {
 
   const challenge = { ...mockChallenge } as Challenge;
   const emptyChallenge = { ...mockEmptyChallenge } as Challenge;
-  const repositoryToken = getRepositoryToken(Challenge);
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -21,7 +19,7 @@ describe('ChallengesController', () => {
       providers: [
         ChallengesService,
         {
-          provide: repositoryToken,
+          provide: 'CHALLENGE_REPOSITORY',
           useClass: Repository,
         },
       ],

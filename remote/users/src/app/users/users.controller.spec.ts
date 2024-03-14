@@ -1,6 +1,5 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { mockEmptyUser, mockUser } from '@proto/testing';
 import { DeleteResult, Repository } from 'typeorm';
 
@@ -16,7 +15,6 @@ describe('UsersController', () => {
 
   const user = { ...mockUser } as User;
   const emptyUser = { ...mockEmptyUser } as User;
-  const repositoryToken = getRepositoryToken(User);
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -26,7 +24,7 @@ describe('UsersController', () => {
         UsersService,
         JwtService,
         {
-          provide: repositoryToken,
+          provide: 'USER_REPOSITORY',
           useClass: Repository,
         },
       ],

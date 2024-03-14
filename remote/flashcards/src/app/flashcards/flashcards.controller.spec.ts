@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { mockEmptyFlashcard, mockFlashcard } from '@proto/testing';
 import { DeleteResult, Repository } from 'typeorm';
 
@@ -13,7 +12,6 @@ describe('FlashcardsController', () => {
 
   const flashcard = { ...mockFlashcard } as Flashcard;
   const emptyFlashcard = { ...mockEmptyFlashcard } as Flashcard;
-  const repositoryToken = getRepositoryToken(Flashcard);
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -21,7 +19,7 @@ describe('FlashcardsController', () => {
       providers: [
         FlashcardsService,
         {
-          provide: repositoryToken,
+          provide: 'FLASHCARD_REPOSITORY',
           useClass: Repository,
         },
       ],
