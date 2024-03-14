@@ -1,12 +1,11 @@
-<div class="container">
-  <div class="card-wrapper">
-    <mat-card class="mat-elevation-z1">
-      <mat-card-header>
-        <mat-card-title>
-            Login
-        </mat-card-title>
-      </mat-card-header>
-      <form (submit)="login(loginInfo)">
+<div class="login">
+  <div class="container">
+    <div class="card-wrapper">
+      <mat-card class="mat-elevation-z1">
+        <mat-card-header>
+          <mat-card-title> Login </mat-card-title>
+        </mat-card-header>
+        <form (submit)="login(loginInfo)">
           <mat-card-content>
             <mat-form-field class="full-width">
               <input
@@ -24,15 +23,16 @@
                 [(ngModel)]="loginInfo.password"
                 type="password"
                 name="password"
-              >
+              />
             </mat-form-field>
           </mat-card-content>
           <mat-card-actions>
             <button type="submit" mat-button color="primary">Login</button>
           </mat-card-actions>
-      </form>
-    </mat-card>
+        </form>
+      </mat-card>
+    </div>
   </div>
-</div>
 
-<div class="background" [ngClass]="chosenFilter"></div>
+  <div class="background" [ngClass]="chosenFilter"></div>
+</div>
