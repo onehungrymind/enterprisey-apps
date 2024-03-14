@@ -10,9 +10,21 @@ services:
   gateway:
     image: app-gateway
     depends_on:
-      - challenges
-      - flashcards
-      - notes
-      - users
+      users:
+        condition: service_started
+        restart: true
+        required: true
+      challenges:
+        condition: service_started
+        restart: true
+        required: true
+      flashcards:
+        condition: service_started
+        restart: true
+        required: true
+      notes:
+        condition: service_started
+        restart: true
+        required: true
     ports:
       - "3500:3500"
