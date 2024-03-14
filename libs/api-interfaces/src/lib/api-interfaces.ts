@@ -67,3 +67,8 @@ export interface Company extends BaseEntity {
   name: string;
   description: string;
 }
+
+export interface Login {
+  email: string;
+  password: string;
+}

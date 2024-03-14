@@ -7,6 +7,8 @@ import { Observable, filter } from 'rxjs';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { UsersListComponent } from './users-list/users-list.component';
 
+import { LoginModule } from '@proto/ui-login';
+
 @Component({
   selector: 'proto-users',
   standalone: true,
@@ -14,7 +16,7 @@ import { UsersListComponent } from './users-list/users-list.component';
     CommonModule,
     MaterialModule,
     UsersListComponent,
-    UserDetailsComponent,
+    UserDetailsComponent
   ],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],

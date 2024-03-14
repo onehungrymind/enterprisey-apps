@@ -6,6 +6,33 @@ import { of } from 'rxjs';
 import { catchError, exhaustMap, map } from 'rxjs/operators';
 import { UsersActions } from './users.actions';
 
+
+export const loginUser = createEffect(
+  (actions$ = inject(Actions), usersService = inject(UsersService)) => {
+  return actions$.pipe(
+    ofType(UsersActions.loginUser),
+    exhaustMap((action, value) => {
+      return usersService.login(action.email, action.password).pipe(
+        map((user: User) => UsersActions.loginUserSuccess({ user })),
+        catchError((error) => of(UsersActions.loginUserFailure({ error })))
+      );
+    })
+  );
+});
+
+export const loadLoggedInUser = createEffect(
+  (actions$ = inject(Actions), usersService = inject(UsersService)) => {
+  return actions$.pipe(
+    ofType(UsersActions.loadLoggedInUser),
+    exhaustMap((action, value) => {
+      return usersService.findByEmail(action.email).pipe(
+        map((user: User) => UsersActions.loadLoggedInUserSuccess({ user })),
+        catchError((error) => of(UsersActions.loadLoggedInUserFailure({ error })))
+      );
+    })
+  );
+});
+
 export const loadUsers = createEffect(
   (actions$ = inject(Actions), usersService = inject(UsersService)) => {
     return actions$.pipe(
