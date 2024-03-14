@@ -1,5 +1,4 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 
 import { Flashcard } from '../database/entities/flashcard.entity';
@@ -7,7 +6,7 @@ import { Flashcard } from '../database/entities/flashcard.entity';
 @Injectable()
 export class FlashcardsService {
   constructor(
-    @Inject(getRepositoryToken(Flashcard))
+    @Inject('FLASHCARD_REPOSITORY')
     private flashcardsRepository: Repository<Flashcard>
   ) {}
 

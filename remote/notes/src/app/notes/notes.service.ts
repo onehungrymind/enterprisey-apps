@@ -1,5 +1,4 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 
 import { Note } from '../database/entities/note.entity';
@@ -7,7 +6,7 @@ import { Note } from '../database/entities/note.entity';
 @Injectable()
 export class NotesService {
   constructor(
-    @Inject(getRepositoryToken(Note))
+    @Inject('NOTE_REPOSITORY')
     private notesRepository: Repository<Note>
   ) {}
 

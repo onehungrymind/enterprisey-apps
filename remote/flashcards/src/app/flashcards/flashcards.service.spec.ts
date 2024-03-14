@@ -1,6 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { mockEmptyFlashcard, mockFlashcard } from '@proto/testing';
 import { DeleteResult, Repository } from 'typeorm';
 
@@ -13,21 +12,20 @@ describe('FlashcardsService', () => {
 
   const flashcard = { ...mockFlashcard } as Flashcard;
   const emptyFlashcard = { ...mockEmptyFlashcard } as Flashcard;
-  const repositoryToken = getRepositoryToken(Flashcard);
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         FlashcardsService,
         {
-          provide: repositoryToken,
+          provide: 'FLASHCARD_REPOSITORY',
           useClass: Repository,
         },
       ],
     }).compile();
 
     service = module.get<FlashcardsService>(FlashcardsService);
-    repository = module.get<Repository<Flashcard>>(repositoryToken);
+    repository = module.get<Repository<Flashcard>>('FLASHCARD_REPOSITORY');
   });
 
   it('should be defined', () => {

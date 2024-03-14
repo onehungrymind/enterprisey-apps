@@ -1,5 +1,4 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 
 import { Feature } from '../database/entities/feature.entity';
@@ -7,7 +6,7 @@ import { Feature } from '../database/entities/feature.entity';
 @Injectable()
 export class FeaturesService {
   constructor(
-    @Inject(getRepositoryToken(Feature))
+    @Inject('FEATURE_REPOSITORY')
     private featuresRepository: Repository<Feature>
   ) {}
 

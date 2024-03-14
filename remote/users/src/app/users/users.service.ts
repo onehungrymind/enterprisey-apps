@@ -1,5 +1,4 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { DeleteResult, Repository } from 'typeorm';
 
@@ -8,7 +7,7 @@ import { User } from '../database/entities/user.entity';
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject(getRepositoryToken(User))
+    @Inject('USER_REPOSITORY')
     private usersRepository: Repository<User>
   ) {}
 

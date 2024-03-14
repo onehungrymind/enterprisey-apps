@@ -1,5 +1,4 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 
 import { Challenge } from '../database/entities/challenge.entity';
@@ -7,7 +6,7 @@ import { Challenge } from '../database/entities/challenge.entity';
 @Injectable()
 export class ChallengesService {
   constructor(
-    @Inject(getRepositoryToken(Challenge))
+    @Inject('CHALLENGE_REPOSITORY')
     private challengesRepository: Repository<Challenge>
   ) {}
 

@@ -1,6 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { mockChallenge, mockEmptyChallenge } from '@proto/testing';
 import { DeleteResult, Repository } from 'typeorm';
 
@@ -13,21 +12,20 @@ describe('ChallengesService', () => {
 
   const challenge = { ...mockChallenge } as Challenge;
   const emptyChallenge = { ...mockEmptyChallenge } as Challenge;
-  const repositoryToken = getRepositoryToken(Challenge);
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ChallengesService,
         {
-          provide: repositoryToken,
+          provide: 'CHALLENGE_REPOSITORY',
           useClass: Repository,
         },
       ],
     }).compile();
 
     service = module.get<ChallengesService>(ChallengesService);
-    repository = module.get<Repository<Challenge>>(repositoryToken);
+    repository = module.get<Repository<Challenge>>('CHALLENGE_REPOSITORY');
   });
 
   it('should be defined', () => {
