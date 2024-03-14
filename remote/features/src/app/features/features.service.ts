@@ -2,13 +2,19 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DeleteResult, Repository } from 'typeorm';
 
 import { Feature } from '../database/entities/feature.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class FeaturesService {
   constructor(
     @Inject('FEATURE_REPOSITORY')
-    private featuresRepository: Repository<Feature>
-  ) {}
+    private featuresRepository: Repository<Feature>,
+    private configService: ConfigService
+  ) {
+    // FOR DEMONSTRATION PURPOSES ONLY
+    // const API_KEY = this.configService.get<string>('SUPER_SECRET_API_KEY');
+    // console.log('👉 THE API_KEY IS: ', API_KEY);
+  }
 
   async findAll(): Promise<Feature[]> {
     return await this.featuresRepository.find();
