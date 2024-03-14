@@ -3,11 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '@proto/api-interfaces';
 import { MaterialModule } from '@proto/material';
 import { UsersFacade } from '@proto/users-state';
-import { Observable, filter } from 'rxjs';
+import { filter, Observable } from 'rxjs';
+
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { UsersListComponent } from './users-list/users-list.component';
-
-import { LoginModule } from '@proto/ui-login';
 
 @Component({
   selector: 'proto-users',
@@ -16,7 +15,7 @@ import { LoginModule } from '@proto/ui-login';
     CommonModule,
     MaterialModule,
     UsersListComponent,
-    UserDetailsComponent
+    UserDetailsComponent,
   ],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],

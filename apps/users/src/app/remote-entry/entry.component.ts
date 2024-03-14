@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UsersComponent } from '../users/users.component';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, UsersComponent],
+  imports: [CommonModule, RouterOutlet],
   selector: 'proto-users-entry',
-  template: `<proto-users></proto-users>`,
+  template: `<router-outlet />`,
 })
 export class RemoteEntryComponent {}
