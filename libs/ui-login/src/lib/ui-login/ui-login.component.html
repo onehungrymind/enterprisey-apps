@@ -1,5 +1,5 @@
 <div class="login">
-  <div class="container">
+  <div class="wrapper">
     <div class="card-wrapper">
       <mat-card class="mat-elevation-z1">
         <mat-card-header>
@@ -13,8 +13,7 @@
                 placeholder="Email"
                 [(ngModel)]="loginInfo.email"
                 type="text"
-                name="email"
-              />
+                name="email" />
             </mat-form-field>
             <mat-form-field class="full-width">
               <input
@@ -22,8 +21,7 @@
                 placeholder="Password"
                 [(ngModel)]="loginInfo.password"
                 type="password"
-                name="password"
-              />
+                name="password" />
             </mat-form-field>
           </mat-card-content>
           <mat-card-actions>
