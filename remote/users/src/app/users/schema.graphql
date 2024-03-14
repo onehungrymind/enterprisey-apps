@@ -1,0 +1,14 @@
+
+
+type Query {
+  users: [User!]!
+}
+
+type User @key(fields: "id") {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  role: String!
+  company_id: String!
+}

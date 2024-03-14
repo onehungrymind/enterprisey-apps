@@ -47,5 +47,6 @@
       "module": "CommonJS"
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": ["node_modules", "tmp"],
+  "include": ["**/*.graphql"]
 }

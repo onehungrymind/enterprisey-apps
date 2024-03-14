@@ -3,7 +3,7 @@ const { join } = require('path');
 
 module.exports = {
   output: {
-    path: join(__dirname, '../../dist/remote/users'),
+    path: join(__dirname, '../../dist/remote/gateway'),
   },
   plugins: [
     new NxWebpackPlugin({
@@ -11,7 +11,7 @@ module.exports = {
       compiler: 'tsc',
       main: './src/main.ts',
       tsConfig: './tsconfig.app.json',
-      assets: ['./src/assets', './src/app/users/schema.graphql'],
+      assets: ['./src/assets'],
       optimization: false,
       outputHashing: 'none',
     }),
