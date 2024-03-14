@@ -82,6 +82,10 @@ curl -X POST http://localhost:3400/api/users/auth/login -d '{"email": "test@test
 
 You will receive a token in the response. You can use this token to authenticate requests to the API.
 
+```bash
+curl http://localhost:3400/api/users -H "Authorization: Bearer YOUR_TOKEN"
+```
+
 ## The Wizard
 
 There is a tool that you can use to help accelerate development across features. It allows you to quickly pull code from one feature and generate an equivalent version for other features.

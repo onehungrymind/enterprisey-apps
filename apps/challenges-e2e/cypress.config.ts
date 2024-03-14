@@ -12,6 +12,6 @@ export default defineConfig({
       },
       ciWebServerCommand: 'nx run challenges:serve-static',
     }),
-    baseUrl: 'http://localhost:4200',
+    baseUrl: 'http://localhost:4202',
   },
 });

@@ -37,6 +37,7 @@ export class UsersController {
     return this.usersService.create(user);
   }
 
+  @UseGuards(AuthGuard('local'))
   @Get()
   findAll(): Promise<User[]> {
     return this.usersService.findAll();
