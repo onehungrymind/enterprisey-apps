@@ -1,12 +1,15 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { DeleteResult, Repository } from 'typeorm';
+
 import { User } from '../database/entities/user.entity';
+
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject('USER_REPOSITORY')
-    private usersRepository: Repository<User>,
+    @Inject(getRepositoryToken(User))
+    private usersRepository: Repository<User>
   ) {}
 
   async findAll(): Promise<User[]> {
@@ -37,27 +40,26 @@ export class UsersService {
     return await this.usersRepository.findOneBy({ email });
   }
 
-  async create(user: User): Promise<User>  {
-
+  async create(user: User): Promise<User> {
     return new Promise((resolve, reject) => {
       bcrypt.hash(user.password, 10, async (err: Error, hash: string) => {
         try {
-        const userWithHashedPassword: User = {
-          ...user,
-          password: hash,
-        };
+          const userWithHashedPassword: User = {
+            ...user,
+            password: hash,
+          };
 
-        const db_user = await this.usersRepository.save(userWithHashedPassword)
+          const db_user = await this.usersRepository.save(
+            userWithHashedPassword
+          );
 
-        if (err) reject(err.message)
+          if (err) reject(err.message);
 
-        resolve(db_user)
+          resolve(db_user);
         } catch (err) {
-          reject(err.message)
+          reject(err.message);
         }
       });
     });
-}
-
   }
-
+}

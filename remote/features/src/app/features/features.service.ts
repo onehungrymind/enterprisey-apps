@@ -1,12 +1,14 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { Repository, DeleteResult } from 'typeorm';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { DeleteResult, Repository } from 'typeorm';
+
 import { Feature } from '../database/entities/feature.entity';
 
 @Injectable()
 export class FeaturesService {
   constructor(
-    @Inject('FEATURE_REPOSITORY')
-    private featuresRepository: Repository<Feature>,
+    @Inject(getRepositoryToken(Feature))
+    private featuresRepository: Repository<Feature>
   ) {}
 
   async findAll(): Promise<Feature[]> {
