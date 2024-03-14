@@ -1,18 +1,9 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { User } from '../database/entities/user.entity';
 import { UsersService } from './users.service';
 import { AuthService } from '../auth/auth.service';
-import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { LocalAuthGuard } from '../auth/guards/local-auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -21,7 +12,7 @@ export class UsersController {
     private readonly authService: AuthService,
   ) {}
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Req() req) {
     return this.authService.login(req.body);
@@ -55,5 +46,17 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('auth/test')
+  async test(@Req() req) {
+    return "success!"
+  }
+
+  @Get('auth/validate')
+  async validate(@Req() req) {
+    const { authorization } = req.headers;
+    return this.authService.validateToken(authorization);
   }
 }
