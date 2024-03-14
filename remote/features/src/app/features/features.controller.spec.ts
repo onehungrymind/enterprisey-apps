@@ -1,5 +1,5 @@
+import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { mockEmptyFeature, mockFeature } from '@proto/testing';
 import { DeleteResult, Repository } from 'typeorm';
 
@@ -13,15 +13,15 @@ describe('FeaturesController', () => {
 
   const feature = { ...mockFeature } as Feature;
   const emptyFeature = { ...mockEmptyFeature } as Feature;
-  const repositoryToken = getRepositoryToken(Feature);
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [FeaturesController],
       providers: [
+        ConfigService,
         FeaturesService,
         {
-          provide: repositoryToken,
+          provide: 'FEATURE_REPOSITORY',
           useClass: Repository,
         },
       ],

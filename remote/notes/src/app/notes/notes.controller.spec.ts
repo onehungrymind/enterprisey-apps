@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { mockEmptyNote, mockNote } from '@proto/testing';
 import { DeleteResult, Repository } from 'typeorm';
 
@@ -13,7 +12,6 @@ describe('NotesController', () => {
 
   const note = { ...mockNote } as Note;
   const emptyNote = { ...mockEmptyNote } as Note;
-  const repositoryToken = getRepositoryToken(Note);
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -21,7 +19,7 @@ describe('NotesController', () => {
       providers: [
         NotesService,
         {
-          provide: repositoryToken,
+          provide: 'NOTE_REPOSITORY',
           useClass: Repository,
         },
       ],
