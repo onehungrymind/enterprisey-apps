@@ -31,6 +31,7 @@ export const camelCase = transformPipe(pascalCase, decapitalize);
 export const kebabCase = transformPipe(strip, addDashes, lowercase);
 export const snakeCase = transformPipe(strip, addUnderscores, lowercase);
 export const constantCase = transformPipe(strip, addUnderscores, uppercase);
+export const allUpper = transformPipe(strip, uppercase);
 
 // BUILDING
 export const buildBase = (schema: Schema): NameVariations => ({
@@ -42,6 +43,8 @@ export const buildBase = (schema: Schema): NameVariations => ({
   selectors: kebabCase(schema.modelPlural),
   snake: snakeCase(schema.model),
   snakes: snakeCase(schema.modelPlural),
+  allUp: allUpper(schema.model),
+  allUps: allUpper(schema.modelPlural),
 });
 
 export const buildSingleParam = (v: NameVariations) => `${v.ref}: ${v.model}`;
@@ -66,6 +69,8 @@ export const buildBaseRelationVariations = ({
   selectors: kebabCase(relatedSchema.modelPlural),
   snake: snakeCase(relatedSchema.model),
   snakes: snakeCase(relatedSchema.modelPlural),
+  allUp: allUpper(relatedSchema.model),
+  allUps: allUpper(relatedSchema.modelPlural),
 });
 
 export const generateRelationNameVariations: (prop: Prop) => NameVariations =
