@@ -18,6 +18,10 @@ export class NotesService {
     return await this.notesRepository.findOneBy({ id });
   }
 
+  async findByUserId(userId: string): Promise<Note[]> {
+    return await this.notesRepository.find({ where: { user_id: userId } });
+  }
+
   async get(id: string): Promise<Note> {
     const note = await this.notesRepository.findOneBy({ id });
     if (!note) throw new NotFoundException();

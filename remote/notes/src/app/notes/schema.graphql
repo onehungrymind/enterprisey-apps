@@ -1,0 +1,26 @@
+extend type Query {
+  note(id: ID!): Note
+}
+
+type Mutation {
+  createNote(userId: ID!, content: NoteInput!): Note
+  updateNote(id: ID!, title: String, content: NoteInput): Note
+  deleteNote(id: ID!): Note
+}
+
+type Note @key(fields: "id") {
+  id: ID!
+  title: String!
+  content: String!
+}
+
+type User @key(fields: "id") {
+  id: ID!
+  notes: [Note!]
+}
+
+input NoteInput {
+  title: String!
+  content: String!
+  type: String
+}
