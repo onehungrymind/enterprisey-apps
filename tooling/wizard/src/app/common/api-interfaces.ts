@@ -11,6 +11,8 @@ export interface NameVariations extends BaseEntity {
   selectors: string;
   snake: string;
   snakes: string;
+  allUp: string;
+  allUps: string;
   singleParam?: string;
   multiParam?: string;
 }

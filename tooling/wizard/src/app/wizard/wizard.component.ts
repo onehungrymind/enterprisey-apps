@@ -112,7 +112,7 @@ export class WizardComponent {
   }
 
   add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
+    const value = (event.value.toLowerCase() || '').trim();
 
     if (value) {
       const modelPlural = pluralize(value);
@@ -162,8 +162,8 @@ export class WizardComponent {
   }
 
   generateBaseTemplate(keyword: string) {
-    this.baseKeyword = keyword;
-    this.baseKeywords = this.generateBaseKeywords(keyword);
+    this.baseKeyword = keyword.toLowerCase();
+    this.baseKeywords = this.generateBaseKeywords(this.baseKeyword);
     this.baseTemplate = this.updateTemplate(
       this.refTemplate,
       this.baseKeywords
@@ -184,6 +184,8 @@ export class WizardComponent {
       { word: nameVariations.model, target: `\${model}` },
       { word: nameVariations.refs, target: `\${refs}` },
       { word: nameVariations.ref, target: `\${ref}` },
+      { word: nameVariations.allUps, target: `\${allUps}` },
+      { word: nameVariations.allUp, target: `\${allUp}` },
     ];
   }
 
