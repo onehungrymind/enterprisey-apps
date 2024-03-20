@@ -6,7 +6,8 @@
       "description": "Describe the challenges feature",
       "remote_uri": "http://localhost:4201",
       "api_uri": "http://localhost:3100/api/challenges",
-      "healthy": true
+      "slug": "challenges",
+      "healthy": false
     },
     {
       "id": "feature2",
@@ -14,6 +15,7 @@
       "description": "Describe the flashcard feature",
       "remote_uri": "http://localhost:4202",
       "api_uri": "http://localhost:3200/api/flashcard",
+      "slug": "flashcards",
       "healthy": true
     },
     {
@@ -22,7 +24,8 @@
       "description": "Describe the notes feature",
       "remote_uri": "http://localhost:4203",
       "api_uri": "http://localhost:3300/api/notes",
-      "healthy": true
+      "slug": "notes",
+      "healthy": false
     },
     {
       "id": "feature4",
@@ -30,6 +33,7 @@
       "description": "Describe the users feature",
       "remote_uri": "http://localhost:4204",
       "api_uri": "http://localhost:3400/api/users",
+      "slug": "users",
       "healthy": true
     }
   ]
