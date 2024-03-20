@@ -3,7 +3,7 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from '../database/entities/user.entity';
-
+import { JwtPayload, TokenExpiredError } from 'jsonwebtoken';
 
 type UserWithoutPassword = Omit<User, 'password'>;
 
@@ -11,7 +11,7 @@ type UserWithoutPassword = Omit<User, 'password'>;
 export class AuthService {
   constructor(
     private usersService: UsersService,
-    private jwtService: JwtService,
+    private jwtService: JwtService
   ) {}
 
   private stripPassword(user: User): UserWithoutPassword {
@@ -19,7 +19,10 @@ export class AuthService {
     return result;
   }
 
-  async validateUser(email: string, pass: string): Promise<UserWithoutPassword> {
+  async validateUser(
+    email: string,
+    pass: string
+  ): Promise<UserWithoutPassword> {
     const user = await this.usersService.findByEmail(email);
     const match = await bcrypt.compare(pass, user.password);
 
@@ -29,19 +32,14 @@ export class AuthService {
     return null;
   }
 
-  async validateToken(token: string): Promise<UserWithoutPassword> {
-    try {
-      const noBearer = token.replace('Bearer ', '');
-      const payload = this.jwtService.verify(noBearer);
-      return this.stripPassword(await this.usersService.findOne(payload.id))
-    } catch (err) {
-      return null;
-    }
-  }
-
   async login({ email }: { email: string }) {
     const user = await this.usersService.findByEmail(email);
-    const payload = { email, id: user.id };
+    const payload: JwtPayload = {
+      email,
+      sub: user.id,
+      aud: 'user',
+      role: user.role,
+    };
     const access_token = this.jwtService.sign(payload);
 
     return {
