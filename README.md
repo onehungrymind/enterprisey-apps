@@ -1,4 +1,4 @@
-# Enterprisey Workshop POC
+# Enterprisey Sample Application[s]
 
 ## Setup Instructions
 
