@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -15,8 +16,8 @@ import { UsersService } from './users.service';
 import { AuthService } from '../auth/auth.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { LocalAuthGuard } from '../auth/guards/local-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { Role } from '../auth/role.decorator';
+import { RolesGuard } from '@proto/guards/remote-auth';
+import { Roles } from '@proto/guards/remote-auth';
 
 @Controller('users')
 export class UsersController {
@@ -32,43 +33,49 @@ export class UsersController {
     return this.authService.login(req);
   }
 
+  @Get('auth/validate')
+  @UseGuards(JwtAuthGuard)
+  validate(@Req() req: { user: { id: string } }) {
+    return req.user;
+  }
+
   @Get('email/:email')
-  @Role(['admin'])
+  @Roles(['admin'])
   @UseGuards(JwtAuthGuard)
   findByEmail(@Param('email') email: string): Promise<User> {
     return this.usersService.findByEmail(email);
   }
 
   @Post()
-  @Role(['admin'])
+  @Roles(['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   create(@Body() user: User): Promise<User> {
     return this.usersService.create(user);
   }
 
   @Get()
-  @Role(['admin'])
+  @Roles(['admin', 'tester'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Get(':id')
-  @Role(['user'])
+  @Roles(['user'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   findOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne(id);
   }
 
   @Patch(':id')
-  @Role(['admin'])
+  @Roles(['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   update(@Param('id') id: string, @Body() user: User) {
     return this.usersService.update(user);
   }
 
   @Delete(':id')
-  @Role(['admin'])
+  @Roles(['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);

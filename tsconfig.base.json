@@ -25,6 +25,7 @@
       "@proto/features-state": ["libs/features-state/src/index.ts"],
       "@proto/flashcards-data": ["libs/flashcards-data/src/index.ts"],
       "@proto/flashcards-state": ["libs/flashcards-state/src/index.ts"],
+      "@proto/guards/remote-auth": ["libs/guards/remote-auth/src/index.ts"],
       "@proto/material": ["libs/material/src/index.ts"],
       "@proto/notes-data": ["libs/notes-data/src/index.ts"],
       "@proto/notes-state": ["libs/notes-state/src/index.ts"],

@@ -9,6 +9,8 @@ services:
       - "3100:3500"
   notes:
     image: app-notes
+    environment:
+        - "AUTH_URL=http://app-users:3500"
     ports:
       - "3200:3500"
   users:
