@@ -54,13 +54,36 @@ npm run wizard
 
 ## The Portal
 
-**This is still a work in progres.**
-
 The portal is designed to allow for the registration of new remote applications to be loaded in the host application. 
 
 ```
-npm run serve:portal-feature
+npm run serve:portal-feature 
 ```
+
+### Seeing It
+
+**STEP ONE: Run the API**
+
+```
+npm run serve:portal-json 
+```
+
+**STEP TWO: Run the Remote Apps**
+
+```
+npm run serve:challenges-feature
+npm run serve:flashcards-feature
+npm run serve:notes-feature
+npm run serve:users-feature
+```
+
+**STEP THREE: Run the Dashboard**
+
+```
+npm start
+```
+
+### Understanding It
 
 In the dashboard app, we are able to load the remote defintions in the `main.ts` file like this.
 
@@ -81,6 +104,42 @@ fetch(FEATURES_API_URI)
   .then(() => import('./bootstrap').catch((err) => console.error(err)));
 ```
 
+We are also dynamically defining our routes in the `app.component.ts` file in the dashboard. 
+
+```typescript
+export class AppComponent implements OnInit {
+  features$: Observable<Feature[]> = this.featuresFacade.allFeatures$.pipe(
+    tap((features: Feature[]) => this.configRoutes(features))
+  );
+
+  constructor(private featuresFacade: FeaturesFacade, private router: Router) {}
+
+  ngOnInit() {
+    this.featuresFacade.loadFeatures();
+  }
+
+  configRoutes(features: Feature[]) {
+    const home: Route = {
+      path: '',
+      component: HomeComponent,
+    };
+
+    const routes = features.reduce((acc: any, cur: any) => {
+      acc = [
+        ...acc,
+        {
+          path: cur.slug,
+          loadChildren: () =>
+            loadRemoteModule(cur.slug, './Routes').then((m) => m.remoteRoutes),
+        },
+      ];
+      return acc;
+    }, [home]);
+
+    this.router.resetConfig(routes);
+  }
+}
+```
 
 ## Authentication
 
