@@ -42,17 +42,48 @@ npx nx serve dashboard --open
 npm start
 ```
 
-## WIP: The Portal
+## The Wizard
 
-The portal is designed to load in the remote URIs that an MFE is hosted at as well as the API URI. 
+There is a tool that you can use to help accelerate development across features. It allows you to quickly pull code from one feature and generate an equivalent version for other features.
 
-You can get to the portal by running
+You can see the tool by running
+
+```
+npm run wizard
+```
+
+## The Portal
+
+**This is still a work in progres.**
+
+The portal is designed to allow for the registration of new remote applications to be loaded in the host application. 
 
 ```
 npm run serve:portal-feature
 ```
 
+In the dashboard app, we are able to load the remote defintions in the `main.ts` file like this.
+
+```typescript
+import { setRemoteDefinitions } from '@nx/angular/mf';
+
+const FEATURES_API_URI = 'http://localhost:3000/api/features';
+
+fetch(FEATURES_API_URI)
+  .then((res) => res.json())
+  .then((res) =>
+    res.reduce((acc: any, r: any) => {
+      acc[r.slug] = r.remote_uri;
+      return acc;
+    }, {})
+  )
+  .then((definitions: any) => setRemoteDefinitions(definitions))
+  .then(() => import('./bootstrap').catch((err) => console.error(err)));
+```
+
+
 ## Authentication
+
 This feature uses the Users API to create and authenticate users. 
 
 Start the service with `npm run s:users-api`.
@@ -82,29 +113,30 @@ curl -X POST http://localhost:3400/api/users/auth/login -d '{"email": "test@test
 
 You will receive a token in the response. You can use this token to authenticate requests to the API.
 
-## The Wizard
+## Docker 
 
-There is a tool that you can use to help accelerate development across features. It allows you to quickly pull code from one feature and generate an equivalent version for other features.
+**Build a Single Service**
 
-You can see the tool by running
+To build a single service by passing the name to the build command.
 
-```
-npm run wizard
-```
-
-## Running the remote services with docker
-### Build a single service by passing the name to the build command.
 ```
 npm run docker:build-remote <service name> (users, notes, flashcards, challenges)
 ```
 
-### Build all services (this will take a while, as it will build all the remote services in the monorepo.)
+**Build all the Services**
+
+Run this command to build all the services. 
+
 ```
 npm run docker:build-remote
 ```
 
-### Run with docker-compose
+NOTE: this will take a while, as it will build all the remote services in the monorepo.
+
+**Run with docker-compose**
+
 After building all the images, run the full stack with the following command.
+
 ```
 npm run docker:run-remote
 ```
