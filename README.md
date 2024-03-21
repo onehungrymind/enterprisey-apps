@@ -109,33 +109,3 @@ After building all the images, run the full stack with the following command.
 npm run docker:run-remote
 ```
 
-
-# Action Items
-
-## The Frontend
-- [x] Load all four features into the dashboard
-- [X] Fix the unit tests for the data features
-- [X] Fix the unit tests for the state features
-- [X] Fix the unit tests for the app features
-
-- [ ] Set up auth workflow
-
-- [ ] Get Cypress working for each app
-- [ ] Mock out API in Cypress using Cy.intercept
-- [ ] Create suite of tests on a feature for CRUD
-- [ ] Set up deployment
-
-- [ ] BONUS: Integrate Cucumber into Cypress tests
-- [ ] Style the application
-- [ ] Animate the application
-
-## The API
-- [X] Create data seeders
-- [X] Create E2E tests for APIs
-- [X] Add docker images
-- [ ] Set up a route guard
-- [ ] Add in supergraph
-
-## The Workshop
-- [X] Get portal concept working
-- [ ] Break down steps to build portal in workshop
