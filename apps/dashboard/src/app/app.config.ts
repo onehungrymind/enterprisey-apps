@@ -7,10 +7,11 @@ import {
   withEnabledBlockingInitialNavigation,
 } from '@angular/router';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
-import { provideStore } from '@ngrx/store';
+import { provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { appRoutes } from './app.routes';
 import { provideEffects } from '@ngrx/effects';
+import { FeaturesEffects, FeaturesState } from '@proto/features-state';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -33,6 +34,8 @@ export const appConfig: ApplicationConfig = {
       }
     ),
     provideRouterStore(),
+    provideEffects(FeaturesEffects),
+    provideState(FeaturesState.FEATURES_FEATURE_KEY, FeaturesState.reducers),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),

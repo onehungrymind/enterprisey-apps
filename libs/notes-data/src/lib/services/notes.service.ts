@@ -14,7 +14,6 @@ export class NotesService {
   constructor(private http: HttpClient) {}
 
   all() {
-    console.log('HELLO NOTES!', this.getUrl())
     return this.http.get<Note[]>(this.getUrl());
   }
 
