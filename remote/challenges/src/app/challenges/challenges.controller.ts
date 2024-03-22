@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { Challenge } from '../database/entities/challenge.entity';
 import { ChallengesService } from './challenges.service';
-import { JwtAuthGuard, Roles } from '@proto/guards/remote-auth';
+import { JwtAuthGuard, Roles, RolesGuard } from '@proto/guards/remote-auth';
 
 @Controller('challenges')
 export class ChallengesController {
@@ -23,7 +23,7 @@ export class ChallengesController {
 
   @Get()
   @Roles(['tester'])
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   findAll(): Promise<Challenge[]> {
     return this.challengesService.findAll();
   }

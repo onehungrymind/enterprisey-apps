@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { Flashcard } from '../database/entities/flashcard.entity';
 import { FlashcardsService } from './flashcards.service';
-import { JwtAuthGuard, Roles } from '@proto/guards/remote-auth';
+import { JwtAuthGuard, Roles, RolesGuard } from '@proto/guards/remote-auth';
 
 @Controller('flashcards')
 export class FlashcardsController {
@@ -23,7 +23,7 @@ export class FlashcardsController {
 
   @Get()
   @Roles(['tester'])
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   findAll(): Promise<Flashcard[]> {
     return this.flashcardsService.findAll();
   }
