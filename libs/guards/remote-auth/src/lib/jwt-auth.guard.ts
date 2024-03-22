@@ -8,7 +8,9 @@ const auth_url = process.env['AUTH_URL'] || 'http://localhost:3400';
 export class JwtAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
-      const request: Request = context.switchToHttp().getRequest();
+      const request: Request & { user: { id: string; role: string } } = context
+        .switchToHttp()
+        .getRequest();
 
       if (!request.headers.authorization) {
         return false;
@@ -30,7 +32,7 @@ export class JwtAuthGuard implements CanActivate {
       }
 
       if (result) {
-        request.body.user = result;
+        request.user = result;
 
         return true;
       }
