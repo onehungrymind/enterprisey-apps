@@ -16,8 +16,8 @@ import { UsersService } from './users.service';
 import { AuthService } from '../auth/auth.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { LocalAuthGuard } from '../auth/guards/local-auth.guard';
-import { RolesGuard } from '@proto/guards/remote-auth';
-import { Roles } from '@proto/guards/remote-auth';
+import { RolesGuard } from '@proto/lib/roles.guard';
+import { Roles } from '@proto/lib/roles.decorator';
 
 @Controller('users')
 export class UsersController {

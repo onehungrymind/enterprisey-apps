@@ -45,6 +45,7 @@ COPY jest.preset.js .
 COPY jest.config.ts .
 COPY tsconfig.base.json .
 COPY nx.json .
+COPY ./libs ./libs
 COPY ./remote/${SERVER_DIR} ./remote/${SERVER_DIR}
 COPY ./databases ./databases
 
