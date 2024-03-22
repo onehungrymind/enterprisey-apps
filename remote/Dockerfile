@@ -60,6 +60,8 @@ RUN npx nx build ${SERVER_DIR}-api
 # where the necessary files are copied from the build stage.
 FROM base as final
 
+RUN apk add --no-cache dumb-init
+
 ARG SERVER_DIR=users
 
 # Use production node environment by default.
@@ -83,4 +85,5 @@ ENV PORT 3500
 EXPOSE 3500
 
 # Run the application.
+ENTRYPOINT ["dumb-init", "--"]
 CMD node main.js
