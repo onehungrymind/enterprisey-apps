@@ -6,9 +6,11 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { Feature } from '../database/entities/feature.entity';
 import { FeaturesService } from './features.service';
+import { JwtAuthGuard, Roles } from '@proto/guards/remote-auth';
 
 @Controller('features')
 export class FeaturesController {
@@ -20,6 +22,8 @@ export class FeaturesController {
   }
 
   @Get()
+  @Roles(['tester'])
+  @UseGuards(JwtAuthGuard)
   findAll(): Promise<Feature[]> {
     return this.featuresService.findAll();
   }
