@@ -1,0 +1,67 @@
+name: Remote Service CI
+
+on:
+  push:
+    paths:
+      - "remote/**"
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - "remote/**"
+
+jobs:
+  build-users:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: build -t "app-users" --build-arg SERVER_DIR="users" --network=host . -f ./remote/Dockerfile
+      - name: push the Docker image
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+
+  build-challenges:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: build -t "app-challenges" --build-arg SERVER_DIR="challenges" --network=host . -f ./remote/Dockerfile
+      - name: push the Docker image
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+
+  build-features:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: build -t "app-features" --build-arg SERVER_DIR="features" --network=host . -f ./remote/Dockerfile
+      - name: push the Docker image
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+
+  build-flashcards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: build -t "app-flashcards" --build-arg SERVER_DIR="flashcards" --network=host . -f ./remote/Dockerfile
+      - name: push the Docker image
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+
+  build-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: build -t "app-notes" --build-arg SERVER_DIR="notes" --network=host . -f ./remote/Dockerfile
+      - name: push the Docker image
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+
+  build-gateway:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: build -t "app-gateway" --build-arg SERVER_DIR="gateway" --network=host . -f ./remote/Dockerfile
+      - name: push the Docker image
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+
