@@ -11,6 +11,9 @@
     }
   ],
   "compilerOptions": {
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@proto/*": ["libs/guards/remote-auth/src/*"],
+    }
   }
 }

@@ -1,17 +1,27 @@
 services:
   challenges:
     image: app-challenges
-    ports:
-      - "3000:3500"
+    environment:
+      - "AUTH_URL=http://users:3500"
   flashcards:
     image: app-flashcards
-    ports:
-      - "3100:3500"
+    environment:
+      - "AUTH_URL=http://users:3500"
   notes:
     image: app-notes
-    ports:
-      - "3200:3500"
+    environment:
+        - "AUTH_URL=http://users:3500"
   users:
     image: app-users
+    environment:
+      - "AUTH_URL=http://users:3500"
+  features:
+    image: app-features
+    environment:
+      - "AUTH_URL=http://users:3500"
+  gateway:
+    image: envoyproxy/envoy:tools-v1.29-latest
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
     ports:
-      - "3300:3500"
+      - "3500:3500"

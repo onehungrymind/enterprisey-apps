@@ -200,3 +200,5 @@ After building all the images, run the full stack with the following command.
 npm run docker:run-remote
 ```
 
+The service cluster will be available at `http://localhost:3500`; make API requests to the services at `http://localhost:3500/api/<service-name>`, the gateway will route the requests to the appropriate service.
+

@@ -45,6 +45,7 @@ COPY jest.preset.js .
 COPY jest.config.ts .
 COPY tsconfig.base.json .
 COPY nx.json .
+COPY ./libs ./libs
 COPY ./remote/${SERVER_DIR} ./remote/${SERVER_DIR}
 COPY ./databases ./databases
 
@@ -58,6 +59,8 @@ RUN npx nx build ${SERVER_DIR}-api
 # Create a new stage to run the application with minimal runtime dependencies
 # where the necessary files are copied from the build stage.
 FROM base as final
+
+RUN apk add --no-cache dumb-init
 
 ARG SERVER_DIR=users
 
@@ -82,4 +85,5 @@ ENV PORT 3500
 EXPOSE 3500
 
 # Run the application.
+ENTRYPOINT ["dumb-init", "--"]
 CMD node main.js
