@@ -2,6 +2,8 @@ name: Remote Service CI
 
 on:
   push:
+    paths:
+      - 'remote/**'
 
 jobs:
   build-users:
@@ -29,12 +31,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build the Docker image
         run: docker build -t ghcr.io/${{ github.repository_owner }}/app-challenges:${{ github.sha }} --build-arg SERVER_DIR="challenges" --network=host . -f ./remote/Dockerfile
-      - name: push the Docker image
+      - name: Login to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+      - name: Tag the Docker image
+        run: docker tag ghcr.io/${{ github.repository_owner }}/app-challenges:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/app-challenges:${{ github.sha }}
       - name: Push the Docker image
-        run:
-          docker tag ghcr.io/${{ github.repository_owner }}/app-challenges:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/app-challenges:${{ github.sha }} \
-          docker push ghcr.io/${{ github.repository_owner }}/app-challenges:${{ github.sha }}
+        run: docker push ghcr.io/${{ github.repository_owner }}/app-challenges:${{ github.sha }}
 
   build-features:
     runs-on: ubuntu-latest
@@ -45,12 +47,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build the Docker image
         run: docker build -t ghcr.io/${{ github.repository_owner }}/app-features:${{ github.sha }} --build-arg SERVER_DIR="features" --network=host . -f ./remote/Dockerfile
-      - name: Log in to registry
+      - name: Login to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+      - name: Tag the Docker image
+        run: docker tag ghcr.io/${{ github.repository_owner }}/app-features:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/app-features:${{ github.sha }}
       - name: Push the Docker image
-        run:
-          docker tag ghcr.io/${{ github.repository_owner }}/app-features:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/app-features:${{ github.sha }} \
-          docker push ghcr.io/${{ github.repository_owner }}/app-features:${{ github.sha }}
+        run: docker push ghcr.io/${{ github.repository_owner }}/app-features:${{ github.sha }}
 
   build-flashcards:
     runs-on: ubuntu-latest
@@ -61,12 +63,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build the Docker image
         run: docker build -t ghcr.io/${{ github.repository_owner }}/app-flashcards:${{ github.sha }} --build-arg SERVER_DIR="flashcards" --network=host . -f ./remote/Dockerfile
-      - name: Log in to registry
+      - name: Login to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+      - name: Tag the Docker image
+        run: docker tag ghcr.io/${{ github.repository_owner }}/app-flashcards:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/app-flashcards:${{ github.sha }}
       - name: Push the Docker image
-        run:
-          docker tag ghcr.io/${{ github.repository_owner }}/app-flashcards:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/app-flashcards:${{ github.sha }} \
-          docker push ghcr.io/${{ github.repository_owner }}/app-flashcards:${{ github.sha }}
+        run: docker push ghcr.io/${{ github.repository_owner }}/app-flashcards:${{ github.sha }}
 
   build-notes:
     runs-on: ubuntu-latest
@@ -77,10 +79,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build the Docker image
         run: docker build -t ghcr.io/${{ github.repository_owner }}/app-notes:${{ github.sha }} --build-arg SERVER_DIR="notes" --network=host . -f ./remote/Dockerfile
-      - name: Log in to registry
+      - name: Login to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+      - name: Tag the Docker image
+        run: docker tag ghcr.io/${{ github.repository_owner }}/app-notes:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/app-notes:${{ github.sha }}
       - name: Push the Docker image
-        run:
-          docker tag ghcr.io/${{ github.repository_owner }}/app-notes:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/app-notes:${{ github.sha }} \
-          docker push ghcr.io/${{ github.repository_owner }}/app-notes:${{ github.sha }}
+        run: docker push ghcr.io/${{ github.repository_owner }}/app-notes:${{ github.sha }}
 
