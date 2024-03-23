@@ -1,22 +1,22 @@
 services:
   challenges:
-    image: app-challenges
+    image: ghcr.io/onehungrymind/app-challenges
     environment:
       - "AUTH_URL=http://users:3500"
   flashcards:
-    image: app-flashcards
+    image: ghcr.io/onehungrymind/app-flashcards
     environment:
       - "AUTH_URL=http://users:3500"
   notes:
-    image: app-notes
+    image: ghcr.io/onehungrymind/app-notes
     environment:
         - "AUTH_URL=http://users:3500"
   users:
-    image: app-users
+    image: ghcr.io/onehungrymind/app-users
     environment:
       - "AUTH_URL=http://users:3500"
   features:
-    image: app-features
+    image: ghcr.io/onehungrymind/app-features
     environment:
       - "AUTH_URL=http://users:3500"
   gateway:
