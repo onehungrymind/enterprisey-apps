@@ -1,0 +1,8 @@
+{
+  "name": "guards-remote-auth",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/guards/remote-auth/src",
+  "projectType": "library",
+  "targets": {},
+  "tags": []
+}

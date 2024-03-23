@@ -6,13 +6,15 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { Flashcard } from '../database/entities/flashcard.entity';
 import { FlashcardsService } from './flashcards.service';
+import { JwtAuthGuard, Roles, RolesGuard } from '@proto/guards/remote-auth';
 
 @Controller('flashcards')
 export class FlashcardsController {
-  constructor(private readonly flashcardsService: FlashcardsService) { }
+  constructor(private readonly flashcardsService: FlashcardsService) {}
 
   @Post()
   create(@Body() flashcard: Flashcard): Promise<Flashcard> {
@@ -20,6 +22,8 @@ export class FlashcardsController {
   }
 
   @Get()
+  @Roles(['tester'])
+  @UseGuards(JwtAuthGuard, RolesGuard)
   findAll(): Promise<Flashcard[]> {
     return this.flashcardsService.findAll();
   }
