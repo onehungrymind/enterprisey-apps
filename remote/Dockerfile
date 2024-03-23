@@ -50,8 +50,14 @@ COPY ./remote/${SERVER_DIR} ./remote/${SERVER_DIR}
 COPY ./databases ./databases
 
  # Build the application.
-RUN npm set maxsockets 1 && npm ci
-RUN npx nx build ${SERVER_DIR}-api
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=cache,target=/root/.npm \
+    npm set maxsockets 1 && npm ci
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=cache,target=/root/.npm \
+    npx nx build ${SERVER_DIR}-api
 
 
 
