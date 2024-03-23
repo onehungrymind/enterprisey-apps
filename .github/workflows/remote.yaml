@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build the Docker image
-        run: build -t "app-users" --build-arg SERVER_DIR="users" --network=host . -f ./remote/Dockerfile
+        run: docker build -t "app-users" --build-arg SERVER_DIR="users" --network=host . -f ./remote/Dockerfile
       - name: push the Docker image
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
       - name: Push the Docker image
@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build the Docker image
-        run: build -t "app-challenges" --build-arg SERVER_DIR="challenges" --network=host . -f ./remote/Dockerfile
+        run: docker build -t "app-challenges" --build-arg SERVER_DIR="challenges" --network=host . -f ./remote/Dockerfile
       - name: push the Docker image
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
       - name: Push the Docker image
@@ -44,7 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build the Docker image
-        run: build -t "app-features" --build-arg SERVER_DIR="features" --network=host . -f ./remote/Dockerfile
+        run: docker build -t "app-features" --build-arg SERVER_DIR="features" --network=host . -f ./remote/Dockerfile
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
       - name: Push the Docker image
@@ -60,7 +60,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build the Docker image
-        run: build -t "app-flashcards" --build-arg SERVER_DIR="flashcards" --network=host . -f ./remote/Dockerfile
+        run: docker build -t "app-flashcards" --build-arg SERVER_DIR="flashcards" --network=host . -f ./remote/Dockerfile
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
       - name: Push the Docker image
@@ -76,7 +76,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build the Docker image
-        run: build -t "app-notes" --build-arg SERVER_DIR="notes" --network=host . -f ./remote/Dockerfile
+        run: docker build -t "app-notes" --build-arg SERVER_DIR="notes" --network=host . -f ./remote/Dockerfile
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
       - name: Push the Docker image
