@@ -64,6 +64,9 @@ export class UsersController {
   @Role(['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   update(@Param('id') id: string, @Body() user: User) {
+    if (id !== user.id) {
+      throw new Error('User id does not match');
+    }
     return this.usersService.update(user);
   }
 
