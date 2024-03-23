@@ -13,12 +13,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build the Docker image
         run: docker build -t ghcr.io/${{ github.repository_owner }}/app-users:${{ github.sha }} --build-arg SERVER_DIR="users" --network=host . -f ./remote/Dockerfile
-      - name: push the Docker image
+      - name: Login to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+      - name: Tag the Docker image
+        run: docker tag ghcr.io/${{ github.repository_owner }}/app-users:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/app-users:${{ github.sha }}
       - name: Push the Docker image
-        run:
-          docker tag ghcr.io/${{ github.repository_owner }}/app-users:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/app-users:${{ github.sha }} \
-          docker push ghcr.io/${{ github.repository_owner }}/app-users:${{ github.sha }}
+        run: docker push ghcr.io/${{ github.repository_owner }}/app-users:${{ github.sha }}
 
   build-challenges:
     runs-on: ubuntu-latest
