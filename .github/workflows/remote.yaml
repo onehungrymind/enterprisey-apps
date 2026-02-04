@@ -1,14 +1,7 @@
 name: Remote Service CI
 
 on:
-  push:
-    paths:
-      - "remote/**"
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-    paths:
-      - "remote/**"
+  workflow_dispatch: # Manual trigger only — automatic builds disabled until stabilized
 
 jobs:
   build-users:
