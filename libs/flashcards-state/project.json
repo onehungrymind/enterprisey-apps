@@ -1,9 +1,0 @@
-{
-  "name": "flashcards-state",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/flashcards-state/src",
-  "prefix": "proto",
-  "tags": [],
-  "projectType": "library",
-  "targets": {}
-}

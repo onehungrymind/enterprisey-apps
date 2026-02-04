@@ -1,0 +1,62 @@
+<mat-card>
+  <mat-card-content>
+    <mat-card-title>
+      @if (currentSource.id) {
+        <span>Editing {{ originalName }}</span>
+      } @else {
+        Select or Create Source
+      }
+    </mat-card-title>
+    <form #form="ngForm" (ngSubmit)="saved.emit(currentSource)">
+      <mat-form-field class="full-width">
+        <mat-label>Source Name</mat-label>
+        <input matInput
+          [(ngModel)]="currentSource.name"
+          name="name"
+          required />
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Source Type</mat-label>
+        <mat-select [(ngModel)]="currentSource.type" name="type" required>
+          @for (type of sourceTypes; track type) {
+            <mat-option [value]="type">{{ type }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Sync Frequency</mat-label>
+        <mat-select [(ngModel)]="currentSource.syncFrequency" name="syncFrequency">
+          @for (opt of syncOptions; track opt) {
+            <mat-option [value]="opt">{{ opt }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="mb-4">
+        <h4 class="text-sm font-medium text-gray-600 mb-2">Connection Configuration</h4>
+        @for (key of getConnectionConfigKeys(); track key) {
+          <mat-form-field class="full-width">
+            <mat-label>{{ key }}</mat-label>
+            <input matInput
+              [(ngModel)]="currentSource.connectionConfig[key]"
+              [name]="'config_' + key" />
+          </mat-form-field>
+        }
+        <button mat-stroked-button type="button" (click)="addConfigField()">
+          <mat-icon>add</mat-icon> Add Config Field
+        </button>
+      </div>
+
+      <mat-card-actions>
+        <button [disabled]="form.invalid" type="submit" mat-button color="primary">
+          Save
+        </button>
+        <button type="button" mat-button (click)="cancelled.emit()">
+          Cancel
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>

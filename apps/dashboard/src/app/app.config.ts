@@ -5,6 +5,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import {
   provideRouter,
   withEnabledBlockingInitialNavigation,
+  withViewTransitions,
 } from '@angular/router';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
 import { provideState, provideStore } from '@ngrx/store';
@@ -12,11 +13,12 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { appRoutes } from './app.routes';
 import { provideEffects } from '@ngrx/effects';
 import { FeaturesEffects, FeaturesState } from '@proto/features-state';
+import { provideEnvironment } from '@proto/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideClientHydration(),
-    provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
+    provideRouter(appRoutes, withEnabledBlockingInitialNavigation(), withViewTransitions()),
     provideEffects(),
     provideStore(
       {
@@ -42,5 +44,6 @@ export const appConfig: ApplicationConfig = {
     }),
     provideHttpClient(),
     provideAnimationsAsync(),
+    provideEnvironment(),
   ],
 };

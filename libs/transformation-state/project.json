@@ -1,0 +1,9 @@
+{
+  "name": "transformation-state",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/transformation-state/src",
+  "prefix": "proto",
+  "tags": [],
+  "projectType": "library",
+  "targets": {}
+}

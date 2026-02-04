@@ -1,0 +1,56 @@
+<mat-card>
+  <mat-card-content>
+    <mat-card-title>Connection Status</mat-card-title>
+
+    <div class="flex items-center gap-4 p-4">
+      <div class="flex items-center gap-2">
+        <div class="w-3 h-3 rounded-full"
+          [class.bg-green-500]="source.status === 'connected'"
+          [class.bg-red-500]="source.status === 'error'"
+          [class.bg-yellow-500]="source.status === 'syncing' || source.status === 'testing'"
+          [class.bg-gray-400]="source.status === 'disconnected'"
+          [class.animate-pulse]="isProcessing">
+        </div>
+        <span class="text-lg font-medium capitalize">{{ source.status }}</span>
+      </div>
+
+      @if (source.lastSyncAt) {
+        <span class="text-sm text-gray-500">
+          Last synced: {{ source.lastSyncAt }}
+        </span>
+      }
+    </div>
+
+    @if (source.errorLog?.length) {
+      <div class="p-4 bg-red-50 rounded mt-2">
+        <h4 class="text-sm font-medium text-red-800 mb-1">Error Log</h4>
+        @for (error of source.errorLog; track error) {
+          <p class="text-sm text-red-600">{{ error }}</p>
+        }
+      </div>
+    }
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary"
+        [disabled]="isProcessing"
+        (click)="testConnection.emit(source.id!)">
+        @if (source.status === 'testing') {
+          <mat-spinner diameter="18" class="inline-block mr-2"></mat-spinner>
+          Testing...
+        } @else {
+          Test Connection
+        }
+      </button>
+      <button mat-raised-button
+        [disabled]="isProcessing || source.status === 'disconnected'"
+        (click)="syncSource.emit(source.id!)">
+        @if (source.status === 'syncing') {
+          <mat-spinner diameter="18" class="inline-block mr-2"></mat-spinner>
+          Syncing...
+        } @else {
+          Sync Now
+        }
+      </button>
+    </mat-card-actions>
+  </mat-card-content>
+</mat-card>

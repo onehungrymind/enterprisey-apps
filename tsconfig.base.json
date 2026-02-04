@@ -16,31 +16,28 @@
     "baseUrl": ".",
     "paths": {
       "@proto/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@proto/challenges-data": ["libs/challenges-data/src/index.ts"],
-      "@proto/challenges-local-state": [
-        "libs/challenges-local-state/src/index.ts"
-      ],
-      "@proto/challenges-state": ["libs/challenges-state/src/index.ts"],
+      "@proto/environment": ["libs/environment/src/index.ts"],
       "@proto/features-data": ["libs/features-data/src/index.ts"],
       "@proto/features-state": ["libs/features-state/src/index.ts"],
-      "@proto/flashcards-data": ["libs/flashcards-data/src/index.ts"],
-      "@proto/flashcards-state": ["libs/flashcards-state/src/index.ts"],
       "@proto/guards/remote-auth": ["libs/guards/remote-auth/src/index.ts"],
       "@proto/material": ["libs/material/src/index.ts"],
-      "@proto/notes-data": ["libs/notes-data/src/index.ts"],
-      "@proto/notes-state": ["libs/notes-state/src/index.ts"],
       "@proto/testing": ["libs/testing/src/index.ts"],
       "@proto/ui-login": ["libs/ui-login/src/index.ts"],
       "@proto/users-data": ["libs/users-data/src/index.ts"],
       "@proto/users-state": ["libs/users-state/src/index.ts"],
-      "challenges/Routes": [
-        "apps/challenges/src/app/remote-entry/entry.routes.ts"
-      ],
-      "flashcards/Routes": [
-        "apps/flashcards/src/app/remote-entry/entry.routes.ts"
-      ],
-      "notes/Routes": ["apps/notes/src/app/remote-entry/entry.routes.ts"],
-      "users/Routes": ["apps/users/src/app/remote-entry/entry.routes.ts"]
+      "@proto/ingress-data": ["libs/ingress-data/src/index.ts"],
+      "@proto/ingress-state": ["libs/ingress-state/src/index.ts"],
+      "@proto/transformation-data": ["libs/transformation-data/src/index.ts"],
+      "@proto/transformation-state": ["libs/transformation-state/src/index.ts"],
+      "@proto/reporting-data": ["libs/reporting-data/src/index.ts"],
+      "@proto/reporting-state": ["libs/reporting-state/src/index.ts"],
+      "@proto/export-data": ["libs/export-data/src/index.ts"],
+      "@proto/export-state": ["libs/export-state/src/index.ts"],
+      "users/Routes": ["apps/users/src/app/remote-entry/entry.routes.ts"],
+      "ingress/Routes": ["apps/ingress/src/app/remote-entry/entry.routes.ts"],
+      "transformation/Routes": ["apps/transformation/src/app/remote-entry/entry.routes.ts"],
+      "reporting/Routes": ["apps/reporting/src/app/remote-entry/entry.routes.ts"],
+      "export/Routes": ["apps/export/src/app/remote-entry/entry.routes.ts"]
     }
   },
   "ts-node": {

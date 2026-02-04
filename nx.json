@@ -46,7 +46,7 @@
       "inputs": ["production", "^production"]
     },
     "e2e-ci--**/*": {
-      "dependsOn": ["^build", "^portal:build", "^wizard:build"]
+      "dependsOn": ["^build"]
     }
   },
   "plugins": [
@@ -63,13 +63,6 @@
       }
     },
     {
-      "plugin": "@nx/cypress/plugin",
-      "options": {
-        "targetName": "e2e",
-        "componentTestingTargetName": "component-test"
-      }
-    },
-    {
       "plugin": "@nx/webpack/plugin",
       "options": {
         "buildTargetName": "build",
@@ -80,7 +73,7 @@
   ],
   "generators": {
     "@nx/angular:application": {
-      "e2eTestRunner": "cypress",
+      "e2eTestRunner": "none",
       "linter": "eslint",
       "style": "scss",
       "unitTestRunner": "jest"

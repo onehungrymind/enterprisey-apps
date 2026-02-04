@@ -1,0 +1,36 @@
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { DataSource, DataSchema } from '@proto/api-interfaces';
+
+export const SourcesActions = createActionGroup({
+  source: 'Ingress API',
+  events: {
+    'Select Source': props<{ selectedId: string }>(),
+    'Reset Selected Source': emptyProps(),
+    'Reset Sources': emptyProps(),
+    'Load Sources': emptyProps(),
+    'Load Sources Success': props<{ sources: DataSource[] }>(),
+    'Load Sources Failure': props<{ error: any }>(),
+    'Load Source': props<{ sourceId: string }>(),
+    'Load Source Success': props<{ source: DataSource }>(),
+    'Load Source Failure': props<{ error: any }>(),
+    'Create Source': props<{ source: DataSource }>(),
+    'Create Source Success': props<{ source: DataSource }>(),
+    'Create Source Failure': props<{ error: any }>(),
+    'Update Source': props<{ source: DataSource }>(),
+    'Update Source Success': props<{ source: DataSource }>(),
+    'Update Source Failure': props<{ error: any }>(),
+    'Delete Source': props<{ source: DataSource }>(),
+    'Delete Source Success': props<{ source: DataSource }>(),
+    'Delete Source Failure': props<{ error: any }>(),
+    'Test Connection': props<{ sourceId: string }>(),
+    'Test Connection Success': props<{ source: DataSource }>(),
+    'Test Connection Failure': props<{ error: any }>(),
+    'Sync Source': props<{ sourceId: string }>(),
+    'Sync Source Success': props<{ source: DataSource }>(),
+    'Sync Source Failure': props<{ error: any }>(),
+    'Load Schema': props<{ sourceId: string }>(),
+    'Load Schema Success': props<{ schema: DataSchema }>(),
+    'Load Schema Failure': props<{ error: any }>(),
+    'Status Update': props<{ source: DataSource }>(),
+  },
+});

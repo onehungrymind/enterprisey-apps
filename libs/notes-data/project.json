@@ -1,9 +1,0 @@
-{
-  "name": "notes-data",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/notes-data/src",
-  "prefix": "proto",
-  "tags": [],
-  "projectType": "library",
-  "targets": {}
-}

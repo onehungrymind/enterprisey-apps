@@ -1,0 +1,36 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Dashboards</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    @if (loading) {
+      <mat-spinner diameter="40" class="mx-auto my-4"></mat-spinner>
+    } @else {
+      <mat-list>
+        @for (dashboard of dashboards; track dashboard.id) {
+          <mat-list-item (click)="selected.emit(dashboard)" class="cursor-pointer">
+            <mat-icon matListItemIcon>dashboard</mat-icon>
+            <div matListItemTitle>{{ dashboard.name }}</div>
+            <div matListItemLine>{{ dashboard.description }}</div>
+            <div matListItemMeta>
+              @if (dashboard.isPublic) {
+                <mat-icon matTooltip="Public" class="text-green-500">public</mat-icon>
+              } @else {
+                <mat-icon matTooltip="Private" class="text-gray-400">lock</mat-icon>
+              }
+              <button mat-icon-button color="warn"
+                (click)="deleted.emit(dashboard); $event.stopPropagation()"
+                matTooltip="Delete">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </mat-list-item>
+        } @empty {
+          <mat-list-item>
+            <span matListItemTitle>No dashboards yet</span>
+          </mat-list-item>
+        }
+      </mat-list>
+    }
+  </mat-card-content>
+</mat-card>

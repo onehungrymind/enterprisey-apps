@@ -2,37 +2,46 @@
   "features": [
     {
       "id": "feature1",
-      "title": "Challenges Feature",
-      "description": "Describe the challenges feature",
+      "title": "Ingress",
+      "description": "Data source management and schema discovery",
       "remote_uri": "http://localhost:4202",
-      "api_uri": "http://localhost:3100/api/challenges",
-      "slug": "challenges",
-      "healthy": false
+      "api_uri": "http://localhost:3100/api",
+      "slug": "ingress",
+      "healthy": true
     },
     {
       "id": "feature2",
-      "title": "Flashcard Feature",
-      "description": "Describe the flashcard feature",
+      "title": "Transformation",
+      "description": "Data pipeline builder and management",
       "remote_uri": "http://localhost:4203",
-      "api_uri": "http://localhost:3200/api/flashcard",
-      "slug": "flashcards",
+      "api_uri": "http://localhost:3200/api",
+      "slug": "transformation",
       "healthy": true
     },
     {
       "id": "feature3",
-      "title": "Notes Feature",
-      "description": "Describe the notes feature",
+      "title": "Reporting",
+      "description": "Dashboards and data visualization",
       "remote_uri": "http://localhost:4204",
-      "api_uri": "http://localhost:3300/api/notes",
-      "slug": "notes",
-      "healthy": false
+      "api_uri": "http://localhost:3300/api",
+      "slug": "reporting",
+      "healthy": true
     },
     {
       "id": "feature4",
-      "title": "Users Feature",
-      "description": "Describe the users feature",
+      "title": "Export",
+      "description": "Data export job queue and scheduling",
+      "remote_uri": "http://localhost:4205",
+      "api_uri": "http://localhost:3400/api",
+      "slug": "export",
+      "healthy": true
+    },
+    {
+      "id": "feature5",
+      "title": "Users",
+      "description": "User management and authentication",
       "remote_uri": "http://localhost:4201",
-      "api_uri": "http://localhost:3400/api/users",
+      "api_uri": "http://localhost:3500/api",
       "slug": "users",
       "healthy": true
     }

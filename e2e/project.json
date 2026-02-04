@@ -1,0 +1,19 @@
+{
+  "name": "e2e",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "e2e",
+  "tags": ["scope:e2e"],
+  "targets": {
+    "e2e": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npx bddgen --config e2e/playwright.config.ts",
+          "npx playwright test --config e2e/playwright.config.ts"
+        ],
+        "parallel": false
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "export-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "remote/export/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "export-api:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "export-api:build:development"
+        },
+        "production": {
+          "buildTarget": "export-api:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

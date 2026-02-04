@@ -1,0 +1,41 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Pipelines</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="flex gap-2 mb-4">
+      @for (entry of statusCounts | keyvalue; track entry.key) {
+        <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100">
+          <mat-icon class="text-sm mr-1">{{ getStatusIcon(entry.key) }}</mat-icon>
+          {{ entry.key }}: {{ entry.value }}
+        </span>
+      }
+    </div>
+    <mat-list>
+      @for (pipeline of pipelines; track pipeline.id) {
+        <mat-list-item (click)="selected.emit(pipeline)" class="cursor-pointer">
+          <mat-icon matListItemIcon>{{ getStatusIcon(pipeline.status) }}</mat-icon>
+          <div matListItemTitle>{{ pipeline.name }}</div>
+          <div matListItemLine>{{ pipeline.description }}</div>
+          <div matListItemMeta class="flex gap-1">
+            <button mat-icon-button color="primary"
+              (click)="runPipeline.emit(pipeline.id!); $event.stopPropagation()"
+              [disabled]="pipeline.status === 'error'"
+              matTooltip="Run Pipeline">
+              <mat-icon>play_arrow</mat-icon>
+            </button>
+            <button mat-icon-button color="warn"
+              (click)="deleted.emit(pipeline); $event.stopPropagation()"
+              matTooltip="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </mat-list-item>
+      } @empty {
+        <mat-list-item>
+          <span matListItemTitle>No pipelines yet</span>
+        </mat-list-item>
+      }
+    </mat-list>
+  </mat-card-content>
+</mat-card>

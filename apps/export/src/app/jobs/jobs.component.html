@@ -1,0 +1,25 @@
+<div class="m-20">
+  <div class="flex gap-8">
+    <div class="w-1/3">
+      <proto-job-form
+        (submitted)="startExport($event)">
+      </proto-job-form>
+    </div>
+    <div class="w-2/3">
+      @if (store.activeJobs().length > 0) {
+        <div class="mb-4">
+          <proto-active-jobs
+            [jobs]="store.activeJobs()"
+            (cancelJob)="cancelJob($event)">
+          </proto-active-jobs>
+        </div>
+      }
+
+      <proto-job-history
+        [jobs]="store.completedJobs()"
+        [failedJobs]="store.failedJobs()"
+        (removeJob)="removeJob($event)">
+      </proto-job-history>
+    </div>
+  </div>
+</div>

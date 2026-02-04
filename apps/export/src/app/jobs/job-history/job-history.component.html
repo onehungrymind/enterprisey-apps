@@ -1,0 +1,48 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Job History</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    @if (failedJobs.length > 0) {
+      <h4 class="text-red-500 mb-2">Failed Jobs</h4>
+      @for (job of failedJobs; track job.id) {
+        <div class="flex items-center p-3 mb-2 rounded border border-red-200 bg-red-50">
+          <mat-icon color="warn" class="mr-3">error</mat-icon>
+          <div class="flex-1">
+            <div class="font-medium">{{ job.name }}</div>
+            <div class="text-sm text-red-500">{{ job.error }}</div>
+          </div>
+          <button mat-icon-button color="warn" (click)="removeJob.emit(job)" matTooltip="Remove">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      }
+    }
+
+    <h4 class="mb-2 mt-4">Completed</h4>
+    @for (job of jobs; track job.id) {
+      <div class="flex items-center p-3 mb-2 rounded border border-gray-200">
+        <mat-icon color="primary" class="mr-3">check_circle</mat-icon>
+        <div class="flex-1">
+          <div class="font-medium">{{ job.name }}</div>
+          <div class="text-sm text-gray-500">
+            {{ job.format | uppercase }} |
+            {{ job.recordCount | number }} records |
+            {{ formatSize(job.fileSize) }} |
+            {{ job.completedAt | date:'short' }}
+          </div>
+        </div>
+        @if (job.outputUrl) {
+          <a mat-icon-button [href]="job.outputUrl" target="_blank" matTooltip="Download">
+            <mat-icon>download</mat-icon>
+          </a>
+        }
+        <button mat-icon-button color="warn" (click)="removeJob.emit(job)" matTooltip="Remove">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    } @empty {
+      <p class="text-gray-500 text-center py-4">No completed jobs yet</p>
+    }
+  </mat-card-content>
+</mat-card>

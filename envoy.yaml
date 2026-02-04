@@ -4,7 +4,7 @@ static_resources:
       address:
         socket_address:
           address: 0.0.0.0
-          port_value: 3500
+          port_value: 9000
       filter_chains:
         - filters:
             - name: envoy.filters.network.http_connection_manager
@@ -25,17 +25,37 @@ static_resources:
                           route:
                               cluster: users
                         - match:
-                            prefix: "/api/challenges"
+                            prefix: "/api/sources"
                           route:
-                              cluster: challenges
+                              cluster: ingress
                         - match:
-                            prefix: "/api/flashcards"
+                            prefix: "/api/schemas"
                           route:
-                              cluster: flashcards
+                              cluster: ingress
                         - match:
-                            prefix: "/api/notes"
+                            prefix: "/api/pipelines"
                           route:
-                               cluster: notes
+                              cluster: transformation
+                        - match:
+                            prefix: "/api/steps"
+                          route:
+                              cluster: transformation
+                        - match:
+                            prefix: "/api/dashboards"
+                          route:
+                              cluster: reporting
+                        - match:
+                            prefix: "/api/widgets"
+                          route:
+                              cluster: reporting
+                        - match:
+                            prefix: "/api/queries"
+                          route:
+                              cluster: reporting
+                        - match:
+                            prefix: "/api/jobs"
+                          route:
+                              cluster: export
                         - match:
                             prefix: "/api/features"
                           route:
@@ -55,44 +75,57 @@ static_resources:
                     socket_address:
                       address: users
                       port_value: 3500
-    - name: challenges
+    - name: ingress
       connect_timeout: 0.25s
       type: logical_dns
       lb_policy: round_robin
       load_assignment:
-        cluster_name: challenges
+        cluster_name: ingress
         endpoints:
           - lb_endpoints:
               - endpoint:
                   address:
                     socket_address:
-                      address: challenges
+                      address: ingress
                       port_value: 3500
-    - name: flashcards
+    - name: transformation
       connect_timeout: 0.25s
       type: logical_dns
       lb_policy: round_robin
       load_assignment:
-        cluster_name: flashcards
+        cluster_name: transformation
         endpoints:
           - lb_endpoints:
               - endpoint:
                   address:
                     socket_address:
-                      address: flashcards
+                      address: transformation
                       port_value: 3500
-    - name: notes
+    - name: reporting
       connect_timeout: 0.25s
       type: logical_dns
       lb_policy: round_robin
       load_assignment:
-        cluster_name: notes
+        cluster_name: reporting
         endpoints:
           - lb_endpoints:
               - endpoint:
                   address:
                     socket_address:
-                      address: notes
+                      address: reporting
+                      port_value: 3500
+    - name: export
+      connect_timeout: 0.25s
+      type: logical_dns
+      lb_policy: round_robin
+      load_assignment:
+        cluster_name: export
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: export
                       port_value: 3500
     - name: features
       connect_timeout: 0.25s

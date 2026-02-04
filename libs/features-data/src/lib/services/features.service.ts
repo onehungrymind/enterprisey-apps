@@ -1,17 +1,17 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Feature } from '@proto/api-interfaces';
-
-// TEMPORARY
-const API_URL = 'http://localhost:3000/api';
+import { APP_ENVIRONMENT } from '@proto/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FeaturesService {
+  private http = inject(HttpClient);
+  private env = inject(APP_ENVIRONMENT);
   model = 'features';
 
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
   all() {
     return this.http.get<Feature[]>(this.getUrl());
@@ -34,7 +34,7 @@ export class FeaturesService {
   }
 
   private getUrl() {
-    return `${API_URL}/${this.model}`;
+    return `${this.env.featuresApiUrl}/${this.model}`;
   }
 
   private getUrlWithId(id: string | undefined | null) {

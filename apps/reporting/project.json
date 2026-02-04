@@ -1,0 +1,133 @@
+{
+  "name": "reporting",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "proto",
+  "sourceRoot": "apps/reporting/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/reporting/browser",
+        "index": "apps/reporting/src/index.html",
+        "main": "apps/reporting/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/reporting/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/reporting/src/favicon.ico", "apps/reporting/src/assets"],
+        "styles": ["apps/reporting/src/styles.scss"],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/reporting/webpack.config.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
+            { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/reporting/webpack.prod.config.ts"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nx/angular:dev-server",
+      "options": {
+        "port": 4204,
+        "publicHost": "http://localhost:4204"
+      },
+      "configurations": {
+        "production": { "buildTarget": "reporting:build:production" },
+        "development": { "buildTarget": "reporting:build:development" }
+      },
+      "defaultConfiguration": "development",
+      "continuous": true
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": { "buildTarget": "reporting:build" }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "defaultConfiguration": "production",
+      "options": { "buildTarget": "reporting:build", "port": 4204, "watch": false },
+      "configurations": {
+        "development": { "buildTarget": "reporting:build:development" },
+        "production": { "buildTarget": "reporting:build:production" }
+      }
+    },
+    "server": {
+      "dependsOn": ["build"],
+      "executor": "@nx/angular:webpack-server",
+      "options": {
+        "outputPath": "dist/apps/reporting/server",
+        "main": "apps/reporting/server.ts",
+        "tsConfig": "apps/reporting/tsconfig.server.json",
+        "inlineStyleLanguage": "scss",
+        "customWebpackConfig": { "path": "apps/reporting/webpack.server.config.ts" }
+      },
+      "configurations": {
+        "production": { "outputHashing": "media" },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "sourceMap": true,
+          "extractLicenses": false,
+          "vendorChunk": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve-ssr": {
+      "executor": "@nx/angular:ssr-dev-server",
+      "configurations": {
+        "development": {
+          "browserTarget": "reporting:build:development",
+          "serverTarget": "reporting:server:development"
+        },
+        "production": {
+          "browserTarget": "reporting:build:production",
+          "serverTarget": "reporting:server:production"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": { "port": 4204 },
+      "continuous": true
+    },
+    "prerender": {
+      "executor": "@angular-devkit/build-angular:prerender",
+      "options": { "routes": ["/"] },
+      "configurations": {
+        "development": {
+          "browserTarget": "reporting:build:development",
+          "serverTarget": "reporting:server:development"
+        },
+        "production": {
+          "browserTarget": "reporting:build:production",
+          "serverTarget": "reporting:server:production"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "static-server": {
+      "dependsOn": ["build", "server"],
+      "executor": "nx:run-commands",
+      "options": { "command": "PORT=4204 node dist/apps/reporting/server/main.js" }
+    }
+  }
+}

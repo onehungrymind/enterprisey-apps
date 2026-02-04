@@ -1,0 +1,9 @@
+{
+  "name": "environment",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/environment/src",
+  "prefix": "proto",
+  "projectType": "library",
+  "tags": ["scope:shared"],
+  "targets": {}
+}

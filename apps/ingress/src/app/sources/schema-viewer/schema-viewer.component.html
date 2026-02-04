@@ -1,0 +1,29 @@
+<mat-card>
+  <mat-card-content>
+    <mat-card-title>
+      Discovered Schema
+      <span class="text-sm text-gray-500 ml-2">v{{ schema.version }}</span>
+    </mat-card-title>
+    <p class="text-sm text-gray-500 px-2 mb-2">
+      Discovered: {{ schema.discoveredAt }}
+    </p>
+
+    <mat-list>
+      @for (field of schema.fields; track field.name) {
+        <mat-list-item>
+          <mat-icon matListItemIcon class="text-gray-400">{{ getTypeIcon(field.type) }}</mat-icon>
+          <span matLine>
+            <span class="font-medium">{{ field.name }}</span>
+            <span class="text-sm text-gray-500 ml-2">({{ field.type }})</span>
+            @if (field.nullable) {
+              <span class="text-xs text-yellow-600 ml-1">nullable</span>
+            }
+          </span>
+          <span matLine class="text-xs text-gray-400">
+            Sample: {{ field.sampleValues.join(', ') }}
+          </span>
+        </mat-list-item>
+      }
+    </mat-list>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,36 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ currentPipeline.id ? 'Edit' : 'New' }} Pipeline</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form class="flex flex-col gap-4 mt-4">
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="currentPipeline.name" name="name" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput [(ngModel)]="currentPipeline.description" name="description" rows="3"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Source ID</mat-label>
+        <input matInput [(ngModel)]="currentPipeline.sourceId" name="sourceId" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="currentPipeline.status" name="status">
+          @for (status of statuses; track status) {
+            <mat-option [value]="status">{{ status }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="save()" [disabled]="!currentPipeline.name">Save</button>
+  </mat-card-actions>
+</mat-card>

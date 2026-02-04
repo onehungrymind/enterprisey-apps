@@ -1,0 +1,133 @@
+{
+  "name": "export",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "proto",
+  "sourceRoot": "apps/export/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/export/browser",
+        "index": "apps/export/src/index.html",
+        "main": "apps/export/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/export/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/export/src/favicon.ico", "apps/export/src/assets"],
+        "styles": ["apps/export/src/styles.scss"],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/export/webpack.config.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
+            { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/export/webpack.prod.config.ts"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nx/angular:dev-server",
+      "options": {
+        "port": 4205,
+        "publicHost": "http://localhost:4205"
+      },
+      "configurations": {
+        "production": { "buildTarget": "export:build:production" },
+        "development": { "buildTarget": "export:build:development" }
+      },
+      "defaultConfiguration": "development",
+      "continuous": true
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": { "buildTarget": "export:build" }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "defaultConfiguration": "production",
+      "options": { "buildTarget": "export:build", "port": 4205, "watch": false },
+      "configurations": {
+        "development": { "buildTarget": "export:build:development" },
+        "production": { "buildTarget": "export:build:production" }
+      }
+    },
+    "server": {
+      "dependsOn": ["build"],
+      "executor": "@nx/angular:webpack-server",
+      "options": {
+        "outputPath": "dist/apps/export/server",
+        "main": "apps/export/server.ts",
+        "tsConfig": "apps/export/tsconfig.server.json",
+        "inlineStyleLanguage": "scss",
+        "customWebpackConfig": { "path": "apps/export/webpack.server.config.ts" }
+      },
+      "configurations": {
+        "production": { "outputHashing": "media" },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "sourceMap": true,
+          "extractLicenses": false,
+          "vendorChunk": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve-ssr": {
+      "executor": "@nx/angular:ssr-dev-server",
+      "configurations": {
+        "development": {
+          "browserTarget": "export:build:development",
+          "serverTarget": "export:server:development"
+        },
+        "production": {
+          "browserTarget": "export:build:production",
+          "serverTarget": "export:server:production"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": { "port": 4205 },
+      "continuous": true
+    },
+    "prerender": {
+      "executor": "@angular-devkit/build-angular:prerender",
+      "options": { "routes": ["/"] },
+      "configurations": {
+        "development": {
+          "browserTarget": "export:build:development",
+          "serverTarget": "export:server:development"
+        },
+        "production": {
+          "browserTarget": "export:build:production",
+          "serverTarget": "export:server:production"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "static-server": {
+      "dependsOn": ["build", "server"],
+      "executor": "nx:run-commands",
+      "options": { "command": "PORT=4205 node dist/apps/export/server/main.js" }
+    }
+  }
+}

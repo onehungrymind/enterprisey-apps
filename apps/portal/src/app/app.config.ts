@@ -11,6 +11,7 @@ import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { appRoutes } from './app.routes';
 import { provideEffects } from '@ngrx/effects';
+import { provideEnvironment } from '@proto/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -39,5 +40,6 @@ export const appConfig: ApplicationConfig = {
     }),
     provideHttpClient(),
     provideAnimationsAsync(),
+    provideEnvironment(),
   ],
 };

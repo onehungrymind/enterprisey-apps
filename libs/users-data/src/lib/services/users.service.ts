@@ -1,17 +1,17 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { User } from '@proto/api-interfaces';
-
-// TEMPORARY
-const API_URL = 'http://localhost:3400/api';
+import { APP_ENVIRONMENT } from '@proto/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UsersService {
+  private http = inject(HttpClient);
+  private env = inject(APP_ENVIRONMENT);
   model = 'users';
 
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
   login(email: string, password: string) {
     return this.http.post<User>(this.getLoginUrl(), { email, password });
@@ -42,7 +42,7 @@ export class UsersService {
   }
 
   private getUrl() {
-    return `${API_URL}/${this.model}`;
+    return `${this.env.usersApiUrl}/${this.model}`;
   }
 
   private getUrlWithId(id: string | null | undefined) {
@@ -50,7 +50,7 @@ export class UsersService {
   }
 
   private getLoginUrl() {
-    return `${API_URL}/auth/login`;
+    return `${this.env.usersApiUrl}/auth/login`;
   }
 
   private getUrlWithEmail(email: string) {

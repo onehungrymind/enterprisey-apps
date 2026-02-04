@@ -1,0 +1,33 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Run History</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <table mat-table [dataSource]="runs" class="w-full">
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let run">
+          <mat-icon [color]="getStatusColor(run.status)">{{ getStatusIcon(run.status) }}</mat-icon>
+          {{ run.status }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="startedAt">
+        <th mat-header-cell *matHeaderCellDef>Started</th>
+        <td mat-cell *matCellDef="let run">{{ run.startedAt | date:'short' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="completedAt">
+        <th mat-header-cell *matHeaderCellDef>Completed</th>
+        <td mat-cell *matCellDef="let run">{{ run.completedAt | date:'short' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="recordsProcessed">
+        <th mat-header-cell *matHeaderCellDef>Records</th>
+        <td mat-cell *matCellDef="let run">{{ run.recordsProcessed | number }}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    @if (runs.length === 0) {
+      <p class="text-gray-500 text-center py-4">No runs yet</p>
+    }
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,133 @@
+{
+  "name": "transformation",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "proto",
+  "sourceRoot": "apps/transformation/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/transformation/browser",
+        "index": "apps/transformation/src/index.html",
+        "main": "apps/transformation/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/transformation/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/transformation/src/favicon.ico", "apps/transformation/src/assets"],
+        "styles": ["apps/transformation/src/styles.scss"],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/transformation/webpack.config.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
+            { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/transformation/webpack.prod.config.ts"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nx/angular:dev-server",
+      "options": {
+        "port": 4203,
+        "publicHost": "http://localhost:4203"
+      },
+      "configurations": {
+        "production": { "buildTarget": "transformation:build:production" },
+        "development": { "buildTarget": "transformation:build:development" }
+      },
+      "defaultConfiguration": "development",
+      "continuous": true
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": { "buildTarget": "transformation:build" }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "defaultConfiguration": "production",
+      "options": { "buildTarget": "transformation:build", "port": 4203, "watch": false },
+      "configurations": {
+        "development": { "buildTarget": "transformation:build:development" },
+        "production": { "buildTarget": "transformation:build:production" }
+      }
+    },
+    "server": {
+      "dependsOn": ["build"],
+      "executor": "@nx/angular:webpack-server",
+      "options": {
+        "outputPath": "dist/apps/transformation/server",
+        "main": "apps/transformation/server.ts",
+        "tsConfig": "apps/transformation/tsconfig.server.json",
+        "inlineStyleLanguage": "scss",
+        "customWebpackConfig": { "path": "apps/transformation/webpack.server.config.ts" }
+      },
+      "configurations": {
+        "production": { "outputHashing": "media" },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "sourceMap": true,
+          "extractLicenses": false,
+          "vendorChunk": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve-ssr": {
+      "executor": "@nx/angular:ssr-dev-server",
+      "configurations": {
+        "development": {
+          "browserTarget": "transformation:build:development",
+          "serverTarget": "transformation:server:development"
+        },
+        "production": {
+          "browserTarget": "transformation:build:production",
+          "serverTarget": "transformation:server:production"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": { "port": 4203 },
+      "continuous": true
+    },
+    "prerender": {
+      "executor": "@angular-devkit/build-angular:prerender",
+      "options": { "routes": ["/"] },
+      "configurations": {
+        "development": {
+          "browserTarget": "transformation:build:development",
+          "serverTarget": "transformation:server:development"
+        },
+        "production": {
+          "browserTarget": "transformation:build:production",
+          "serverTarget": "transformation:server:production"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "static-server": {
+      "dependsOn": ["build", "server"],
+      "executor": "nx:run-commands",
+      "options": { "command": "PORT=4203 node dist/apps/transformation/server/main.js" }
+    }
+  }
+}

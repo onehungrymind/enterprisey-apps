@@ -1,0 +1,60 @@
+<div class="flex m-20">
+  <div class="w-1/2 mr-10">
+    <proto-pipeline-list
+      [pipelines]="(pipelines$ | async)!"
+      [statusCounts]="(pipelinesByStatus$ | async)!"
+      (selected)="selectPipeline($event)"
+      (deleted)="deletePipeline($event)"
+      (runPipeline)="runPipeline($event)">
+    </proto-pipeline-list>
+  </div>
+  <div class="w-1/2 ml-10">
+    <proto-pipeline-editor
+      [pipeline]="selectedPipeline$ | async"
+      (saved)="savePipeline($event)"
+      (cancelled)="reset()">
+    </proto-pipeline-editor>
+
+    @if (selectedPipeline$ | async; as pipeline) {
+      <div class="mt-4">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Transform Steps</mat-card-title>
+            <span class="flex-1"></span>
+            <button mat-mini-fab color="primary" (click)="newStep(pipeline.id!)">
+              <mat-icon>add</mat-icon>
+            </button>
+          </mat-card-header>
+          <mat-card-content>
+            <proto-step-list
+              [steps]="(steps$ | async)!"
+              (editStep)="editStep($event)"
+              (deleteStep)="deleteStep($event)"
+              (reorderStep)="reorderStep($event)">
+            </proto-step-list>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      @if (editingStep) {
+        <div class="mt-4">
+          <proto-step-editor
+            [step]="editingStep"
+            (saved)="saveStep($event)"
+            (cancelled)="cancelStepEdit()">
+          </proto-step-editor>
+        </div>
+      }
+
+      @if (preview$ | async; as preview) {
+        <div class="mt-4">
+          <proto-pipeline-preview [preview]="preview"></proto-pipeline-preview>
+        </div>
+      }
+
+      <div class="mt-4">
+        <proto-run-history [runs]="(runs$ | async)!"></proto-run-history>
+      </div>
+    }
+  </div>
+</div>

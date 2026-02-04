@@ -1,16 +1,23 @@
 services:
-  challenges:
-    image: app-challenges
+  ingress:
+    image: app-ingress
     environment:
       - "AUTH_URL=http://users:3500"
-  flashcards:
-    image: app-flashcards
+  transformation:
+    image: app-transformation
     environment:
       - "AUTH_URL=http://users:3500"
-  notes:
-    image: app-notes
+      - "INGRESS_API_URL=http://ingress:3500"
+  reporting:
+    image: app-reporting
     environment:
-        - "AUTH_URL=http://users:3500"
+      - "AUTH_URL=http://users:3500"
+      - "TRANSFORMATION_API_URL=http://transformation:3500"
+  export:
+    image: app-export
+    environment:
+      - "AUTH_URL=http://users:3500"
+      - "REPORTING_API_URL=http://reporting:3500"
   users:
     image: app-users
     environment:
@@ -24,4 +31,4 @@ services:
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
     ports:
-      - "3500:3500"
+      - "9000:9000"

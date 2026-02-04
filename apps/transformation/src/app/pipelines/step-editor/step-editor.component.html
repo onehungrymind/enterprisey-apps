@@ -1,0 +1,31 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ currentStep.id ? 'Edit' : 'New' }} Step</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form class="flex flex-col gap-4 mt-4">
+      <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <mat-select [(ngModel)]="currentStep.type" name="type">
+          @for (type of stepTypes; track type) {
+            <mat-option [value]="type">{{ type | titlecase }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Order</mat-label>
+        <input matInput type="number" [(ngModel)]="currentStep.order" name="order" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Configuration (JSON)</mat-label>
+        <textarea matInput [(ngModel)]="configJson" name="config" rows="6" class="font-mono"></textarea>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="save()">Save Step</button>
+  </mat-card-actions>
+</mat-card>
