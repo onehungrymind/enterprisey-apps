@@ -1,10 +1,10 @@
 import { Challenge } from '../database/entities/challenge.entity';
-import { Connection } from 'typeorm';
+import { DataSource } from 'typeorm';
 
 export const challengeProviders = [
   {
     provide: 'CHALLENGE_REPOSITORY',
-    useFactory: (connection: Connection) => connection.getRepository(Challenge),
+    useFactory: (dataSource: DataSource) => dataSource.getRepository(Challenge),
     inject: ['DATABASE_CONNECTION'],
   },
 ];

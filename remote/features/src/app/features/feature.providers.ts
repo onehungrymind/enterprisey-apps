@@ -1,10 +1,10 @@
 import { Feature } from '../database/entities/feature.entity';
-import { Connection } from 'typeorm';
+import { DataSource } from 'typeorm';
 
 export const featureProviders = [
   {
     provide: 'FEATURE_REPOSITORY',
-    useFactory: (connection: Connection) => connection.getRepository(Feature),
+    useFactory: (dataSource: DataSource) => dataSource.getRepository(Feature),
     inject: ['DATABASE_CONNECTION'],
   },
 ];

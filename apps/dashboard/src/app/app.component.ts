@@ -1,4 +1,4 @@
-import { AsyncPipe, NgFor, TitleCasePipe } from '@angular/common';
+import { AsyncPipe, TitleCasePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Route, Router, RouterModule } from '@angular/router';
 import { loadRemoteModule } from '@nx/angular/mf';
@@ -8,11 +8,10 @@ import { Observable, tap } from 'rxjs';
 import { HomeComponent } from './home/home.component';
 
 @Component({
-  standalone: true,
-  imports: [RouterModule, AsyncPipe, NgFor, TitleCasePipe],
-  selector: 'proto-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+    imports: [RouterModule, AsyncPipe, TitleCasePipe],
+    selector: 'proto-root',
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
   features$: Observable<Feature[]> = this.featuresFacade.allFeatures$.pipe(

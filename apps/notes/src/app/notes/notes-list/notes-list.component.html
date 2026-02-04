@@ -4,14 +4,18 @@
       Notes
     </mat-card-title>
     <mat-list>
-      <mat-list-item *ngFor="let note of notes" class="mat-list-option" (click)="selected.emit(note)">
-        <span matLine>{{ note.title }}</span>
-        <button *ngIf="!readonly" mat-icon-button matListItemMeta
-          (click)="deleted.emit(note); $event.stopImmediatePropagation()"
-          type="button" color="warn">
-          <mat-icon>clear</mat-icon>
-        </button>
-      </mat-list-item>
+      @for (note of notes; track note) {
+        <mat-list-item class="mat-list-option" (click)="selected.emit(note)">
+          <span matLine>{{ note.title }}</span>
+          @if (!readonly) {
+            <button mat-icon-button matListItemMeta
+              (click)="deleted.emit(note); $event.stopImmediatePropagation()"
+              type="button" color="warn">
+              <mat-icon>clear</mat-icon>
+            </button>
+          }
+        </mat-list-item>
+      }
     </mat-list>
   </mat-card-content>
 </mat-card>

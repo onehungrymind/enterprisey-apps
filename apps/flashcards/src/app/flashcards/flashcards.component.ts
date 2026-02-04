@@ -8,16 +8,15 @@ import { FlashcardDetailsComponent } from './flashcard-details/flashcard-details
 import { FlashcardsListComponent } from './flashcards-list/flashcards-list.component';
 
 @Component({
-  selector: 'proto-flashcards',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MaterialModule,
-    FlashcardsListComponent,
-    FlashcardDetailsComponent,
-  ],
-  templateUrl: './flashcards.component.html',
-  styleUrls: ['./flashcards.component.scss'],
+    selector: 'proto-flashcards',
+    imports: [
+        CommonModule,
+        MaterialModule,
+        FlashcardsListComponent,
+        FlashcardDetailsComponent,
+    ],
+    templateUrl: './flashcards.component.html',
+    styleUrls: ['./flashcards.component.scss']
 })
 export class FlashcardsComponent implements OnInit {
   flashcards$: Observable<Flashcard[]> = this.flashcardsFacade.allFlashcards$;

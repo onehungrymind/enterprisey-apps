@@ -1,10 +1,10 @@
-import { Connection } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { Flashcard } from '../database/entities/flashcard.entity';
 
 export const flashcardProviders = [
   {
     provide: 'FLASHCARD_REPOSITORY',
-    useFactory: (connection: Connection) => connection.getRepository(Flashcard),
+    useFactory: (dataSource: DataSource) => dataSource.getRepository(Flashcard),
     inject: ['DATABASE_CONNECTION'],
   },
 ];

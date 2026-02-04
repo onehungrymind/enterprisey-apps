@@ -8,16 +8,15 @@ import { NoteDetailsComponent } from './note-details/note-details.component';
 import { NotesListComponent } from './notes-list/notes-list.component';
 
 @Component({
-  selector: 'proto-notes',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MaterialModule,
-    NotesListComponent,
-    NoteDetailsComponent,
-  ],
-  templateUrl: './notes.component.html',
-  styleUrls: ['./notes.component.scss'],
+    selector: 'proto-notes',
+    imports: [
+        CommonModule,
+        MaterialModule,
+        NotesListComponent,
+        NoteDetailsComponent,
+    ],
+    templateUrl: './notes.component.html',
+    styleUrls: ['./notes.component.scss']
 })
 export class NotesComponent implements OnInit {
   notes$: Observable<Note[]> = this.notesFacade.allNotes$;

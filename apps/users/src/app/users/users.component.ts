@@ -9,16 +9,15 @@ import { UserDetailsComponent } from './user-details/user-details.component';
 import { UsersListComponent } from './users-list/users-list.component';
 
 @Component({
-  selector: 'proto-users',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MaterialModule,
-    UsersListComponent,
-    UserDetailsComponent,
-  ],
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss'],
+    selector: 'proto-users',
+    imports: [
+        CommonModule,
+        MaterialModule,
+        UsersListComponent,
+        UserDetailsComponent,
+    ],
+    templateUrl: './users.component.html',
+    styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
   users$: Observable<User[]> = this.usersFacade.allUsers$;

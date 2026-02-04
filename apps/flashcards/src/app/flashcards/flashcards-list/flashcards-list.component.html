@@ -4,14 +4,18 @@
       Flashcards
     </mat-card-title>
     <mat-list>
-      <mat-list-item *ngFor="let flashcard of flashcards" class="mat-list-option" (click)="selected.emit(flashcard)">
-        <span matLine>{{ flashcard.title }}</span>
-        <button *ngIf="!readonly" mat-icon-button matListItemMeta
-          (click)="deleted.emit(flashcard); $event.stopImmediatePropagation()"
-          type="button" color="warn">
-          <mat-icon>clear</mat-icon>
-        </button>
-      </mat-list-item>
+      @for (flashcard of flashcards; track flashcard) {
+        <mat-list-item class="mat-list-option" (click)="selected.emit(flashcard)">
+          <span matLine>{{ flashcard.title }}</span>
+          @if (!readonly) {
+            <button mat-icon-button matListItemMeta
+              (click)="deleted.emit(flashcard); $event.stopImmediatePropagation()"
+              type="button" color="warn">
+              <mat-icon>clear</mat-icon>
+            </button>
+          }
+        </mat-list-item>
+      }
     </mat-list>
   </mat-card-content>
 </mat-card>

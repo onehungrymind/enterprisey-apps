@@ -1,8 +1,8 @@
 {
   "name": "challenges-api-e2e",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "implicitDependencies": ["challenges-api"],
   "projectType": "application",
+  "implicitDependencies": ["challenges-api"],
   "targets": {
     "e2e": {
       "executor": "@nx/jest:jest",

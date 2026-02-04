@@ -70,7 +70,8 @@
           "buildTarget": "challenges:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "continuous": true
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
@@ -136,7 +137,8 @@
       "defaultConfiguration": "development",
       "options": {
         "port": 4202
-      }
+      },
+      "continuous": true
     },
     "prerender": {
       "executor": "@angular-devkit/build-angular:prerender",

@@ -6,11 +6,10 @@ import { Challenge } from '@proto/api-interfaces';
 import { MaterialModule } from '@proto/material';
 
 @Component({
-  selector: 'proto-challenge-details',
-  standalone: true,
-  imports: [CommonModule, MaterialModule, FormsModule],
-  templateUrl: './challenge-details.component.html',
-  styleUrls: ['./challenge-details.component.scss'],
+    selector: 'proto-challenge-details',
+    imports: [CommonModule, MaterialModule, FormsModule],
+    templateUrl: './challenge-details.component.html',
+    styleUrls: ['./challenge-details.component.scss']
 })
 export class ChallengeDetailsComponent {
   currentChallenge!: Challenge;

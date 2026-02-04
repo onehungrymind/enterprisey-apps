@@ -6,11 +6,10 @@ import { User } from '@proto/api-interfaces';
 import { MaterialModule } from '@proto/material';
 
 @Component({
-  selector: 'proto-user-details',
-  standalone: true,
-  imports: [CommonModule, MaterialModule, FormsModule],
-  templateUrl: './user-details.component.html',
-  styleUrls: ['./user-details.component.scss'],
+    selector: 'proto-user-details',
+    imports: [CommonModule, MaterialModule, FormsModule],
+    templateUrl: './user-details.component.html',
+    styleUrls: ['./user-details.component.scss']
 })
 export class UserDetailsComponent {
   currentUser!: User;

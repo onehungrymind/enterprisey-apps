@@ -1,5 +1,5 @@
 /* eslint-disable */
-export default {
+module.exports = {
   displayName: 'guards-remote-auth',
   preset: '../../../jest.preset.js',
   testEnvironment: 'node',

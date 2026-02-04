@@ -9,12 +9,14 @@
             Home
           </button>
         </li>
-        <li *ngFor="let feature of features$ | async">
-          <button routerLink="{{feature.slug}}"
-            class="bg-transparent border hover:border-transparent hover:bg-white hover:text-black font-bold py-2 w-40">
-            {{feature.slug | titlecase}}
-          </button>
-        </li>
+        @for (feature of features$ | async; track feature) {
+          <li>
+            <button routerLink="{{feature.slug}}"
+              class="bg-transparent border hover:border-transparent hover:bg-white hover:text-black font-bold py-2 w-40">
+              {{feature.slug | titlecase}}
+            </button>
+          </li>
+        }
       </ul>
     </nav>
   </div>

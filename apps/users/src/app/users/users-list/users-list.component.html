@@ -4,15 +4,19 @@
       Users
     </mat-card-title>
     <mat-list>
-      <mat-list-item *ngFor="let user of users" class="mat-list-option" (click)="selected.emit(user)">
-        <span matLine>{{ user.firstName }}
+      @for (user of users; track user) {
+        <mat-list-item class="mat-list-option" (click)="selected.emit(user)">
+          <span matLine>{{ user.firstName }}
           {{ user.lastName }}</span>
-        <button *ngIf="!readonly" mat-icon-button matListItemMeta
-          (click)="deleted.emit(user); $event.stopImmediatePropagation()"
-          type="button" color="warn">
-          <mat-icon>clear</mat-icon>
-        </button>
-      </mat-list-item>
+          @if (!readonly) {
+            <button mat-icon-button matListItemMeta
+              (click)="deleted.emit(user); $event.stopImmediatePropagation()"
+              type="button" color="warn">
+              <mat-icon>clear</mat-icon>
+            </button>
+          }
+        </mat-list-item>
+      }
     </mat-list>
   </mat-card-content>
 </mat-card>

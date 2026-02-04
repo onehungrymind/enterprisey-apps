@@ -1,8 +1,8 @@
 {
   "name": "flashcards-api-e2e",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "implicitDependencies": ["flashcards-api"],
   "projectType": "application",
+  "implicitDependencies": ["flashcards-api"],
   "targets": {
     "e2e": {
       "executor": "@nx/jest:jest",

@@ -1,10 +1,13 @@
 <mat-card>
   <mat-card-content>
     <mat-card-title>
-      <span *ngIf="currentUser.id; else elseBlock">
-        Editing {{ originalTitle | titlecase }}
-      </span>
-      <ng-template #elseBlock> Select User </ng-template>
+      @if (currentUser.id) {
+        <span>
+          Editing {{ originalTitle | titlecase }}
+        </span>
+      } @else {
+        Select User
+      }
     </mat-card-title>
     <form #form="ngForm" (ngSubmit)="saved.emit(currentUser)">
       <mat-form-field class="full-width">
@@ -15,7 +18,7 @@
           type="input"
           name="firstname"
           required="true"
-        />
+          />
       </mat-form-field>
       <mat-form-field class="full-width">
         <input
@@ -25,7 +28,7 @@
           type="input"
           name="lastname"
           required="true"
-        />
+          />
       </mat-form-field>
       <mat-form-field class="full-width">
         <input
@@ -35,7 +38,7 @@
           type="input"
           name="email"
           required="true"
-        />
+          />
       </mat-form-field>
       <mat-form-field class="full-width">
         <input
@@ -45,7 +48,7 @@
           type="password"
           name="password"
           required="true"
-        />
+          />
       </mat-form-field>
 
       <mat-card-actions>
@@ -54,7 +57,7 @@
           type="submit"
           mat-button
           color="primary"
-        >
+          >
           Save
         </button>
         <button type="button" mat-button (click)="cancelled.emit()">

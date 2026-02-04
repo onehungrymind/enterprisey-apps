@@ -1,16 +1,13 @@
 import { Challenge } from '@proto/api-interfaces';
 import { mockChallenge, mockEmptyChallenge } from '@proto/testing';
-
 import { ChallengesActions } from './challenges.actions';
 import {
   ChallengesState,
   initialChallengesState,
   reducer,
 } from './challenges.reducer';
-
 describe('Challenges Reducer', () => {
   let challenges: Challenge[];
-
   beforeEach(() => {
     challenges = [
       { ...mockChallenge, id: '0' },
@@ -18,7 +15,6 @@ describe('Challenges Reducer', () => {
       { ...mockChallenge, id: '2' },
     ];
   });
-
   describe('valid Challenges actions', () => {
     it('loadChallenges should set loaded to false', () => {
       const action = ChallengesActions.loadChallenges();
@@ -26,12 +22,9 @@ describe('Challenges Reducer', () => {
         ...initialChallengesState,
         error: null,
       };
-
       const result: ChallengesState = reducer(initialChallengesState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('loadChallengesSuccess should set the list of known Challenges', () => {
       const action = ChallengesActions.loadChallengesSuccess({ challenges });
       const expectedState = {
@@ -44,12 +37,9 @@ describe('Challenges Reducer', () => {
         },
         ids: challenges.map((challenge) => challenge.id),
       };
-
       const result: ChallengesState = reducer(initialChallengesState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('loadChallengesFailure should set error to error', () => {
       const error = new Error();
       const action = ChallengesActions.loadChallengesFailure({ error });
@@ -57,12 +47,9 @@ describe('Challenges Reducer', () => {
         ...initialChallengesState,
         error,
       };
-
       const result: ChallengesState = reducer(initialChallengesState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('loadChallenge should set loaded to false', () => {
       const action = ChallengesActions.loadChallenge({
         challengeId: mockChallenge.id as string,
@@ -72,12 +59,9 @@ describe('Challenges Reducer', () => {
         loaded: false,
         error: null,
       };
-
       const result: ChallengesState = reducer(initialChallengesState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('loadChallengeSuccess should set loaded to true', () => {
       const action = ChallengesActions.loadChallengeSuccess({
         challenge: mockChallenge,
@@ -90,12 +74,9 @@ describe('Challenges Reducer', () => {
         },
         ids: [mockChallenge.id],
       };
-
       const result: ChallengesState = reducer(initialChallengesState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('loadChallengeFailure should set error to error', () => {
       const error = new Error();
       const action = ChallengesActions.loadChallengeFailure({ error });
@@ -103,12 +84,9 @@ describe('Challenges Reducer', () => {
         ...initialChallengesState,
         error,
       };
-
       const result: ChallengesState = reducer(initialChallengesState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('updateChallengeSuccess should modify challenge', () => {
       const prepAction = ChallengesActions.loadChallengeSuccess({
         challenge: { ...mockEmptyChallenge, id: mockChallenge.id },
@@ -117,7 +95,6 @@ describe('Challenges Reducer', () => {
         initialChallengesState,
         prepAction
       );
-
       const expectedState = {
         ...initialChallengesState,
         loaded: true,
@@ -126,15 +103,12 @@ describe('Challenges Reducer', () => {
         },
         ids: [mockChallenge.id],
       };
-
       const action = ChallengesActions.updateChallengeSuccess({
         challenge: mockChallenge,
       });
       const result: ChallengesState = reducer(prepState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('updateChallengeFailure should set error to error', () => {
       const error = new Error();
       const action = ChallengesActions.updateChallengeFailure({ error });
@@ -142,12 +116,9 @@ describe('Challenges Reducer', () => {
         ...initialChallengesState,
         error: error,
       };
-
       const result: ChallengesState = reducer(initialChallengesState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('createChallengeSuccess should add challenge', () => {
       const action = ChallengesActions.createChallengeSuccess({
         challenge: mockChallenge,
@@ -160,12 +131,9 @@ describe('Challenges Reducer', () => {
         },
         ids: [mockChallenge.id],
       };
-
       const result: ChallengesState = reducer(initialChallengesState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('createChallengeFailure should set error to error', () => {
       const error = new Error();
       const action = ChallengesActions.createChallengeFailure({ error });
@@ -173,12 +141,9 @@ describe('Challenges Reducer', () => {
         ...initialChallengesState,
         error,
       };
-
       const result: ChallengesState = reducer(initialChallengesState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('deleteChallengeSuccess should add challenge', () => {
       const prepAction = ChallengesActions.loadChallengeSuccess({
         challenge: mockChallenge,
@@ -187,20 +152,16 @@ describe('Challenges Reducer', () => {
         initialChallengesState,
         prepAction
       );
-
       const expectedState = {
         ...initialChallengesState,
         loaded: true,
       };
-
       const action = ChallengesActions.deleteChallengeSuccess({
         challenge: mockChallenge,
       });
       const result: ChallengesState = reducer(prepState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('deleteChallengeFailure should set error to error', () => {
       const error = new Error();
       const action = ChallengesActions.deleteChallengeFailure({ error });
@@ -208,12 +169,9 @@ describe('Challenges Reducer', () => {
         ...initialChallengesState,
         error,
       };
-
       const result: ChallengesState = reducer(initialChallengesState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('selectChallenge should set selectedId', () => {
       const action = ChallengesActions.selectChallenge({
         selectedId: mockChallenge.id as string,
@@ -222,29 +180,22 @@ describe('Challenges Reducer', () => {
         ...initialChallengesState,
         selectedId: mockChallenge.id,
       };
-
       const result: ChallengesState = reducer(initialChallengesState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('resetSelectedChallenge should reset selectedId', () => {
       const prepAction = ChallengesActions.selectChallenge({
         selectedId: mockChallenge.id as string,
       });
       const prepState = reducer(initialChallengesState, prepAction);
-
       const action = ChallengesActions.resetSelectedChallenge();
       const expectedState = {
         ...initialChallengesState,
         selectedId: null,
       };
-
       const result: ChallengesState = reducer(prepState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('resetChallenges should reset challenges', () => {
       const prepAction = ChallengesActions.loadChallengesSuccess({
         challenges,
@@ -253,25 +204,19 @@ describe('Challenges Reducer', () => {
         initialChallengesState,
         prepAction
       );
-
       const expectedState = {
         ...initialChallengesState,
         loaded: true,
       };
-
       const action = ChallengesActions.resetChallenges();
       const result: ChallengesState = reducer(prepState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
   });
-
   describe('unknown action', () => {
     it('should return the previous state', () => {
       const action = {} as any;
-
       const result: ChallengesState = reducer(initialChallengesState, action);
-
       expect(result).toBe(initialChallengesState);
     });
   });

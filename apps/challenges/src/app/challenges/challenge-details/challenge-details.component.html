@@ -1,10 +1,13 @@
 <mat-card>
   <mat-card-content>
     <mat-card-title>
-      <span *ngIf="currentChallenge.id; else elseBlock">
-        Editing {{ originalTitle | titlecase }}
-      </span>
-      <ng-template #elseBlock> Select Challenge </ng-template>
+      @if (currentChallenge.id) {
+        <span>
+          Editing {{ originalTitle | titlecase }}
+        </span>
+      } @else {
+        Select Challenge
+      }
     </mat-card-title>
     <form #form="ngForm" (ngSubmit)="saved.emit(currentChallenge)">
       <mat-form-field class="full-width">
@@ -44,7 +47,7 @@
         <mat-checkbox
           [(ngModel)]="currentChallenge.completed"
           class="checkbox-margin"
-          name="completed">Completed</mat-checkbox>
+        name="completed">Completed</mat-checkbox>
       </div>
 
       <mat-card-actions>

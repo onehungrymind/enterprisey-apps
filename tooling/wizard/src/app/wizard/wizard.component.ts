@@ -15,40 +15,37 @@ import {
 import pluralize from 'pluralize';
 
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 
 import { MaterialModule } from '@proto/material';
 
 @Component({
-  selector: 'proto-wizard',
-  standalone: true,
-  imports: [
-    CommonModule,
+    selector: 'proto-wizard',
+    imports: [
     MaterialModule,
     CodemirrorModule,
     FormsModule,
-    HighlightModule,
-  ],
-  providers: [
-    {
-      provide: HIGHLIGHT_OPTIONS,
-      useValue: {
-        lineNumbers: true,
-        fullLibraryLoader: () => import('highlight.js'),
-        coreLibraryLoader: () => import('highlight.js/lib/core'),
-        lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
-        themePath:
-          'node_modules/highlight.js/styles/base16/material-darker.css',
-        languages: {
-          typescript: () => import('highlight.js/lib/languages/typescript'),
-          css: () => import('highlight.js/lib/languages/css'),
-          json: () => import('highlight.js/lib/languages/json'),
+    HighlightModule
+],
+    providers: [
+        {
+            provide: HIGHLIGHT_OPTIONS,
+            useValue: {
+                lineNumbers: true,
+                fullLibraryLoader: () => import('highlight.js'),
+                coreLibraryLoader: () => import('highlight.js/lib/core'),
+                lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
+                themePath: 'node_modules/highlight.js/styles/base16/material-darker.css',
+                languages: {
+                    typescript: () => import('highlight.js/lib/languages/typescript'),
+                    css: () => import('highlight.js/lib/languages/css'),
+                    json: () => import('highlight.js/lib/languages/json'),
+                },
+            },
         },
-      },
-    },
-  ],
-  templateUrl: './wizard.component.html',
-  styleUrl: './wizard.component.scss',
+    ],
+    templateUrl: './wizard.component.html',
+    styleUrl: './wizard.component.scss'
 })
 export class WizardComponent {
   refTemplate = '';

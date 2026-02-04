@@ -28,11 +28,10 @@ export const filters = [
 ];
 
 @Component({
-  selector: 'proto-ui-login',
-  standalone: true,
-  imports: [CommonModule, MaterialModule, FormsModule],
-  templateUrl: './ui-login.component.html',
-  styleUrls: ['./ui-login.component.scss'],
+    selector: 'proto-ui-login',
+    imports: [CommonModule, MaterialModule, FormsModule],
+    templateUrl: './ui-login.component.html',
+    styleUrls: ['./ui-login.component.scss']
 })
 export class LoginComponent {
   loginInfo: Login = {

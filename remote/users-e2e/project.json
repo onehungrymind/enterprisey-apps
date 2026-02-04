@@ -1,8 +1,8 @@
 {
   "name": "users-api-e2e",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "implicitDependencies": ["users-api"],
   "projectType": "application",
+  "implicitDependencies": ["users-api"],
   "targets": {
     "e2e": {
       "executor": "@nx/jest:jest",

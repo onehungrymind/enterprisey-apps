@@ -6,11 +6,10 @@ import { Note } from '@proto/api-interfaces';
 import { MaterialModule } from '@proto/material';
 
 @Component({
-  selector: 'proto-note-details',
-  standalone: true,
-  imports: [CommonModule, MaterialModule, FormsModule],
-  templateUrl: './note-details.component.html',
-  styleUrls: ['./note-details.component.scss'],
+    selector: 'proto-note-details',
+    imports: [CommonModule, MaterialModule, FormsModule],
+    templateUrl: './note-details.component.html',
+    styleUrls: ['./note-details.component.scss']
 })
 export class NoteDetailsComponent {
   currentNote!: Note;

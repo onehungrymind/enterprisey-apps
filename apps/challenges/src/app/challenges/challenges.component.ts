@@ -8,16 +8,15 @@ import { ChallengeDetailsComponent } from './challenge-details/challenge-details
 import { ChallengesListComponent } from './challenges-list/challenges-list.component';
 
 @Component({
-  selector: 'proto-challenges',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MaterialModule,
-    ChallengesListComponent,
-    ChallengeDetailsComponent,
-  ],
-  templateUrl: './challenges.component.html',
-  styleUrls: ['./challenges.component.scss'],
+    selector: 'proto-challenges',
+    imports: [
+        CommonModule,
+        MaterialModule,
+        ChallengesListComponent,
+        ChallengeDetailsComponent,
+    ],
+    templateUrl: './challenges.component.html',
+    styleUrls: ['./challenges.component.scss']
 })
 export class ChallengesComponent implements OnInit {
   challenges$: Observable<Challenge[]> = this.challengesFacade.allChallenges$;

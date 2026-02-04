@@ -1,16 +1,13 @@
 import { Flashcard } from '@proto/api-interfaces';
 import { mockEmptyFlashcard, mockFlashcard } from '@proto/testing';
-
 import { FlashcardsActions } from './flashcards.actions';
 import {
   FlashcardsState,
   initialFlashcardsState,
   reducer,
 } from './flashcards.reducer';
-
 describe('Flashcards Reducer', () => {
   let flashcards: Flashcard[];
-
   beforeEach(() => {
     flashcards = [
       { ...mockFlashcard, id: '0' },
@@ -18,7 +15,6 @@ describe('Flashcards Reducer', () => {
       { ...mockFlashcard, id: '2' },
     ];
   });
-
   describe('valid Flashcards actions', () => {
     it('loadFlashcards should set loaded to false', () => {
       const action = FlashcardsActions.loadFlashcards();
@@ -26,12 +22,9 @@ describe('Flashcards Reducer', () => {
         ...initialFlashcardsState,
         error: null,
       };
-
       const result: FlashcardsState = reducer(initialFlashcardsState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('loadFlashcardsSuccess should set the list of known Flashcards', () => {
       const action = FlashcardsActions.loadFlashcardsSuccess({ flashcards });
       const expectedState = {
@@ -44,12 +37,9 @@ describe('Flashcards Reducer', () => {
         },
         ids: flashcards.map((flashcard) => flashcard.id),
       };
-
       const result: FlashcardsState = reducer(initialFlashcardsState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('loadFlashcardsFailure should set error to error', () => {
       const error = new Error();
       const action = FlashcardsActions.loadFlashcardsFailure({ error });
@@ -57,12 +47,9 @@ describe('Flashcards Reducer', () => {
         ...initialFlashcardsState,
         error,
       };
-
       const result: FlashcardsState = reducer(initialFlashcardsState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('loadFlashcard should set loaded to false', () => {
       const action = FlashcardsActions.loadFlashcard({
         flashcardId: mockFlashcard.id as string,
@@ -72,12 +59,9 @@ describe('Flashcards Reducer', () => {
         loaded: false,
         error: null,
       };
-
       const result: FlashcardsState = reducer(initialFlashcardsState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('loadFlashcardSuccess should set loaded to true', () => {
       const action = FlashcardsActions.loadFlashcardSuccess({
         flashcard: mockFlashcard,
@@ -90,12 +74,9 @@ describe('Flashcards Reducer', () => {
         },
         ids: [mockFlashcard.id],
       };
-
       const result: FlashcardsState = reducer(initialFlashcardsState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('loadFlashcardFailure should set error to error', () => {
       const error = new Error();
       const action = FlashcardsActions.loadFlashcardFailure({ error });
@@ -103,12 +84,9 @@ describe('Flashcards Reducer', () => {
         ...initialFlashcardsState,
         error,
       };
-
       const result: FlashcardsState = reducer(initialFlashcardsState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('updateFlashcardSuccess should modify flashcard', () => {
       const prepAction = FlashcardsActions.loadFlashcardSuccess({
         flashcard: { ...mockEmptyFlashcard, id: mockFlashcard.id },
@@ -117,7 +95,6 @@ describe('Flashcards Reducer', () => {
         initialFlashcardsState,
         prepAction
       );
-
       const expectedState = {
         ...initialFlashcardsState,
         loaded: true,
@@ -126,15 +103,12 @@ describe('Flashcards Reducer', () => {
         },
         ids: [mockFlashcard.id],
       };
-
       const action = FlashcardsActions.updateFlashcardSuccess({
         flashcard: mockFlashcard,
       });
       const result: FlashcardsState = reducer(prepState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('updateFlashcardFailure should set error to error', () => {
       const error = new Error();
       const action = FlashcardsActions.updateFlashcardFailure({ error });
@@ -142,12 +116,9 @@ describe('Flashcards Reducer', () => {
         ...initialFlashcardsState,
         error: error,
       };
-
       const result: FlashcardsState = reducer(initialFlashcardsState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('createFlashcardSuccess should add flashcard', () => {
       const action = FlashcardsActions.createFlashcardSuccess({
         flashcard: mockFlashcard,
@@ -160,12 +131,9 @@ describe('Flashcards Reducer', () => {
         },
         ids: [mockFlashcard.id],
       };
-
       const result: FlashcardsState = reducer(initialFlashcardsState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('createFlashcardFailure should set error to error', () => {
       const error = new Error();
       const action = FlashcardsActions.createFlashcardFailure({ error });
@@ -173,12 +141,9 @@ describe('Flashcards Reducer', () => {
         ...initialFlashcardsState,
         error,
       };
-
       const result: FlashcardsState = reducer(initialFlashcardsState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('deleteFlashcardSuccess should add flashcard', () => {
       const prepAction = FlashcardsActions.loadFlashcardSuccess({
         flashcard: mockFlashcard,
@@ -187,20 +152,16 @@ describe('Flashcards Reducer', () => {
         initialFlashcardsState,
         prepAction
       );
-
       const expectedState = {
         ...initialFlashcardsState,
         loaded: true,
       };
-
       const action = FlashcardsActions.deleteFlashcardSuccess({
         flashcard: mockFlashcard,
       });
       const result: FlashcardsState = reducer(prepState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('deleteFlashcardFailure should set error to error', () => {
       const error = new Error();
       const action = FlashcardsActions.deleteFlashcardFailure({ error });
@@ -208,12 +169,9 @@ describe('Flashcards Reducer', () => {
         ...initialFlashcardsState,
         error,
       };
-
       const result: FlashcardsState = reducer(initialFlashcardsState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('selectFlashcard should set selectedId', () => {
       const action = FlashcardsActions.selectFlashcard({
         selectedId: mockFlashcard.id as string,
@@ -222,29 +180,22 @@ describe('Flashcards Reducer', () => {
         ...initialFlashcardsState,
         selectedId: mockFlashcard.id,
       };
-
       const result: FlashcardsState = reducer(initialFlashcardsState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('resetSelectedFlashcard should reset selectedId', () => {
       const prepAction = FlashcardsActions.selectFlashcard({
         selectedId: mockFlashcard.id as string,
       });
       const prepState = reducer(initialFlashcardsState, prepAction);
-
       const action = FlashcardsActions.resetSelectedFlashcard();
       const expectedState = {
         ...initialFlashcardsState,
         selectedId: null,
       };
-
       const result: FlashcardsState = reducer(prepState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
-
     it('resetFlashcards should reset flashcards', () => {
       const prepAction = FlashcardsActions.loadFlashcardsSuccess({
         flashcards,
@@ -253,25 +204,19 @@ describe('Flashcards Reducer', () => {
         initialFlashcardsState,
         prepAction
       );
-
       const expectedState = {
         ...initialFlashcardsState,
         loaded: true,
       };
-
       const action = FlashcardsActions.resetFlashcards();
       const result: FlashcardsState = reducer(prepState, action);
-
       expect(result).toStrictEqual(expectedState);
     });
   });
-
   describe('unknown action', () => {
     it('should return the previous state', () => {
       const action = {} as any;
-
       const result: FlashcardsState = reducer(initialFlashcardsState, action);
-
       expect(result).toBe(initialFlashcardsState);
     });
   });

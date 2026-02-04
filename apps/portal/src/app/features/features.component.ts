@@ -8,16 +8,15 @@ import { FeatureDetailsComponent } from './feature-details/feature-details.compo
 import { FeaturesListComponent } from './features-list/features-list.component';
 
 @Component({
-  selector: 'proto-features',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MaterialModule,
-    FeaturesListComponent,
-    FeatureDetailsComponent,
-  ],
-  templateUrl: './features.component.html',
-  styleUrls: ['./features.component.scss'],
+    selector: 'proto-features',
+    imports: [
+        CommonModule,
+        MaterialModule,
+        FeaturesListComponent,
+        FeatureDetailsComponent,
+    ],
+    templateUrl: './features.component.html',
+    styleUrls: ['./features.component.scss']
 })
 export class FeaturesComponent implements OnInit {
   features$: Observable<Feature[]> = this.featuresFacade.allFeatures$;

@@ -1,10 +1,13 @@
 <mat-card>
   <mat-card-content>
     <mat-card-title>
-      <span *ngIf="currentNote.id; else elseBlock">
-        Editing {{ originalTitle | titlecase }}
-      </span>
-      <ng-template #elseBlock> Select Note </ng-template>
+      @if (currentNote.id) {
+        <span>
+          Editing {{ originalTitle | titlecase }}
+        </span>
+      } @else {
+        Select Note
+      }
     </mat-card-title>
     <form #form="ngForm" (ngSubmit)="saved.emit(currentNote)">
       <mat-form-field class="full-width">
@@ -15,7 +18,7 @@
           type="input"
           name="title"
           required="true"
-        />
+          />
       </mat-form-field>
       <mat-form-field class="full-width">
         <input
@@ -25,7 +28,7 @@
           type="input"
           name="lastname"
           required="true"
-        />
+          />
       </mat-form-field>
 
       <mat-card-actions>
@@ -34,7 +37,7 @@
           type="submit"
           mat-button
           color="primary"
-        >
+          >
           Save
         </button>
         <button type="button" mat-button (click)="cancelled.emit()">

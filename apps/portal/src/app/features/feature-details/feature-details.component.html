@@ -1,10 +1,13 @@
 <mat-card>
   <mat-card-content>
     <mat-card-title>
-      <span *ngIf="currentFeature.id; else elseBlock">
-        Editing {{ originalTitle | titlecase }}
-      </span>
-      <ng-template #elseBlock> Select Feature </ng-template>
+      @if (currentFeature.id) {
+        <span>
+          Editing {{ originalTitle | titlecase }}
+        </span>
+      } @else {
+        Select Feature
+      }
     </mat-card-title>
     <form #form="ngForm" (ngSubmit)="saved.emit(currentFeature)">
       <mat-form-field class="full-width">
@@ -52,7 +55,7 @@
         <mat-checkbox
           [(ngModel)]="currentFeature.healthy"
           class="checkbox-margin"
-          name="healthy">Healthy</mat-checkbox>
+        name="healthy">Healthy</mat-checkbox>
       </div>
 
       <mat-card-actions>

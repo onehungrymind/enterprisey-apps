@@ -1,10 +1,13 @@
 <mat-card>
   <mat-card-content>
     <mat-card-title>
-      <span *ngIf="currentFlashcard.id; else elseBlock">
-        Editing {{ originalTitle | titlecase }}
-      </span>
-      <ng-template #elseBlock> Select Flashcard </ng-template>
+      @if (currentFlashcard.id) {
+        <span>
+          Editing {{ originalTitle | titlecase }}
+        </span>
+      } @else {
+        Select Flashcard
+      }
     </mat-card-title>
     <form #form="ngForm" (ngSubmit)="saved.emit(currentFlashcard)">
       <mat-form-field class="full-width">
@@ -15,7 +18,7 @@
           type="input"
           name="title"
           required="true"
-        />
+          />
       </mat-form-field>
       <mat-form-field class="full-width">
         <input
@@ -24,7 +27,7 @@
           [(ngModel)]="currentFlashcard.description"
           type="input"
           name="description"
-        />
+          />
       </mat-form-field>
       <mat-form-field class="full-width">
         <input
@@ -34,7 +37,7 @@
           type="input"
           name="question"
           required="true"
-        />
+          />
       </mat-form-field>
       <mat-form-field class="full-width">
         <input
@@ -44,7 +47,7 @@
           type="input"
           name="answer"
           required="true"
-        />
+          />
       </mat-form-field>
 
       <mat-card-actions>
@@ -53,7 +56,7 @@
           type="submit"
           mat-button
           color="primary"
-        >
+          >
           Save
         </button>
         <button type="button" mat-button (click)="cancelled.emit()">

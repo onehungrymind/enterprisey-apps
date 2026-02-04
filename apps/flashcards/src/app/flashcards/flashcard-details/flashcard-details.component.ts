@@ -6,11 +6,10 @@ import { Flashcard } from '@proto/api-interfaces';
 import { MaterialModule } from '@proto/material';
 
 @Component({
-  selector: 'proto-flashcard-details',
-  standalone: true,
-  imports: [CommonModule, MaterialModule, FormsModule],
-  templateUrl: './flashcard-details.component.html',
-  styleUrls: ['./flashcard-details.component.scss'],
+    selector: 'proto-flashcard-details',
+    imports: [CommonModule, MaterialModule, FormsModule],
+    templateUrl: './flashcard-details.component.html',
+    styleUrls: ['./flashcard-details.component.scss']
 })
 export class FlashcardDetailsComponent {
   currentFlashcard!: Flashcard;

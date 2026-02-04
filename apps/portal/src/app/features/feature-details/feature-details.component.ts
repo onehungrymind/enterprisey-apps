@@ -6,11 +6,10 @@ import { Feature } from '@proto/api-interfaces';
 import { MaterialModule } from '@proto/material';
 
 @Component({
-  selector: 'proto-feature-details',
-  standalone: true,
-  imports: [CommonModule, MaterialModule, FormsModule],
-  templateUrl: './feature-details.component.html',
-  styleUrls: ['./feature-details.component.scss'],
+    selector: 'proto-feature-details',
+    imports: [CommonModule, MaterialModule, FormsModule],
+    templateUrl: './feature-details.component.html',
+    styleUrls: ['./feature-details.component.scss']
 })
 export class FeatureDetailsComponent {
   currentFeature!: Feature;

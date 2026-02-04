@@ -8,22 +8,15 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/portal",
         "index": "apps/portal/src/index.html",
         "browser": "apps/portal/src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
+        "polyfills": ["zone.js"],
         "tsConfig": "apps/portal/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": [
-          "apps/portal/src/favicon.ico",
-          "apps/portal/src/assets"
-        ],
+        "assets": ["apps/portal/src/favicon.ico", "apps/portal/src/assets"],
         "styles": [
           "@angular/material/prebuilt-themes/indigo-pink.css",
           "apps/portal/src/styles.scss"
@@ -69,7 +62,8 @@
           "buildTarget": "portal:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "continuous": true
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
