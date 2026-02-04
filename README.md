@@ -1,204 +1,236 @@
-# Enterprisey Sample Application[s]
+# Enterprisey Apps — Data Pipeline Platform
 
-## Setup Instructions
+A micro-frontend monorepo demonstrating a **data pipeline architecture** built with Angular 21, NestJS 11, NgRx, and Nx Module Federation. The platform models four interconnected domains — Ingress, Transformation, Reporting, and Export — each with distinct state management strategies and UI patterns.
 
-> [!NOTE]
-> Node Version 20.x.x is recommended for this project.
+## Architecture Overview
+
+```
+Ingress --> Transformation --> Reporting --> Export
+(sources)    (pipelines)      (dashboards)   (jobs)
+```
+
+The dashboard shell dynamically loads each domain as a Module Federation remote, registered through a features API. Each domain has its own NestJS backend with SQLite persistence and its own Angular frontend with dedicated state management.
+
+### State Management Strategy
+
+| Domain | State Approach | Why |
+|--------|---------------|-----|
+| **Ingress** | NgRx classic store + functional effects | WebSocket-like effects for live status; action log for debugging connection issues |
+| **Transformation** | NgRx classic store + complex selectors | Pipeline preview requires composing selectors across steps; action replay for debugging |
+| **Reporting** | NgRx signalStore (`@ngrx/signals`) | Local filter state per widget; simpler than classic store for read-heavy UI |
+| **Export** | NgRx signalStore (`@ngrx/signals`) | Job list with polling; `withMethods` for start/cancel/retry |
+| **Users** | NgRx classic store | Existing auth flow, kept as-is |
+| **Features** | NgRx classic store | Existing feature registry, kept as-is |
+
+## Setup
 
 ```bash
 git clone https://github.com/onehungrymind/enterprisey-apps.git
 cd enterprisey-apps
 npm install
-npm start
 ```
 
-There are four features (challenges, flashcards, notes, users) that will serve as remotes for the host application (dashboard).
+### Port Assignments
 
-To serve a feature, run the corresponding command.
+| Service | Port | Type |
+|---------|------|------|
+| Dashboard (shell) | 4200 | Frontend host |
+| Users | 4201 | Frontend MF remote |
+| Ingress | 4202 | Frontend MF remote |
+| Transformation | 4203 | Frontend MF remote |
+| Reporting | 4204 | Frontend MF remote |
+| Export | 4205 | Frontend MF remote |
+| Features API | 3000 | NestJS backend |
+| Ingress API | 3100 | NestJS backend |
+| Transformation API | 3200 | NestJS backend |
+| Reporting API | 3300 | NestJS backend |
+| Export API | 3400 | NestJS backend |
+| Users API | 3500 | NestJS backend |
+| Portal | 4800 | Standalone frontend |
+| Wizard | 4900 | Standalone frontend |
+| Envoy Gateway | 9000 | API Gateway |
+
+### Running Locally
+
+Start a backend and its corresponding frontend:
 
 ```bash
-npm run serve:challenges-feature
-npm run serve:flashcards-feature
-npm run serve:notes-feature
-npm run serve:users-feature
+# Start the features registry (required for dashboard)
+npx nx serve features-api
+
+# Start the dashboard shell
+npx nx serve dashboard
+
+# Start a domain (backend + frontend)
+npx nx serve ingress-api
+npx nx serve ingress
+
+npx nx serve transformation-api
+npx nx serve transformation
+
+npx nx serve reporting-api
+npx nx serve reporting
+
+npx nx serve export-api
+npx nx serve export
+
+# Users domain
+npx nx serve users-api
+npx nx serve users
 ```
 
-The underlying NPM commands for a feature, are as follows.
+### Docker
 
-```json
-"serve:users-app": "npx nx serve users --open",
-"serve:users-api": "npx nx serve users-api",
-"serve:users-json": "json-server server/users.json --routes=server/routes.json --port=3400",
-"serve:users-feature": "concurrently \"npm run serve:users-json\" \"npm run serve:users-app\""
+Build and run the full stack:
+
+```bash
+npm run docker:build-remote    # Build all service images
+npm run docker:run-remote      # Start with docker-compose
 ```
 
-We are currently serving the data for the feature from `json-server` but you could change the top-level command to use the Nest implementation if you wanted.
+The cluster will be available at `http://localhost:9000` via Envoy gateway.
 
-To run the dashboard, make sure the feature apps are up and running and then execute this command.
+### E2E Tests (Playwright + Cucumber BDD)
 
-```
-npx nx serve dashboard --open 
-// or you can run which wraps the command above
-npm start
-```
-
-## The Wizard
-
-There is a tool that you can use to help accelerate development across features. It allows you to quickly pull code from one feature and generate an equivalent version for other features.
-
-You can see the tool by running
-
-```
-npm run wizard
+```bash
+npx playwright install         # First time only
+npx bddgen && npx playwright test
 ```
 
-## The Portal
+Feature files are in `e2e/features/`.
 
-The portal is designed to allow for the registration of new remote applications to be loaded in the host application. 
-
-```
-npm run serve:portal-feature 
-```
-
-### Seeing It
-
-**STEP ONE: Run the API**
+## Project Structure
 
 ```
-npm run serve:portal-json 
+apps/
+  dashboard/          # Shell host app (port 4200)
+  ingress/            # Data source management MF remote
+  transformation/     # Pipeline builder MF remote
+  reporting/          # Dashboard & visualization MF remote
+  export/             # Job queue MF remote
+  users/              # User management MF remote
+  portal/             # Admin portal (standalone)
+
+remote/
+  features/           # Features registry API (port 3000)
+  ingress/            # Ingress API (port 3100)
+  transformation/     # Transformation API (port 3200)
+  reporting/          # Reporting API (port 3300)
+  export/             # Export API (port 3400)
+  users/              # Users & auth API (port 3500)
+
+libs/
+  api-interfaces/     # Shared TypeScript interfaces for all domains
+  environment/        # Runtime config injection (APP_ENVIRONMENT token)
+  material/           # Angular Material re-exports
+  testing/            # Mock data for all domains
+  guards/             # JWT + Roles guards for NestJS backends
+  ui-login/           # Shared login component
+  ingress-data/       # Ingress HTTP services
+  ingress-state/      # Ingress NgRx classic store
+  transformation-data/# Transformation HTTP services
+  transformation-state/# Transformation NgRx classic store
+  reporting-data/     # Reporting HTTP services
+  reporting-state/    # Reporting NgRx signalStore
+  export-data/        # Export HTTP services
+  export-state/       # Export NgRx signalStore
+  users-data/         # Users HTTP services
+  users-state/        # Users NgRx classic store
+  features-data/      # Features HTTP services
+  features-state/     # Features NgRx classic store
+
+e2e/
+  features/           # Gherkin BDD feature files
+  steps/              # Step definitions
+  fixtures/           # Shared test fixtures
+  playwright.config.ts
+
+tooling/
+  wizard/             # Code generation wizard
 ```
 
-**STEP TWO: Run the Remote Apps**
+## Domain Models
 
-```
-npm run serve:challenges-feature
-npm run serve:flashcards-feature
-npm run serve:notes-feature
-npm run serve:users-feature
-```
+### Ingress — Data Source Management
+Manage external data source connections with real-time status tracking, connection testing, and schema discovery.
 
-**STEP THREE: Run the Dashboard**
+### Transformation — Pipeline Builder
+Build multi-step data transformation pipelines with drag-and-drop step reordering, schema preview propagation, and execution history.
 
-```
-npm start
-```
+### Reporting — Dashboards & Visualization
+Create dashboards with configurable widgets (tables, charts, metrics), backed by report queries with mock aggregation.
 
-### Understanding It
-
-In the dashboard app, we are able to load the remote defintions in the `main.ts` file like this.
-
-```typescript
-import { setRemoteDefinitions } from '@nx/angular/mf';
-
-const FEATURES_API_URI = 'http://localhost:3000/api/features';
-
-fetch(FEATURES_API_URI)
-  .then((res) => res.json())
-  .then((res) =>
-    res.reduce((acc: any, r: any) => {
-      acc[r.slug] = r.remote_uri;
-      return acc;
-    }, {})
-  )
-  .then((definitions: any) => setRemoteDefinitions(definitions))
-  .then(() => import('./bootstrap').catch((err) => console.error(err)));
-```
-
-We are also dynamically defining our routes in the `app.component.ts` file in the dashboard. 
-
-```typescript
-export class AppComponent implements OnInit {
-  features$: Observable<Feature[]> = this.featuresFacade.allFeatures$.pipe(
-    tap((features: Feature[]) => this.configRoutes(features))
-  );
-
-  constructor(private featuresFacade: FeaturesFacade, private router: Router) {}
-
-  ngOnInit() {
-    this.featuresFacade.loadFeatures();
-  }
-
-  configRoutes(features: Feature[]) {
-    const home: Route = {
-      path: '',
-      component: HomeComponent,
-    };
-
-    const routes = features.reduce((acc: any, cur: any) => {
-      acc = [
-        ...acc,
-        {
-          path: cur.slug,
-          loadChildren: () =>
-            loadRemoteModule(cur.slug, './Routes').then((m) => m.remoteRoutes),
-        },
-      ];
-      return acc;
-    }, [home]);
-
-    this.router.resetConfig(routes);
-  }
-}
-```
+### Export — Job Queue
+Queue and monitor export jobs with progress tracking, format selection (CSV/JSON/XLSX/PDF), and automatic polling.
 
 ## Authentication
 
-This feature uses the Users API to create and authenticate users. 
-
-Start the service with `npm run s:users-api`.
-
-Via curl, you can create a user like so:
+The Users API handles authentication with JWT tokens.
 
 ```bash
-curl -X 'POST' \
-  'http://localhost:3400/api/users' \
-  -H 'accept: */*' \
-  -H 'Content-Type: application/json' \
-  -d '{
-"firstName": "test",
-"lastName": "test last",
-"email": "test@test.com",
-"password": "test",
-"role": "tester",
-"company_id": "test"
-}'
+# Create a user
+curl -X POST http://localhost:3500/api/users \
+  -H "Content-Type: application/json" \
+  -d '{"firstName":"test","lastName":"user","email":"test@test.com","password":"test","role":"admin","company_id":"test"}'
+
+# Log in
+curl -X POST http://localhost:3500/api/users/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@test.com","password":"test"}'
 ```
 
-Once the user is created, you can log in like so:
+All backend controllers are guarded with `JwtAuthGuard` and `RolesGuard`.
 
-```bash
-curl -X POST http://localhost:3400/api/users/auth/login -d '{"email": "test@test.com", "password": "test"}' -H "Content-Type: application/json"
-```
+## Progress Checklist
 
-You will receive a token in the response. You can use this token to authenticate requests to the API.
+### Done
 
-## Docker 
+- [x] **Phase 1a** — Remove old domains (challenges, flashcards, notes apps/libs/backends)
+- [x] **Phase 1b** — Replace Cypress with Playwright + playwright-bdd (6 Gherkin feature files)
+- [x] **Phase 1c** — Create `libs/environment/` with `APP_ENVIRONMENT` injection token
+- [x] **Phase 1d** — Update `libs/api-interfaces/` and `libs/testing/` with new domain models
+- [x] **Phase 2** — Ingress domain end-to-end (backend, data lib, state lib, frontend app)
+- [x] **Phase 3** — Transformation domain end-to-end (backend, data lib, state lib, frontend app)
+- [x] **Phase 4** — Reporting domain end-to-end (backend, data lib, signalStore, frontend app)
+- [x] **Phase 5** — Export domain end-to-end (backend, data lib, signalStore, frontend app)
+- [x] **Phase 6** — Integration: dashboard home, viewTransitions, features registry, docker/envoy config
+- [x] **Phase 7** — Modernize existing code: environment injection in features-data, users-data, portal, users apps
+- [x] **Build fixes** — All 16 projects build (`nx run-many --target=build --all`)
+- [x] **Runtime fixes** — Switch to `better-sqlite3` and `bcryptjs` for Node 22 compatibility
+- [x] **All 6 backends start** — Verified NestJS bootstrap on correct ports
 
-**Build a Single Service**
+### Remaining
 
-To build a single service by passing the name to the build command.
+- [ ] **Seed data** — Run database seeders for all backends so the UI has data to display on first load
+- [ ] **Smoke test** — Start all services together, navigate through all domains in the dashboard
+- [ ] **Cross-domain inter-service calls** — Transformation fetching schemas from Ingress, Reporting from Transformation, Export from Reporting
+- [ ] **Role-based access** — Define admin/analyst/engineer role permissions on backend controllers
+- [ ] **Login component** — Migrate `libs/ui-login/` from `[(ngModel)]` to Signal Forms
+- [ ] **Users app** — Migrate user detail/list to modern component patterns
+- [ ] **Wizard** — Update schema list and templates for new domain names
+- [ ] **Playwright step definitions** — Implement step definitions for all 6 `.feature` files
+- [ ] **Unit tests** — Add test coverage for stores, services, effects, selectors
+- [ ] **Advanced UI** — `httpResource()` for widget data, `linkedSignal` for filter state, `@defer` for chart widgets
+- [ ] **WebSocket support** — Real-time source status in Ingress (currently simulated)
+- [ ] **Pipeline DAG editor** — Visual drag-and-drop pipeline builder in Transformation
+- [ ] **Dashboard layout editor** — Drag-and-drop widget positioning in Reporting
+- [ ] **ESLint 9** — Migrate from ESLint 8 legacy config to flat config
+- [ ] **CI/CD** — Pipeline configuration for build, test, and deployment
+- [ ] **Health checks** — Add health endpoints to all backends
 
-```
-npm run docker:build-remote <service name> (users, notes, flashcards, challenges)
-```
+## Tech Stack
 
-**Build all the Services**
-
-Run this command to build all the services. 
-
-```
-npm run docker:build-remote
-```
-
-NOTE: this will take a while, as it will build all the remote services in the monorepo.
-
-**Run with docker-compose**
-
-After building all the images, run the full stack with the following command.
-
-```
-npm run docker:run-remote
-```
-
-The service cluster will be available at `http://localhost:3500`; make API requests to the services at `http://localhost:3500/api/<service-name>`, the gateway will route the requests to the appropriate service.
-
+| Layer | Technology | Version |
+|-------|-----------|---------|
+| Monorepo | Nx | 22 |
+| Frontend | Angular | 21 |
+| Backend | NestJS | 11 |
+| State (classic) | NgRx Store/Effects/Entity | 21 |
+| State (signal) | NgRx Signals | 21 |
+| Database | SQLite via better-sqlite3 + TypeORM | - |
+| Auth | JWT (passport-jwt) + bcryptjs | - |
+| UI Components | Angular Material | 21 |
+| Micro-frontends | Nx Module Federation | 22 |
+| E2E Testing | Playwright + playwright-bdd | - |
+| API Gateway | Envoy | - |
+| Containerization | Docker + Docker Compose | - |
