@@ -84,8 +84,8 @@ npx nx serve users
 Build and run the full stack:
 
 ```bash
-npm run docker:build-remote    # Build all service images
-npm run docker:run-remote      # Start with docker-compose
+npm run docker:build-apis      # Build all service images
+npm run docker:run-apis        # Start with docker-compose
 ```
 
 The cluster will be available at `http://localhost:9000` via Envoy gateway.
@@ -111,7 +111,7 @@ apps/
   users/              # User management MF remote
   portal/             # Admin portal (standalone)
 
-remote/
+apis/
   features/           # Features registry API (port 3000)
   ingress/            # Ingress API (port 3100)
   transformation/     # Transformation API (port 3200)

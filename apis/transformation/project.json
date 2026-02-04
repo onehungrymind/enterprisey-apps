@@ -1,0 +1,24 @@
+{
+  "name": "transformation-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apis/transformation/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "transformation-api:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "transformation-api:build:development"
+        },
+        "production": {
+          "buildTarget": "transformation-api:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

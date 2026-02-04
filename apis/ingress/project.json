@@ -1,0 +1,24 @@
+{
+  "name": "ingress-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apis/ingress/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "ingress-api:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "ingress-api:build:development"
+        },
+        "production": {
+          "buildTarget": "ingress-api:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}
