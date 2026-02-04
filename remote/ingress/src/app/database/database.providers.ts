@@ -8,7 +8,7 @@ export const databaseProviders = [
     provide: DATABASE_CONNECTION,
     useFactory: () =>
       new DataSource({
-        type: 'sqlite',
+        type: 'better-sqlite3',
         database: './databases/ingress.sqlite',
         synchronize: true,
         logging: false,

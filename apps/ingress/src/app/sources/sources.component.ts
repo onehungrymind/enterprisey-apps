@@ -26,7 +26,7 @@ import { SchemaViewerComponent } from './schema-viewer/schema-viewer.component';
 export class SourcesComponent implements OnInit {
   sources$ = this.sourcesFacade.allSources$;
   selectedSource$: Observable<DataSource> = this.sourcesFacade.selectedSource$.pipe(
-    filter((source): source is DataSource => source !== undefined && source !== false)
+    filter((source): source is DataSource => !!source && typeof source !== 'string')
   );
   currentSchema$ = this.sourcesFacade.currentSchema$;
   sourcesByStatus$ = this.sourcesFacade.sourcesByStatus$;

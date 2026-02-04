@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { DeleteResult, Repository } from 'typeorm';
 
 import { User } from '../database/entities/user.entity';

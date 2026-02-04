@@ -5,9 +5,11 @@ import { firstValueFrom } from 'rxjs';
 import { Dashboard } from '@proto/api-interfaces';
 import { DashboardsService } from '@proto/reporting-data';
 
+type PersistedDashboard = Omit<Dashboard, 'id'> & { id: string };
+
 export const DashboardsStore = signalStore(
   { providedIn: 'root' },
-  withEntities<Dashboard>(),
+  withEntities<PersistedDashboard>(),
   withState({
     selectedId: null as string | null,
     loading: false,
@@ -25,7 +27,7 @@ export const DashboardsStore = signalStore(
       patchState(store, { loading: true, error: null });
       try {
         const dashboards = await firstValueFrom(dashboardsService.all());
-        patchState(store, setAllEntities(dashboards), { loading: false });
+        patchState(store, setAllEntities(dashboards as PersistedDashboard[]), { loading: false });
       } catch (err: any) {
         patchState(store, { loading: false, error: err.message });
       }
@@ -39,7 +41,7 @@ export const DashboardsStore = signalStore(
     async create(dashboard: Dashboard) {
       try {
         const created = await firstValueFrom(dashboardsService.create(dashboard));
-        patchState(store, addEntity(created));
+        patchState(store, addEntity(created as PersistedDashboard));
       } catch (err: any) {
         patchState(store, { error: err.message });
       }
@@ -47,7 +49,8 @@ export const DashboardsStore = signalStore(
     async update(dashboard: Dashboard) {
       try {
         const updated = await firstValueFrom(dashboardsService.update(dashboard));
-        patchState(store, updateEntity({ id: updated.id!, changes: updated }));
+        const { id, ...changes } = updated;
+        patchState(store, updateEntity({ id: id!, changes }));
       } catch (err: any) {
         patchState(store, { error: err.message });
       }

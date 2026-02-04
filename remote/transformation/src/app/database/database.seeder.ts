@@ -120,7 +120,7 @@ function computeOutputSchema(
 }
 
 const options: DataSourceOptions & SeederOptions = {
-  type: 'sqlite',
+  type: 'better-sqlite3',
   database: './databases/transformation.sqlite',
   synchronize: true,
   logging: true,

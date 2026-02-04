@@ -1,13 +1,15 @@
 import { computed, inject } from '@angular/core';
 import { signalStore, withState, withComputed, withMethods, withHooks, patchState } from '@ngrx/signals';
-import { withEntities, setAllEntities, addEntity, updateEntity, removeEntity, updateAllEntities } from '@ngrx/signals/entities';
+import { withEntities, setAllEntities, addEntity, updateEntity, removeEntity } from '@ngrx/signals/entities';
 import { firstValueFrom } from 'rxjs';
 import { ExportJob } from '@proto/api-interfaces';
 import { ExportJobsService } from '@proto/export-data';
 
+type PersistedExportJob = Omit<ExportJob, 'id'> & { id: string };
+
 export const ExportJobsStore = signalStore(
   { providedIn: 'root' },
-  withEntities<ExportJob>(),
+  withEntities<PersistedExportJob>(),
   withState({
     selectedFormat: 'csv' as string,
     polling: false,
@@ -33,7 +35,7 @@ export const ExportJobsStore = signalStore(
       patchState(store, { loading: true, error: null });
       try {
         const jobs = await firstValueFrom(jobsService.all());
-        patchState(store, setAllEntities(jobs), { loading: false });
+        patchState(store, setAllEntities(jobs as PersistedExportJob[]), { loading: false });
       } catch (err: any) {
         patchState(store, { loading: false, error: err.message });
       }
@@ -41,7 +43,7 @@ export const ExportJobsStore = signalStore(
     async startExport(job: ExportJob) {
       try {
         const created = await firstValueFrom(jobsService.create(job));
-        patchState(store, addEntity(created), { polling: true });
+        patchState(store, addEntity(created as PersistedExportJob), { polling: true });
       } catch (err: any) {
         patchState(store, { error: err.message });
       }
@@ -49,7 +51,8 @@ export const ExportJobsStore = signalStore(
     async cancelJob(jobId: string) {
       try {
         const cancelled = await firstValueFrom(jobsService.cancel(jobId));
-        patchState(store, updateEntity({ id: cancelled.id!, changes: cancelled }));
+        const { id, ...changes } = cancelled;
+        patchState(store, updateEntity({ id: id!, changes }));
       } catch (err: any) {
         patchState(store, { error: err.message });
       }
@@ -65,9 +68,10 @@ export const ExportJobsStore = signalStore(
     async pollActiveJobs() {
       try {
         const active = await firstValueFrom(jobsService.getActive());
-        active.forEach((job) =>
-          patchState(store, updateEntity({ id: job.id!, changes: job }))
-        );
+        active.forEach((job) => {
+          const { id, ...changes } = job;
+          patchState(store, updateEntity({ id: id!, changes }));
+        });
         if (active.length === 0) {
           patchState(store, { polling: false });
         }

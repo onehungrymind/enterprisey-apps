@@ -65,7 +65,7 @@ export class MainSeeder implements Seeder {
 }
 
 const options: DataSourceOptions & SeederOptions = {
-  type: 'sqlite',
+  type: 'better-sqlite3',
   database: './databases/ingress.sqlite',
   synchronize: true,
   logging: true,

@@ -30,7 +30,7 @@ import { RunHistoryComponent } from './run-history/run-history.component';
 export class PipelinesComponent implements OnInit {
   pipelines$ = this.pipelinesFacade.allPipelines$;
   selectedPipeline$: Observable<Pipeline> = this.pipelinesFacade.selectedPipeline$.pipe(
-    filter((pipeline): pipeline is Pipeline => pipeline !== undefined && pipeline !== false)
+    filter((pipeline): pipeline is Pipeline => !!pipeline && typeof pipeline !== 'string')
   );
   steps$ = this.pipelinesFacade.selectedPipelineSteps$;
   preview$ = this.pipelinesFacade.preview$;

@@ -5,7 +5,7 @@ import { Widget } from './entities/widget.entity';
 import { ReportQuery } from './entities/report-query.entity';
 
 const options: DataSourceOptions = {
-  type: 'sqlite',
+  type: 'better-sqlite3',
   database: './databases/reporting.sqlite',
   synchronize: true,
   logging: true,
