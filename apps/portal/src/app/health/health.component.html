@@ -1,0 +1,58 @@
+<div class="health-dashboard">
+  <!-- Status Banner -->
+  <div class="status-banner" [class]="statusClass">
+    <div class="status-content">
+      <div class="status-indicator">
+        <span class="status-dot"></span>
+        <span class="status-label">{{ statusLabel }}</span>
+      </div>
+      <div class="status-meta">
+        <span class="healthy-count">{{ healthyCount() }}/{{ totalCount() }} features healthy</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="last-checked">
+      Last checked: {{ formatLastChecked() }}
+    </div>
+    <button class="refresh-btn" (click)="refresh()" [disabled]="loading()">
+      @if (loading()) {
+        <span class="spinner"></span>
+        Refreshing...
+      } @else {
+        Refresh Now
+      }
+    </button>
+  </div>
+
+  <!-- Health Grid -->
+  <div class="grid-container">
+    <h2 class="section-title">Service Health</h2>
+    <proto-health-grid [features]="healthGrid()"></proto-health-grid>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <h3 class="legend-title">Legend</h3>
+    <div class="legend-items">
+      <div class="legend-item">
+        <span class="legend-dot healthy"></span>
+        <span class="legend-label">Healthy</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot degraded"></span>
+        <span class="legend-label">Degraded</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot unhealthy"></span>
+        <span class="legend-label">Unhealthy</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot unknown"></span>
+        <span class="legend-label">Unknown</span>
+      </div>
+    </div>
+  </div>
+</div>

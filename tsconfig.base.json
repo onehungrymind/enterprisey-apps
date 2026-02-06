@@ -42,7 +42,9 @@
         "apps/reporting/src/app/remote-entry/entry.routes.ts"
       ],
       "export/Routes": ["apps/export/src/app/remote-entry/entry.routes.ts"],
-      "@proto/ui-theme": ["libs/ui-theme/src/index.ts"]
+      "@proto/ui-theme": ["libs/ui-theme/src/index.ts"],
+      "@proto/health-data": ["libs/health-data/src/index.ts"],
+      "@proto/health-state": ["libs/health-state/src/index.ts"]
     }
   },
   "ts-node": {

@@ -4,6 +4,7 @@ import { WidgetsModule } from './widgets/widgets.module';
 import { QueriesModule } from './queries/queries.module';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { ConfigModule } from '@nestjs/config';
     WidgetsModule,
     QueriesModule,
     DatabaseModule,
+    HealthModule,
   ],
   controllers: [],
   providers: [],

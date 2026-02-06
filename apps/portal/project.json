@@ -21,12 +21,7 @@
           "@angular/material/prebuilt-themes/indigo-pink.css",
           "apps/portal/src/styles.scss"
         ],
-        "scripts": [],
-        "server": "apps/portal/src/main.server.ts",
-        "prerender": true,
-        "ssr": {
-          "entry": "apps/portal/server.ts"
-        }
+        "scripts": []
       },
       "configurations": {
         "production": {
@@ -54,6 +49,9 @@
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "port": 4300
+      },
       "configurations": {
         "production": {
           "buildTarget": "portal:build:production"

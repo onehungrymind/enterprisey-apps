@@ -1,0 +1,54 @@
+<div class="health-grid">
+  <table class="grid-table">
+    <thead>
+      <tr>
+        <th class="layer-header">Layer</th>
+        @for (feature of features; track feature.slug) {
+          <th class="feature-header">{{ feature.name }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Web App Row -->
+      <tr>
+        <td class="layer-label">Web App</td>
+        @for (feature of features; track feature.slug) {
+          <td class="cell-wrapper">
+            <proto-health-cell
+              [status]="feature.webApp?.status ?? null"
+              [responseTimeMs]="feature.webApp?.responseTimeMs ?? null"
+              [label]="feature.name + ' Web App'"
+            ></proto-health-cell>
+          </td>
+        }
+      </tr>
+      <!-- API Row -->
+      <tr>
+        <td class="layer-label">API</td>
+        @for (feature of features; track feature.slug) {
+          <td class="cell-wrapper">
+            <proto-health-cell
+              [status]="feature.api?.status ?? null"
+              [responseTimeMs]="feature.api?.responseTimeMs ?? null"
+              [label]="feature.name + ' API'"
+            ></proto-health-cell>
+          </td>
+        }
+      </tr>
+      <!-- Database Row -->
+      <tr>
+        <td class="layer-label">Database</td>
+        @for (feature of features; track feature.slug) {
+          <td class="cell-wrapper">
+            <proto-health-cell
+              [status]="feature.database?.status ?? null"
+              [responseTimeMs]="feature.database?.responseTimeMs ?? null"
+              [message]="feature.database?.message"
+              [label]="feature.name + ' Database'"
+            ></proto-health-cell>
+          </td>
+        }
+      </tr>
+    </tbody>
+  </table>
+</div>

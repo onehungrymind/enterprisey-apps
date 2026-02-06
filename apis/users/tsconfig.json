@@ -13,7 +13,8 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "paths": {
-      "@proto/*": ["libs/guards/remote-auth/src/*"],
+      "@proto/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@proto/lib/*": ["libs/guards/remote-auth/src/lib/*"]
     }
   }
 }

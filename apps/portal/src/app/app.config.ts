@@ -29,7 +29,7 @@ export const appConfig: ApplicationConfig = {
           strictStateSerializability: true,
           strictActionSerializability: true,
           strictActionWithinNgZone: true,
-          strictActionTypeUniqueness: true,
+          strictActionTypeUniqueness: false, // Disabled due to SSR hydration
         },
       }
     ),

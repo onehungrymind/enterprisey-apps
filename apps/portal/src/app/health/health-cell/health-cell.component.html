@@ -1,0 +1,6 @@
+<div class="health-cell" [class]="statusClass" [title]="tooltipText">
+  <span class="status-icon">{{ statusIcon }}</span>
+  @if (responseTimeMs !== null) {
+    <span class="response-time">{{ responseTimeMs }}ms</span>
+  }
+</div>

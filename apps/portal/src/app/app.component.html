@@ -1,1 +1,44 @@
-<router-outlet></router-outlet>
+<div class="page">
+  <!-- Header -->
+  <header class="page-header">
+    <div class="container">
+      <div class="header-content">
+        <a routerLink="/" class="logo">
+          <span>Enterprisey</span> Portal
+        </a>
+        <nav class="header-nav">
+          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">Features</a>
+          <a routerLink="/health" routerLinkActive="active" class="nav-link">Health</a>
+        </nav>
+        <span class="header-badge">Admin</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="page-content">
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="logo"><span>Enterprisey</span> Portal</span>
+          <p class="footer-tagline">Manage features and configuration</p>
+        </div>
+        <div class="footer-links">
+          <a href="http://localhost:4200" class="footer-link">
+            Dashboard
+          </a>
+          <a href="https://github.com/onehungrymind/enterprisey-apps" target="_blank" class="footer-link">
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

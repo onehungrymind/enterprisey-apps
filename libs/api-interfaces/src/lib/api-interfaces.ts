@@ -6,6 +6,34 @@ export interface BaseEntity {
 }
 
 // =============================================================================
+// Health Monitoring
+// =============================================================================
+export type HealthStatus = 'healthy' | 'degraded' | 'unhealthy';
+
+export interface ComponentHealth {
+  name: string;
+  status: HealthStatus;
+  responseTimeMs: number;
+  message?: string;
+}
+
+export interface ApiHealthResponse {
+  status: HealthStatus;
+  timestamp: string;
+  api: ComponentHealth;
+  database: ComponentHealth;
+  uptime: number;
+}
+
+export interface FeatureHealth {
+  featureSlug: string;
+  featureName: string;
+  webApp: { status: HealthStatus; responseTimeMs: number } | null;
+  api: ApiHealthResponse | null;
+  lastChecked: string;
+}
+
+// =============================================================================
 // Ingress Domain
 // =============================================================================
 export type DataSourceType = 'database' | 'rest_api' | 'csv_file' | 'webhook';

@@ -1,34 +1,41 @@
+// Import the shared UI theme
+@import 'libs/ui-theme/src/lib/styles/theme';
+
+// Set domain theme
+:root {
+  @include generate-color-vars('emerald');
+}
+
+// Angular Material theme
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 
-@tailwind base;
-@tailwind components;
+// Tailwind utilities
 @tailwind utilities;
 
-:root {
-  --primary-color: #fff;
-  --secondary-color: #000;
-  --black-color: #000;
-  --white-color: #fff;
-  --lime-color: #bdff69;
-  --grey-color: #595a5c;
-  --coral-color: #ff6969;
-  --red-color: #ff3030;
-  --green-color: #8fff00;
-  --grey-dark-color: #272727;
-  --grey-mid-color: #595a5c
+// Ensure the page fills the viewport
+html, body {
+  height: 100%;
+}
+
+// Angular Material overrides
+.mat-mdc-card {
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow-md) !important;
 }
 
 .mdc-list-item {
   display: flex !important;
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
 }
 
 .mdc-list-item:hover {
   cursor: pointer !important;
-  background: whitesmoke;
+  background-color: var(--color-gray-50);
 }
 
 .mdc-list-item:not(:first-of-type) {
-  border-top: 1px solid #efefef;
+  border-top: 1px solid var(--color-border);
 }
 
 .mat-mdc-card-title {

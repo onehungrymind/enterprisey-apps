@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { FeaturesComponent } from './features/features.component';
+import { RouterModule, RouterLinkActive } from '@angular/router';
 
 @Component({
-    imports: [FeaturesComponent, RouterModule],
+    imports: [RouterModule, RouterLinkActive],
     selector: 'proto-root',
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'

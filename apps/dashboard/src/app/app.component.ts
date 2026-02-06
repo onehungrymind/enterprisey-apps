@@ -1,11 +1,9 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Route, Router, RouterModule } from '@angular/router';
-import { loadRemoteModule } from '@nx/angular/mf';
+import { RouterModule } from '@angular/router';
 import { Feature } from '@proto/api-interfaces';
 import { FeaturesFacade } from '@proto/features-state';
-import { Observable, tap } from 'rxjs';
-import { HomeComponent } from './home/home.component';
+import { Observable } from 'rxjs';
 
 @Component({
     imports: [RouterModule, AsyncPipe],
@@ -14,34 +12,11 @@ import { HomeComponent } from './home/home.component';
     styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  features$: Observable<Feature[]> = this.featuresFacade.allFeatures$.pipe(
-    tap((features: Feature[]) => this.configRoutes(features))
-  );
+  features$: Observable<Feature[]> = this.featuresFacade.allFeatures$;
 
-  constructor(private featuresFacade: FeaturesFacade, private router: Router) {}
+  constructor(private featuresFacade: FeaturesFacade) {}
 
   ngOnInit() {
     this.featuresFacade.loadFeatures();
-  }
-
-  configRoutes(features: Feature[]) {
-    const home: Route = {
-      path: '',
-      component: HomeComponent,
-    };
-
-    const routes = features.reduce((acc: any, cur: any) => {
-      acc = [
-        ...acc,
-        {
-          path: cur.slug,
-          loadChildren: () =>
-            loadRemoteModule(cur.slug, './Routes').then((m) => m.remoteRoutes),
-        },
-      ];
-      return acc;
-    }, [home]);
-
-    this.router.resetConfig(routes);
   }
 }

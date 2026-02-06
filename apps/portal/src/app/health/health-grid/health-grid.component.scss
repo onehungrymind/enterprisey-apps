@@ -1,0 +1,42 @@
+.health-grid {
+  overflow-x: auto;
+}
+
+.grid-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: var(--space-2);
+}
+
+.layer-header,
+.feature-header {
+  padding: var(--space-3) var(--space-4);
+  text-align: center;
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
+  color: var(--color-gray-700);
+  background-color: var(--color-gray-50);
+  border-radius: var(--radius-md);
+}
+
+.layer-header {
+  text-align: left;
+  min-width: 100px;
+}
+
+.feature-header {
+  min-width: 120px;
+}
+
+.layer-label {
+  padding: var(--space-3) var(--space-4);
+  font-weight: var(--font-medium);
+  font-size: var(--text-sm);
+  color: var(--color-gray-600);
+  background-color: var(--color-gray-50);
+  border-radius: var(--radius-md);
+}
+
+.cell-wrapper {
+  padding: var(--space-1);
+}
