@@ -30,9 +30,7 @@
             { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
           ],
           "outputHashing": "all",
-          "customWebpackConfig": {
-            "path": "apps/ingress/webpack.prod.config.ts"
-          }
+          "customWebpackConfig": { "path": "apps/ingress/webpack.prod.config.ts" }
         },
         "development": {
           "buildOptimizer": false,
@@ -70,64 +68,6 @@
         "development": { "buildTarget": "ingress:build:development" },
         "production": { "buildTarget": "ingress:build:production" }
       }
-    },
-    "server": {
-      "dependsOn": ["build"],
-      "executor": "@nx/angular:webpack-server",
-      "options": {
-        "outputPath": "dist/apps/ingress/server",
-        "main": "apps/ingress/server.ts",
-        "tsConfig": "apps/ingress/tsconfig.server.json",
-        "inlineStyleLanguage": "scss",
-        "customWebpackConfig": { "path": "apps/ingress/webpack.server.config.ts" }
-      },
-      "configurations": {
-        "production": { "outputHashing": "media" },
-        "development": {
-          "buildOptimizer": false,
-          "optimization": false,
-          "sourceMap": true,
-          "extractLicenses": false,
-          "vendorChunk": true
-        }
-      },
-      "defaultConfiguration": "production"
-    },
-    "serve-ssr": {
-      "executor": "@nx/angular:ssr-dev-server",
-      "configurations": {
-        "development": {
-          "browserTarget": "ingress:build:development",
-          "serverTarget": "ingress:server:development"
-        },
-        "production": {
-          "browserTarget": "ingress:build:production",
-          "serverTarget": "ingress:server:production"
-        }
-      },
-      "defaultConfiguration": "development",
-      "options": { "port": 4202 },
-      "continuous": true
-    },
-    "prerender": {
-      "executor": "@angular-devkit/build-angular:prerender",
-      "options": { "routes": ["/"] },
-      "configurations": {
-        "development": {
-          "browserTarget": "ingress:build:development",
-          "serverTarget": "ingress:server:development"
-        },
-        "production": {
-          "browserTarget": "ingress:build:production",
-          "serverTarget": "ingress:server:production"
-        }
-      },
-      "defaultConfiguration": "production"
-    },
-    "static-server": {
-      "dependsOn": ["build", "server"],
-      "executor": "nx:run-commands",
-      "options": { "command": "PORT=4202 node dist/apps/ingress/server/main.js" }
     }
   }
 }

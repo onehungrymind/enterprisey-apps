@@ -1,53 +1,85 @@
 // Import the shared UI theme
 @import 'libs/ui-theme/src/lib/styles/theme';
 
-// Set domain theme
+// Set app-specific accent
 :root {
-  @include generate-color-vars('slate');
+  --accent: var(--accent-users);
+  --accent-subtle: var(--accent-users-subtle);
+  --accent-strong: #475569;
+
+  // Role colors
+  --role-admin: #f87171;
+  --role-admin-bg: rgba(248, 113, 113, 0.08);
+  --role-mentor: #c084fc;
+  --role-mentor-bg: rgba(192, 132, 252, 0.08);
+  --role-apprentice: #60a5fa;
+  --role-apprentice-bg: rgba(96, 165, 250, 0.08);
+  --role-user: #64748b;
+  --role-user-bg: rgba(100, 116, 139, 0.08);
+
+  // Status colors
+  --status-active: var(--color-success);
+  --status-inactive: var(--text-quaternary);
+  --status-invited: var(--color-info);
+
+  // Action colors
+  --action-edit: #fbbf24;
+  --action-export: #f472b6;
+  --action-create: #34d399;
+  --action-invite: #818cf8;
+  --action-permission: #f87171;
+  --action-auth: #64748b;
 }
 
-// Angular Material theme
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
+// Light mode role colors
+html[data-theme="light"] {
+  --role-admin: #dc2626;
+  --role-admin-bg: rgba(220, 38, 38, 0.06);
+  --role-mentor: #7c3aed;
+  --role-mentor-bg: rgba(124, 58, 237, 0.06);
+  --role-apprentice: #2563eb;
+  --role-apprentice-bg: rgba(37, 99, 235, 0.06);
+  --role-user: #475569;
+  --role-user-bg: rgba(71, 85, 105, 0.06);
 
-// Tailwind utilities
-@tailwind utilities;
+  --action-edit: #d97706;
+  --action-export: #db2777;
+  --action-create: #059669;
+  --action-invite: #6366f1;
+  --action-permission: #dc2626;
+  --action-auth: #475569;
+}
 
 // Ensure the page fills the viewport
 html, body {
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-// Angular Material overrides
-.mat-mdc-card {
-  border-radius: var(--radius-xl) !important;
-  box-shadow: var(--shadow-md) !important;
+body {
+  background: var(--bg-root);
+  color: var(--text-primary);
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  transition: background 0.4s, color 0.4s;
 }
 
-.mdc-list-item {
-  display: flex !important;
-  border-radius: var(--radius-md);
-  transition: background-color var(--transition-fast);
+// Custom scrollbar
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
 }
 
-.mdc-list-item:hover {
-  cursor: pointer !important;
-  background-color: var(--color-gray-50);
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.mdc-list-item:not(:first-of-type) {
-  border-top: 1px solid var(--color-border);
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
 }
 
-.mat-mdc-card-title {
-  margin: 10px;
-}
-
-.mat-mdc-card-actions {
-  .mdc-button {
-    margin: 10px;
-  }
-}
-
-.full-width {
-  width: 100%;
+// Form inputs styling
+input, select {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 }

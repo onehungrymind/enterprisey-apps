@@ -1,53 +1,82 @@
 // Import the shared UI theme
 @import 'libs/ui-theme/src/lib/styles/theme';
 
-// Set domain theme
+// Set domain accent for reporting (blue)
 :root {
-  @include generate-color-vars('blue');
+  --accent: var(--accent-reporting);
+  --accent-subtle: var(--accent-reporting-subtle);
+  --accent-strong: #2563eb;
+
+  // Chart colors
+  --chart-1: var(--accent);
+  --chart-2: #818cf8;
+  --chart-3: #c084fc;
+  --chart-4: #334155;
+  --chart-bar-1: var(--accent);
+  --chart-bar-2: #818cf8;
+  --chart-bar-3: var(--color-success);
 }
 
-// Angular Material theme
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
-
-// Tailwind utilities
-@tailwind utilities;
+// Light theme overrides
+html[data-theme="light"] {
+  --accent: #2563eb;
+  --accent-subtle: rgba(37, 99, 235, 0.07);
+  --accent-strong: #1d4ed8;
+  --chart-1: #2563eb;
+  --chart-2: #6366f1;
+  --chart-3: #7c3aed;
+  --chart-4: #cbd5e1;
+  --chart-bar-1: #2563eb;
+  --chart-bar-2: #6366f1;
+  --chart-bar-3: #059669;
+}
 
 // Ensure the page fills the viewport
 html, body {
   height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
-// Angular Material overrides
-.mat-mdc-card {
-  border-radius: var(--radius-xl) !important;
-  box-shadow: var(--shadow-md) !important;
+body {
+  background: var(--bg-root);
+  color: var(--text-primary);
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: background 0.4s, color 0.4s;
 }
 
-.mdc-list-item {
-  display: flex !important;
-  border-radius: var(--radius-md);
-  transition: background-color var(--transition-fast);
+// Custom scrollbar
+::-webkit-scrollbar {
+  width: 4px;
 }
 
-.mdc-list-item:hover {
-  cursor: pointer !important;
-  background-color: var(--color-gray-50);
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.mdc-list-item:not(:first-of-type) {
-  border-top: 1px solid var(--color-border);
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
 }
 
-.mat-mdc-card-title {
-  margin: 10px;
-}
-
-.mat-mdc-card-actions {
-  .mdc-button {
-    margin: 10px;
+// Animation utilities
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.full-width {
-  width: 100%;
+.animate-fade-up {
+  animation: fadeUp 0.4s ease both;
+}
+
+// Mono font for numbers
+.mono {
+  font-family: 'JetBrains Mono', monospace;
 }

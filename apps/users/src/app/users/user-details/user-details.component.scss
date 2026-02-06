@@ -1,0 +1,161 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.details-content {
+  padding: 16px 18px;
+  animation: fadeSlide 0.25s ease;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// User Header
+.user-header {
+  text-align: center;
+  margin-bottom: 20px;
+
+  ui-avatar {
+    margin-bottom: 10px;
+  }
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 10px 0 2px;
+}
+
+.user-email {
+  font-size: 11px;
+  color: var(--text-quaternary);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+// Badges
+.badges {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.badge {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-badge {
+  background: var(--bg-surface-hover);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+// Stats Grid
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 8px;
+  color: var(--text-quaternary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 3px;
+}
+
+.stat-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+// Permissions
+.permissions-section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-quaternary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 8px;
+}
+
+.permissions-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.permission-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  border-bottom: 1px solid var(--border-subtle);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.check-icon {
+  font-size: 10px;
+}
+
+// Actions
+.actions {
+  display: flex;
+  gap: 6px;
+
+  ui-action-button {
+    flex: 1;
+  }
+}
+
+// Empty state
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-ghost);
+  font-size: 12px;
+}

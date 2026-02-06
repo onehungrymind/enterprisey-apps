@@ -1,45 +1,60 @@
-<div class="page" data-theme="dashboard">
-  <!-- Header -->
-  <header class="page-header">
-    <div class="container">
-      <div class="header-content">
-        <a routerLink="/" class="logo">
-          <span>Enterprisey</span> Apps
-        </a>
+<div class="shell">
+  <!-- Navigation -->
+  <nav class="nav-bar">
+    <div class="nav-left">
+      <a routerLink="/" class="logo">
+        <div class="logo-mark">E</div>
+        <span class="logo-text">
+          <span class="logo-accent">Enterprisey</span>
+          <span class="logo-sub">Apps</span>
+        </span>
+      </a>
 
-        <nav class="nav">
-          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
-            Home
+      <div class="nav-links">
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="nav-item"
+          [style.--item-accent]="'var(--accent-dashboard)'"
+          [style.--item-subtle]="'var(--accent-dashboard-subtle)'"
+        >
+          Home
+        </a>
+        @for (item of featureNavItems(); track item.id) {
+          <a
+            [routerLink]="'/' + item.slug"
+            routerLinkActive="active"
+            class="nav-item"
+            [style.--item-accent]="'var(' + item.accentVar + ')'"
+            [style.--item-subtle]="'var(' + item.subtleVar + ')'"
+          >
+            {{ item.name }}
           </a>
-          @for (feature of features$ | async; track feature.id) {
-            <a [routerLink]="feature.slug" routerLinkActive="active" class="nav-link">
-              {{ feature.title }}
-            </a>
-          }
-        </nav>
+        }
       </div>
     </div>
-  </header>
+
+    <div class="nav-right">
+      <div class="status-time">
+        <ui-status-dot [status]="allHealthy() ? 'healthy' : 'degraded'" />
+        <span class="time">{{ formatTime(currentTime()) }}</span>
+      </div>
+
+      <a
+        href="http://localhost:4300/health"
+        target="_blank"
+        class="health-btn"
+      >
+        ◉ Health
+      </a>
+
+      <ui-theme-toggle />
+    </div>
+  </nav>
 
   <!-- Main Content -->
-  <main class="page-content">
-    <router-outlet></router-outlet>
+  <main class="main-content">
+    <router-outlet />
   </main>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-brand">
-          <span class="logo"><span>Enterprisey</span> Apps</span>
-          <p class="footer-tagline">Enterprise-grade data pipeline management</p>
-        </div>
-        <div class="footer-links">
-          <a href="https://github.com/onehungrymind/enterprisey-apps" target="_blank" class="footer-link">
-            GitHub
-          </a>
-        </div>
-      </div>
-    </div>
-  </footer>
 </div>

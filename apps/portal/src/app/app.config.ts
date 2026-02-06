@@ -1,6 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
 import { ApplicationConfig, isDevMode } from '@angular/core';
-import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   provideRouter,
@@ -15,7 +14,6 @@ import { provideEnvironment } from '@proto/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideClientHydration(),
     provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
     provideEffects(),
     provideStore(
@@ -29,7 +27,7 @@ export const appConfig: ApplicationConfig = {
           strictStateSerializability: true,
           strictActionSerializability: true,
           strictActionWithinNgZone: true,
-          strictActionTypeUniqueness: false, // Disabled due to SSR hydration
+          strictActionTypeUniqueness: true,
         },
       }
     ),

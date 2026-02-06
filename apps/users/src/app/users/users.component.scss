@@ -1,0 +1,194 @@
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+// Header
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--border-default);
+  background: var(--nav-bg);
+  transition: background 0.4s;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.app-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+
+  .accent {
+    color: var(--accent);
+  }
+
+  .subtitle {
+    color: var(--text-tertiary);
+    font-weight: 400;
+    margin-left: 8px;
+  }
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tab-nav {
+  display: flex;
+  gap: 4px;
+}
+
+.tab-btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-quaternary);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-transform: capitalize;
+
+  &:hover {
+    color: var(--text-secondary);
+  }
+
+  &.active {
+    background: var(--accent-subtle);
+    border-color: var(--border-strong);
+    color: var(--accent);
+  }
+}
+
+.header-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border-default);
+  margin: 0 4px;
+}
+
+// Content Area
+.app-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+// Users Tab Layout
+.users-layout {
+  display: flex;
+  height: calc(100vh - 53px);
+}
+
+.users-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+// Stats Bar
+.stats-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.stats-group {
+  display: flex;
+  gap: 16px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+
+  .stat-label {
+    font-size: 8px;
+    color: var(--text-quaternary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .stat-value {
+    font-size: 17px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+.filters-group {
+  display: flex;
+  gap: 6px;
+}
+
+.search-input {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  width: 160px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  outline: none;
+
+  &::placeholder {
+    color: var(--text-quaternary);
+  }
+
+  &:focus {
+    border-color: var(--border-strong);
+  }
+}
+
+.company-select {
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 500;
+  background: var(--bg-input);
+  border: 1px solid var(--border-default);
+  color: var(--text-quaternary);
+  outline: none;
+  cursor: pointer;
+
+  &:focus {
+    border-color: var(--border-strong);
+  }
+}
+
+// Role Chips
+.role-chips {
+  display: flex;
+  gap: 4px;
+  padding: 8px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+// Details Panel
+.details-panel {
+  width: 300px;
+  border-left: 1px solid var(--border-default);
+  overflow: auto;
+  flex-shrink: 0;
+}

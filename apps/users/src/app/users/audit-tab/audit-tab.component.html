@@ -1,0 +1,23 @@
+<div class="audit-container">
+  <h2 class="section-title">Activity Audit Log</h2>
+
+  <div class="audit-list">
+    @for (log of auditLog(); track log.time + log.user; let i = $index) {
+      <div class="audit-row" [style.animation-delay.ms]="i * 40">
+        <span
+          class="activity-dot"
+          [style.background]="'var(' + getActionColorVar(log.type) + ')'"
+        ></span>
+
+        <div class="activity-content">
+          <span class="activity-text">
+            <strong class="user-name">{{ log.user }}</strong>
+            {{ log.action }}
+          </span>
+        </div>
+
+        <span class="activity-time">{{ log.time }}</span>
+      </div>
+    }
+  </div>
+</div>

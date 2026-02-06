@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Pipeline, SchemaField } from '@proto/api-interfaces';
-import { APP_ENVIRONMENT } from '@proto/environment';
+import { APP_ENVIRONMENT, AppEnvironment } from '@proto/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PipelinesService {
-  private http = inject(HttpClient);
-  private env = inject(APP_ENVIRONMENT);
+  private readonly http: HttpClient = inject(HttpClient);
+  private readonly env: AppEnvironment = inject(APP_ENVIRONMENT);
 
   all() {
     return this.http.get<Pipeline[]>(this.getUrl());

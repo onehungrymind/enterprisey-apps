@@ -1,22 +1,63 @@
-<mat-card>
-  <mat-card-content>
-    <mat-card-title>
-      Users
-    </mat-card-title>
-    <mat-list>
-      @for (user of users; track user) {
-        <mat-list-item class="mat-list-option" (click)="selected.emit(user)">
-          <span matLine>{{ user.firstName }}
-          {{ user.lastName }}</span>
-          @if (!readonly) {
-            <button mat-icon-button matListItemMeta
-              (click)="deleted.emit(user); $event.stopImmediatePropagation()"
-              type="button" color="warn">
-              <mat-icon>clear</mat-icon>
-            </button>
-          }
-        </mat-list-item>
-      }
-    </mat-list>
-  </mat-card-content>
-</mat-card>
+<!-- Column Headers -->
+<div class="list-header">
+  <span class="col-avatar"></span>
+  <span class="col-user">User</span>
+  <span class="col-role">Role</span>
+  <span class="col-status">Status</span>
+  <span class="col-login">Last Login</span>
+</div>
+
+<!-- User Rows -->
+<div class="user-list">
+  @for (user of users(); track user.id; let i = $index) {
+    @let roleConfig = getRoleConfig(user.role);
+    @let statusConfig = getStatusConfig(user.status);
+
+    <div
+      class="user-row"
+      [class.selected]="selectedUserId() === user.id"
+      [style.animation-delay.ms]="i * 30"
+      (click)="selectUser(user.id)"
+    >
+      <div class="col-avatar">
+        <ui-avatar
+          [firstName]="user.firstName"
+          [lastName]="user.lastName"
+          [color]="user.avatarColor"
+          [size]="34"
+        />
+      </div>
+
+      <div class="col-user">
+        <div class="user-name">{{ user.firstName }} {{ user.lastName }}</div>
+        <div class="user-email">{{ user.email }}</div>
+      </div>
+
+      <div class="col-role">
+        <span
+          class="role-badge"
+          [style.color]="'var(' + roleConfig.colorVar + ')'"
+          [style.background]="'var(' + roleConfig.bgVar + ')'"
+        >
+          {{ roleConfig.icon }} {{ roleConfig.label }}
+        </span>
+      </div>
+
+      <div class="col-status">
+        <span class="status-text" [style.color]="'var(' + statusConfig.colorVar + ')'">
+          {{ statusConfig.label }}
+        </span>
+      </div>
+
+      <div class="col-login">
+        <span class="login-time">{{ user.lastLogin }}</span>
+      </div>
+    </div>
+  }
+
+  @if (users().length === 0) {
+    <div class="empty-state">
+      No users found
+    </div>
+  }
+</div>

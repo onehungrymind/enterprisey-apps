@@ -1,0 +1,117 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+// Column widths
+.col-avatar { width: 44px; }
+.col-user { flex: 1; min-width: 0; }
+.col-role { width: 100px; }
+.col-status { width: 80px; }
+.col-login { width: 100px; text-align: right; }
+
+// Header
+.list-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  font-size: 9px;
+  color: var(--text-quaternary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+// User list
+.user-list {
+  flex: 1;
+  overflow: auto;
+}
+
+// User row
+.user-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-subtle);
+  border-left: 2px solid transparent;
+  background: transparent;
+  transition: all 0.12s;
+  animation: fadeSlide 0.25s ease backwards;
+
+  &:hover {
+    background: var(--bg-surface-hover);
+  }
+
+  &.selected {
+    background: var(--accent-subtle);
+    border-left-color: var(--accent);
+  }
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// User info
+.user-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.user-email {
+  font-size: 10px;
+  color: var(--text-quaternary);
+  font-family: 'JetBrains Mono', monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Role badge
+.role-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+// Status
+.status-text {
+  font-size: 10px;
+  font-weight: 500;
+}
+
+// Last login
+.login-time {
+  font-size: 10px;
+  color: var(--text-quaternary);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+// Empty state
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--text-ghost);
+  font-size: 12px;
+}

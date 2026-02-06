@@ -1,69 +1,79 @@
-<mat-card>
-  <mat-card-content>
-    <mat-card-title>
-      @if (currentUser.id) {
-        <span>
-          Editing {{ originalTitle | titlecase }}
-        </span>
-      } @else {
-        Select User
-      }
-    </mat-card-title>
-    <form #form="ngForm" (ngSubmit)="saved.emit(currentUser)">
-      <mat-form-field class="full-width">
-        <input
-          matInput
-          placeholder="Enter a first name"
-          [(ngModel)]="currentUser.firstName"
-          type="input"
-          name="firstname"
-          required="true"
-          />
-      </mat-form-field>
-      <mat-form-field class="full-width">
-        <input
-          matInput
-          placeholder="Enter a last name"
-          [(ngModel)]="currentUser.lastName"
-          type="input"
-          name="lastname"
-          required="true"
-          />
-      </mat-form-field>
-      <mat-form-field class="full-width">
-        <input
-          matInput
-          placeholder="Enter an email address"
-          [(ngModel)]="currentUser.email"
-          type="input"
-          name="email"
-          required="true"
-          />
-      </mat-form-field>
-      <mat-form-field class="full-width">
-        <input
-          matInput
-          placeholder="Enter a new password"
-          [(ngModel)]="currentUser.password"
-          type="password"
-          name="password"
-          required="true"
-          />
-      </mat-form-field>
+@if (user(); as u) {
+  @let role = roleConfig();
+  @let status = statusConfig();
 
-      <mat-card-actions>
-        <button
-          [disabled]="form.invalid"
-          type="submit"
-          mat-button
-          color="primary"
+  <div class="details-content">
+    <!-- User Header -->
+    <div class="user-header">
+      <ui-avatar
+        [firstName]="u.firstName"
+        [lastName]="u.lastName"
+        [color]="u.avatarColor"
+        [size]="56"
+      />
+      <h2 class="user-name">{{ u.firstName }} {{ u.lastName }}</h2>
+      <div class="user-email">{{ u.email }}</div>
+
+      <!-- Badges -->
+      <div class="badges">
+        @if (role) {
+          <span
+            class="badge role-badge"
+            [style.color]="'var(' + role.colorVar + ')'"
+            [style.background]="'var(' + role.bgVar + ')'"
           >
-          Save
-        </button>
-        <button type="button" mat-button (click)="cancelled.emit()">
-          Cancel
-        </button>
-      </mat-card-actions>
-    </form>
-  </mat-card-content>
-</mat-card>
+            {{ role.icon }} {{ role.label }}
+          </span>
+        }
+        @if (status) {
+          <span
+            class="badge status-badge"
+            [style.color]="'var(' + status.colorVar + ')'"
+          >
+            <span class="status-dot" [style.background]="'var(' + status.colorVar + ')'"></span>
+            {{ status.label }}
+          </span>
+        }
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      @for (stat of detailStats(); track stat.label) {
+        <div class="stat-card">
+          <span class="stat-label">{{ stat.label }}</span>
+          <span class="stat-value">{{ stat.value }}</span>
+        </div>
+      }
+    </div>
+
+    <!-- Permissions -->
+    @if (role) {
+      <div class="permissions-section">
+        <h3 class="section-title">Permissions</h3>
+        <ul class="permissions-list">
+          @for (permission of role.permissions; track permission) {
+            <li class="permission-item">
+              <span class="check-icon" [style.color]="'var(' + role.colorVar + ')'">&#10003;</span>
+              {{ permission }}
+            </li>
+          }
+        </ul>
+      </div>
+    }
+
+    <!-- Actions -->
+    <div class="actions">
+      <ui-action-button variant="secondary" (clicked)="null">
+        Edit Role
+      </ui-action-button>
+      <ui-action-button variant="danger" (clicked)="null">
+        Deactivate
+      </ui-action-button>
+    </div>
+  </div>
+} @else {
+  <div class="empty-state">
+    Select a user
+  </div>
+}

@@ -1,44 +1,40 @@
 // Import the shared UI theme
 @import 'libs/ui-theme/src/lib/styles/theme';
 
-// Angular Material theme (minimal, we'll override most styles)
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
-
-// Tailwind (utilities only, our theme handles base styles)
-@tailwind utilities;
-
 // ─────────────────────────────────────────────────────────────────────────────
-// Dashboard-specific overrides
+// Dashboard App Global Styles
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Ensure the page fills the viewport
 html, body {
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-// Angular Material overrides for consistency
-.mat-mdc-card {
-  border-radius: var(--radius-xl) !important;
-  box-shadow: var(--shadow-md) !important;
+// Set the default accent color for this app
+:root {
+  --accent: var(--accent-dashboard);
+  --accent-subtle: var(--accent-dashboard-subtle);
+  --accent-strong: #7c3aed;
 }
 
-.mat-mdc-button, .mat-mdc-raised-button {
-  border-radius: var(--radius-lg) !important;
+// Scrollbar styles
+::-webkit-scrollbar {
+  width: 4px;
 }
 
-// List item hover states
-.mdc-list-item {
-  display: flex !important;
-  border-radius: var(--radius-md);
-  transition: background-color var(--transition-fast);
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.mdc-list-item:hover {
-  cursor: pointer !important;
-  background-color: var(--color-gray-50);
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
 }
 
-// Full width utility
-.full-width {
-  width: 100%;
+// Selection color
+::selection {
+  background: var(--accent-dashboard);
+  color: var(--text-inverse);
 }

@@ -1,0 +1,22 @@
+/**
+ * Text Color Tokens
+ * Common across all features
+ */
+
+:root[data-theme="dark"] {
+  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-tertiary: rgba(255, 255, 255, 0.35);
+  --text-quaternary: rgba(255, 255, 255, 0.2);
+  --text-ghost: rgba(255, 255, 255, 0.1);
+  --text-inverse: #08090d;
+}
+
+:root[data-theme="light"] {
+  --text-primary: #1a1c23;
+  --text-secondary: #4a4d58;
+  --text-tertiary: #7c7f8e;
+  --text-quaternary: #a3a6b3;
+  --text-ghost: #d0d2da;
+  --text-inverse: #ffffff;
+}

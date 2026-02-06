@@ -1,6 +1,110 @@
 :host {
   display: block;
+  height: 100vh;
+  overflow: hidden;
 }
-.flex-1 {
+
+.shell {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-root);
+  color: var(--text-primary);
+  transition: background 0.4s, color 0.4s;
+}
+
+// Header actions
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.history-btn {
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--bg-input);
+  border: 1px solid var(--border-default);
+  color: var(--text-tertiary);
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  .icon {
+    font-size: 13px;
+  }
+
+  &:hover {
+    border-color: var(--border-strong);
+  }
+
+  &.active {
+    background: var(--accent-subtle);
+    border-color: var(--border-strong);
+    color: var(--accent);
+  }
+}
+
+// Main Layout
+.main-layout {
   flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+// Canvas Area
+.canvas-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.pipeline-header {
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--nav-bg);
+  transition: background 0.4s;
+}
+
+.pipeline-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pipeline-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.pipeline-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 10px;
+  color: var(--text-quaternary);
+  font-family: 'JetBrains Mono', monospace;
+
+  .stat {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.empty-canvas {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-ghost);
+  font-size: 12px;
 }

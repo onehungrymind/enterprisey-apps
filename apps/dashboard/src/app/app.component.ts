@@ -1,22 +1,66 @@
-import { AsyncPipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, OnDestroy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Feature } from '@proto/api-interfaces';
 import { FeaturesFacade } from '@proto/features-state';
-import { Observable } from 'rxjs';
+import { ThemeService, ThemeToggleComponent, StatusDotComponent } from '@proto/ui-theme';
+import { toSignal } from '@angular/core/rxjs-interop';
+
+interface FeatureNav {
+  id: string;
+  name: string;
+  slug: string;
+  accentVar: string;
+  subtleVar: string;
+}
 
 @Component({
-    imports: [RouterModule, AsyncPipe],
-    selector: 'proto-root',
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.scss'
+  imports: [RouterModule, ThemeToggleComponent, StatusDotComponent],
+  selector: 'proto-root',
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
-  features$: Observable<Feature[]> = this.featuresFacade.allFeatures$;
+export class AppComponent implements OnInit, OnDestroy {
+  private readonly featuresFacade = inject(FeaturesFacade);
+  protected readonly themeService = inject(ThemeService);
 
-  constructor(private featuresFacade: FeaturesFacade) {}
+  protected readonly features = toSignal(this.featuresFacade.allFeatures$, { initialValue: [] as Feature[] });
+  protected readonly currentTime = signal(new Date());
+  protected readonly allHealthy = signal(true);
+
+  private timeInterval?: ReturnType<typeof setInterval>;
+
+  protected readonly featureNavItems = computed<FeatureNav[]>(() => {
+    const featureAccents: Record<string, { accent: string; subtle: string }> = {
+      ingress: { accent: '--accent-ingress', subtle: '--accent-ingress-subtle' },
+      transformation: { accent: '--accent-transform', subtle: '--accent-transform-subtle' },
+      reporting: { accent: '--accent-reporting', subtle: '--accent-reporting-subtle' },
+      export: { accent: '--accent-export', subtle: '--accent-export-subtle' },
+      users: { accent: '--accent-users', subtle: '--accent-users-subtle' },
+    };
+
+    return this.features().map(f => ({
+      id: f.slug,
+      name: f.title,
+      slug: f.slug,
+      accentVar: featureAccents[f.slug]?.accent || '--accent-dashboard',
+      subtleVar: featureAccents[f.slug]?.subtle || '--accent-dashboard-subtle',
+    }));
+  });
 
   ngOnInit() {
     this.featuresFacade.loadFeatures();
+    this.timeInterval = setInterval(() => {
+      this.currentTime.set(new Date());
+    }, 1000);
+  }
+
+  ngOnDestroy() {
+    if (this.timeInterval) {
+      clearInterval(this.timeInterval);
+    }
+  }
+
+  protected formatTime(date: Date): string {
+    return date.toLocaleTimeString('en-US', { hour12: false });
   }
 }

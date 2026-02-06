@@ -1,60 +1,144 @@
-.page {
+.shell {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  background: var(--bg-root);
+  color: var(--text-primary);
+  transition: background 0.4s ease, color 0.4s ease;
 }
 
-.header-content {
+// Navigation Bar
+.nav-bar {
+  border-bottom: 1px solid var(--border-default);
+  padding: 0 28px;
+  height: 54px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  transition: background 0.4s, border-color 0.4s;
+}
+
+.nav-left {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 28px;
 }
 
-.page-content {
-  flex: 1;
-}
-
-// Footer styles
-.footer {
-  background-color: var(--color-gray-900);
-  color: var(--color-gray-300);
-  padding: var(--space-12) 0;
-  margin-top: auto;
-}
-
-.footer-content {
+.nav-right {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 14px;
 }
 
-.footer-brand {
-  .logo {
-    color: var(--color-white);
-
-    span {
-      color: var(--color-primary-400);
-    }
-  }
-}
-
-.footer-tagline {
-  font-size: var(--text-sm);
-  color: var(--color-gray-500);
-  margin: var(--space-2) 0 0 0;
-}
-
-.footer-links {
+// Logo
+.logo {
   display: flex;
-  gap: var(--space-6);
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
 }
 
-.footer-link {
-  color: var(--color-gray-400);
-  font-size: var(--text-sm);
-  transition: color var(--transition-fast);
+.logo-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--accent-dashboard);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.logo-text {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.logo-accent {
+  color: var(--accent-dashboard);
+}
+
+.logo-sub {
+  color: var(--text-tertiary);
+  font-weight: 400;
+}
+
+// Nav Links
+.nav-links {
+  display: flex;
+  gap: 4px;
+}
+
+.nav-item {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  color: var(--text-quaternary);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+  text-decoration: none;
 
   &:hover {
-    color: var(--color-white);
+    opacity: 0.85;
   }
+
+  &.active {
+    background: var(--item-subtle, var(--accent-dashboard-subtle));
+    color: var(--item-accent, var(--accent-dashboard));
+  }
+}
+
+// Status & Time
+.status-time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.time {
+  font-size: 10px;
+  color: var(--text-quaternary);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+// Health Button
+.health-btn {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--bg-input);
+  border: 1px solid var(--border-default);
+  color: var(--text-quaternary);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+  text-decoration: none;
+
+  &:hover {
+    border-color: var(--border-strong);
+    background: var(--color-success-subtle);
+    color: var(--color-success);
+  }
+}
+
+// Main Content
+.main-content {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 28px 60px;
+  width: 100%;
 }

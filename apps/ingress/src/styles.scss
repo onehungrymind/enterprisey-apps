@@ -1,53 +1,75 @@
 // Import the shared UI theme
 @import 'libs/ui-theme/src/lib/styles/theme';
 
-// Set domain theme
+// Set ingress domain accent
 :root {
-  @include generate-color-vars('emerald');
+  --accent: var(--accent-ingress);
+  --accent-subtle: var(--accent-ingress-subtle);
+  --accent-strong: #059669;
+  --bar-from: #059669;
+  --bar-to: #34d399;
 }
-
-// Angular Material theme
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
-
-// Tailwind utilities
-@tailwind utilities;
 
 // Ensure the page fills the viewport
 html, body {
   height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg-root);
+  color: var(--text-primary);
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: background 0.4s, color 0.4s;
 }
 
-// Angular Material overrides
-.mat-mdc-card {
-  border-radius: var(--radius-xl) !important;
-  box-shadow: var(--shadow-md) !important;
+// Scrollbar styling
+::-webkit-scrollbar {
+  width: 4px;
 }
 
-.mdc-list-item {
-  display: flex !important;
-  border-radius: var(--radius-md);
-  transition: background-color var(--transition-fast);
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.mdc-list-item:hover {
-  cursor: pointer !important;
-  background-color: var(--color-gray-50);
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
 }
 
-.mdc-list-item:not(:first-of-type) {
-  border-top: 1px solid var(--color-border);
-}
-
-.mat-mdc-card-title {
-  margin: 10px;
-}
-
-.mat-mdc-card-actions {
-  .mdc-button {
-    margin: 10px;
+// Animation keyframes
+@keyframes pulseRing {
+  0% {
+    transform: translateY(-50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-50%) scale(3);
+    opacity: 0;
   }
 }
 
-.full-width {
-  width: 100%;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Utility classes
+.mono {
+  font-family: 'JetBrains Mono', monospace;
 }

@@ -26,21 +26,11 @@
       "configurations": {
         "production": {
           "budgets": [
-            {
-              "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
-            },
-            {
-              "type": "anyComponentStyle",
-              "maximumWarning": "2kb",
-              "maximumError": "4kb"
-            }
+            { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
+            { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
           ],
           "outputHashing": "all",
-          "customWebpackConfig": {
-            "path": "apps/users/webpack.prod.config.ts"
-          }
+          "customWebpackConfig": { "path": "apps/users/webpack.prod.config.ts" }
         },
         "development": {
           "buildOptimizer": false,
@@ -60,105 +50,23 @@
         "publicHost": "http://localhost:4201"
       },
       "configurations": {
-        "production": {
-          "buildTarget": "users:build:production"
-        },
-        "development": {
-          "buildTarget": "users:build:development"
-        }
+        "production": { "buildTarget": "users:build:production" },
+        "development": { "buildTarget": "users:build:development" }
       },
       "defaultConfiguration": "development",
       "continuous": true
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
-      "options": {
-        "buildTarget": "users:build"
-      }
+      "options": { "buildTarget": "users:build" }
     },
     "serve-static": {
       "executor": "@nx/web:file-server",
       "defaultConfiguration": "production",
-      "options": {
-        "buildTarget": "users:build",
-        "port": 4201,
-        "watch": false
-      },
+      "options": { "buildTarget": "users:build", "port": 4201, "watch": false },
       "configurations": {
-        "development": {
-          "buildTarget": "users:build:development"
-        },
-        "production": {
-          "buildTarget": "users:build:production"
-        }
-      }
-    },
-    "server": {
-      "dependsOn": ["build"],
-      "executor": "@nx/angular:webpack-server",
-      "options": {
-        "outputPath": "dist/apps/users/server",
-        "main": "apps/users/server.ts",
-        "tsConfig": "apps/users/tsconfig.server.json",
-        "inlineStyleLanguage": "scss",
-        "customWebpackConfig": {
-          "path": "apps/users/webpack.server.config.ts"
-        }
-      },
-      "configurations": {
-        "production": {
-          "outputHashing": "media"
-        },
-        "development": {
-          "buildOptimizer": false,
-          "optimization": false,
-          "sourceMap": true,
-          "extractLicenses": false,
-          "vendorChunk": true
-        }
-      },
-      "defaultConfiguration": "production"
-    },
-    "serve-ssr": {
-      "executor": "@angular-devkit/build-angular:ssr-dev-server",
-      "configurations": {
-        "development": {
-          "browserTarget": "users:build:development",
-          "serverTarget": "users:server:development"
-        },
-        "production": {
-          "browserTarget": "users:build:production",
-          "serverTarget": "users:server:production"
-        }
-      },
-      "defaultConfiguration": "development",
-      "options": {
-        "port": 4201
-      },
-      "continuous": true
-    },
-    "prerender": {
-      "executor": "@angular-devkit/build-angular:prerender",
-      "options": {
-        "routes": ["/"]
-      },
-      "configurations": {
-        "development": {
-          "browserTarget": "users:build:development",
-          "serverTarget": "users:server:development"
-        },
-        "production": {
-          "browserTarget": "users:build:production",
-          "serverTarget": "users:server:production"
-        }
-      },
-      "defaultConfiguration": "production"
-    },
-    "static-server": {
-      "dependsOn": ["build", "server"],
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "PORT=4201 node dist/apps/users/server/main.js"
+        "development": { "buildTarget": "users:build:development" },
+        "production": { "buildTarget": "users:build:production" }
       }
     }
   }

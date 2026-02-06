@@ -1,53 +1,37 @@
 // Import the shared UI theme
 @import 'libs/ui-theme/src/lib/styles/theme';
 
-// Set domain theme
+// Set app-specific accent for Export (rose/pink)
 :root {
-  @include generate-color-vars('rose');
+  --accent: var(--accent-export);
+  --accent-subtle: var(--accent-export-subtle);
+  --accent-strong: #be185d;
+
+  // Format-specific colors
+  --fmt-csv: var(--color-success);
+  --fmt-json: var(--color-warning);
+  --fmt-xlsx: var(--color-info);
+  --fmt-pdf: var(--accent-export);
 }
-
-// Angular Material theme
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
-
-// Tailwind utilities
-@tailwind utilities;
 
 // Ensure the page fills the viewport
 html, body {
   height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg-root);
 }
 
-// Angular Material overrides
-.mat-mdc-card {
-  border-radius: var(--radius-xl) !important;
-  box-shadow: var(--shadow-md) !important;
+// Scrollbar styling
+::-webkit-scrollbar {
+  width: 4px;
 }
 
-.mdc-list-item {
-  display: flex !important;
-  border-radius: var(--radius-md);
-  transition: background-color var(--transition-fast);
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.mdc-list-item:hover {
-  cursor: pointer !important;
-  background-color: var(--color-gray-50);
-}
-
-.mdc-list-item:not(:first-of-type) {
-  border-top: 1px solid var(--color-border);
-}
-
-.mat-mdc-card-title {
-  margin: 10px;
-}
-
-.mat-mdc-card-actions {
-  .mdc-button {
-    margin: 10px;
-  }
-}
-
-.full-width {
-  width: 100%;
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
 }

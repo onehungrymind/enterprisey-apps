@@ -29,16 +29,8 @@
       "configurations": {
         "production": {
           "budgets": [
-            {
-              "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
-            },
-            {
-              "type": "anyComponentStyle",
-              "maximumWarning": "2kb",
-              "maximumError": "4kb"
-            }
+            { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
+            { "type": "anyComponentStyle", "maximumWarning": "2kb", "maximumError": "4kb" }
           ],
           "outputHashing": "all"
         },
@@ -57,89 +49,24 @@
       "executor": "@nx/angular:module-federation-dev-server",
       "options": {
         "port": 4200,
-        "publicHost": "http://localhost:4200"
+        "publicHost": "http://localhost:4200",
+        "devRemotes": ["users", "ingress", "transformation", "reporting", "export"],
+        "skipRemotes": ["users", "ingress", "transformation", "reporting", "export"]
       },
       "configurations": {
-        "production": {
-          "buildTarget": "dashboard:build:production"
-        },
-        "development": {
-          "buildTarget": "dashboard:build:development"
-        }
+        "production": { "buildTarget": "dashboard:build:production" },
+        "development": { "buildTarget": "dashboard:build:development" }
       },
       "defaultConfiguration": "development",
       "continuous": true
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
-      "options": {
-        "buildTarget": "dashboard:build"
-      }
+      "options": { "buildTarget": "dashboard:build" }
     },
     "serve-static": {
       "executor": "@nx/web:file-server",
-      "options": {
-        "buildTarget": "dashboard:build",
-        "port": 4200
-      }
-    },
-    "server": {
-      "dependsOn": ["build"],
-      "executor": "@nx/angular:webpack-server",
-      "options": {
-        "outputPath": "dist/apps/dashboard/server",
-        "main": "apps/dashboard/server.ts",
-        "tsConfig": "apps/dashboard/tsconfig.server.json",
-        "inlineStyleLanguage": "scss",
-        "customWebpackConfig": {
-          "path": "apps/dashboard/webpack.server.config.ts"
-        }
-      },
-      "configurations": {
-        "production": {
-          "outputHashing": "media"
-        },
-        "development": {
-          "buildOptimizer": false,
-          "optimization": false,
-          "sourceMap": true,
-          "extractLicenses": false,
-          "vendorChunk": true
-        }
-      },
-      "defaultConfiguration": "production"
-    },
-    "serve-ssr": {
-      "executor": "@nx/angular:module-federation-dev-ssr",
-      "configurations": {
-        "development": {
-          "browserTarget": "dashboard:build:development",
-          "serverTarget": "dashboard:server:development"
-        },
-        "production": {
-          "browserTarget": "dashboard:build:production",
-          "serverTarget": "dashboard:server:production"
-        }
-      },
-      "defaultConfiguration": "development",
-      "continuous": true
-    },
-    "prerender": {
-      "executor": "@angular-devkit/build-angular:prerender",
-      "options": {
-        "routes": ["/"]
-      },
-      "configurations": {
-        "development": {
-          "browserTarget": "dashboard:build:development",
-          "serverTarget": "dashboard:server:development"
-        },
-        "production": {
-          "browserTarget": "dashboard:build:production",
-          "serverTarget": "dashboard:server:production"
-        }
-      },
-      "defaultConfiguration": "production"
+      "options": { "buildTarget": "dashboard:build", "port": 4200 }
     }
   }
 }

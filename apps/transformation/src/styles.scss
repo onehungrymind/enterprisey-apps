@@ -1,53 +1,101 @@
 // Import the shared UI theme
-@import 'libs/ui-theme/src/lib/styles/theme';
+@use 'libs/ui-theme/src/lib/styles/theme';
+@use 'libs/ui-theme/src/lib/styles/_colors' as colors;
 
-// Set domain theme
+// Set domain theme (amber for transformation)
 :root {
-  @include generate-color-vars('amber');
+  @include colors.generate-color-vars('amber');
+
+  // Set app-specific accent
+  --accent: var(--accent-transform);
+  --accent-subtle: var(--accent-transform-subtle);
+  --accent-strong: #d97706;
+
+  // Pipeline node colors (transformation-specific)
+  --node-bg: rgba(15, 17, 23, 0.9);
+  --grid-line: rgba(255, 255, 255, 0.015);
+  --edge-color: rgba(251, 191, 36, 0.3);
+  --particle-color: #fbbf24;
+
+  // Node type colors
+  --node-source: #34d399;
+  --node-filter: #60a5fa;
+  --node-map: #60a5fa;
+  --node-agg: #c084fc;
+  --node-join: #f472b6;
+  --node-sort: #818cf8;
+  --node-dedup: #fb923c;
+  --node-output: #34d399;
 }
 
-// Angular Material theme
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
+// Light theme overrides
+[data-theme="light"] {
+  --node-bg: rgba(255, 255, 255, 0.95);
+  --grid-line: rgba(0, 0, 0, 0.04);
+  --edge-color: rgba(217, 119, 6, 0.3);
+  --particle-color: #d97706;
+  --accent-strong: #b45309;
 
-// Tailwind utilities
-@tailwind utilities;
+  // Light mode node colors (slightly darker)
+  --node-source: #059669;
+  --node-filter: #2563eb;
+  --node-map: #2563eb;
+  --node-agg: #7c3aed;
+  --node-join: #db2777;
+  --node-sort: #6366f1;
+  --node-dedup: #ea580c;
+  --node-output: #059669;
+}
 
 // Ensure the page fills the viewport
-html, body {
+html,
+body {
   height: 100%;
+  margin: 0;
+  overflow: hidden;
 }
 
-// Angular Material overrides
-.mat-mdc-card {
-  border-radius: var(--radius-xl) !important;
-  box-shadow: var(--shadow-md) !important;
-}
-
-.mdc-list-item {
-  display: flex !important;
-  border-radius: var(--radius-md);
-  transition: background-color var(--transition-fast);
-}
-
-.mdc-list-item:hover {
-  cursor: pointer !important;
-  background-color: var(--color-gray-50);
-}
-
-.mdc-list-item:not(:first-of-type) {
-  border-top: 1px solid var(--color-border);
-}
-
-.mat-mdc-card-title {
-  margin: 10px;
-}
-
-.mat-mdc-card-actions {
-  .mdc-button {
-    margin: 10px;
+// Global animations
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.full-width {
-  width: 100%;
+@keyframes pulseGlow {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+// Scrollbar styling
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+// Utility classes
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.fade-slide {
+  animation: fadeSlide 0.25s ease;
 }

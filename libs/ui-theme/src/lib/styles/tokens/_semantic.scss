@@ -1,0 +1,26 @@
+/**
+ * Semantic Status Tokens
+ * Success, Warning, Danger, Info colors
+ */
+
+:root[data-theme="dark"] {
+  --color-success: #34d399;
+  --color-success-subtle: rgba(52, 211, 153, 0.08);
+  --color-warning: #fbbf24;
+  --color-warning-subtle: rgba(251, 191, 36, 0.08);
+  --color-danger: #f87171;
+  --color-danger-subtle: rgba(248, 113, 113, 0.08);
+  --color-info: #818cf8;
+  --color-info-subtle: rgba(129, 140, 248, 0.1);
+}
+
+:root[data-theme="light"] {
+  --color-success: #059669;
+  --color-success-subtle: rgba(5, 150, 105, 0.08);
+  --color-warning: #d97706;
+  --color-warning-subtle: rgba(217, 119, 6, 0.08);
+  --color-danger: #dc2626;
+  --color-danger-subtle: rgba(220, 38, 38, 0.08);
+  --color-info: #6366f1;
+  --color-info-subtle: rgba(99, 102, 241, 0.08);
+}

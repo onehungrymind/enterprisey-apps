@@ -1,0 +1,16 @@
+/**
+ * Border Tokens
+ * Common across all features
+ */
+
+:root[data-theme="dark"] {
+  --border-default: rgba(255, 255, 255, 0.05);
+  --border-subtle: rgba(255, 255, 255, 0.03);
+  --border-strong: rgba(255, 255, 255, 0.08);
+}
+
+:root[data-theme="light"] {
+  --border-default: rgba(0, 0, 0, 0.08);
+  --border-subtle: rgba(0, 0, 0, 0.04);
+  --border-strong: rgba(0, 0, 0, 0.12);
+}

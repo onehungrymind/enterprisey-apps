@@ -1,0 +1,36 @@
+<div class="roles-container">
+  <h2 class="section-title">Role Definitions</h2>
+
+  <div class="roles-grid">
+    @for (role of roleConfigs(); track role.key; let i = $index) {
+      <div class="role-card" [style.animation-delay.ms]="i * 80">
+        <!-- Role Icon -->
+        <div
+          class="role-icon"
+          [style.background]="'var(' + role.bgVar + ')'"
+          [style.color]="'var(' + role.colorVar + ')'"
+        >
+          {{ role.icon }}
+        </div>
+
+        <!-- Role Name -->
+        <h3 class="role-name" [style.color]="'var(' + role.colorVar + ')'">
+          {{ role.label }}
+        </h3>
+
+        <!-- User Count -->
+        <div class="role-count">{{ getUserCount()(role.key) }} users</div>
+
+        <!-- Permissions -->
+        <div class="permissions">
+          @for (permission of role.permissions; track permission) {
+            <div class="permission-row">
+              <span class="check" [style.color]="'var(' + role.colorVar + ')'">&#10003;</span>
+              <span class="permission-text">{{ permission }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

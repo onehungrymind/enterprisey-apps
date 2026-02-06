@@ -1,0 +1,28 @@
+/**
+ * Surface & Background Tokens
+ * Common across all features
+ */
+
+:root[data-theme="dark"] {
+  --bg-root: #08090d;
+  --bg-surface: rgba(255, 255, 255, 0.015);
+  --bg-surface-hover: rgba(255, 255, 255, 0.03);
+  --bg-surface-active: rgba(255, 255, 255, 0.05);
+  --bg-elevated: rgba(255, 255, 255, 0.025);
+  --bg-input: rgba(255, 255, 255, 0.03);
+  --bg-code: rgba(0, 0, 0, 0.2);
+  --bg-canvas: #0b0d12;
+  --nav-bg: rgba(255, 255, 255, 0.008);
+}
+
+:root[data-theme="light"] {
+  --bg-root: #f8f9fc;
+  --bg-surface: #ffffff;
+  --bg-surface-hover: #f3f4f8;
+  --bg-surface-active: #eceef3;
+  --bg-elevated: #ffffff;
+  --bg-input: #f3f4f8;
+  --bg-code: #f0f1f5;
+  --bg-canvas: #f3f4f8;
+  --nav-bg: rgba(255, 255, 255, 0.85);
+}

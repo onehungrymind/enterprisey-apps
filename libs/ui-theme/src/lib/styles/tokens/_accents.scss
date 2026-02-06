@@ -1,0 +1,57 @@
+/**
+ * Feature Accent Colors
+ * Each feature has its own accent that can be used via --accent variable
+ * Dashboard uses all feature accents for the card grid display
+ */
+
+:root[data-theme="dark"] {
+  // Dashboard (Purple)
+  --accent-dashboard: #a78bfa;
+  --accent-dashboard-subtle: rgba(167, 139, 250, 0.1);
+
+  // Ingress (Emerald)
+  --accent-ingress: #34d399;
+  --accent-ingress-subtle: rgba(52, 211, 153, 0.1);
+
+  // Transformation (Amber)
+  --accent-transform: #fbbf24;
+  --accent-transform-subtle: rgba(251, 191, 36, 0.1);
+
+  // Reporting (Blue)
+  --accent-reporting: #60a5fa;
+  --accent-reporting-subtle: rgba(96, 165, 250, 0.1);
+
+  // Export (Rose)
+  --accent-export: #f472b6;
+  --accent-export-subtle: rgba(244, 114, 182, 0.1);
+
+  // Users (Slate)
+  --accent-users: #94a3b8;
+  --accent-users-subtle: rgba(148, 163, 184, 0.1);
+}
+
+:root[data-theme="light"] {
+  // Dashboard (Purple)
+  --accent-dashboard: #7c3aed;
+  --accent-dashboard-subtle: rgba(124, 58, 237, 0.07);
+
+  // Ingress (Emerald)
+  --accent-ingress: #059669;
+  --accent-ingress-subtle: rgba(5, 150, 105, 0.07);
+
+  // Transformation (Amber)
+  --accent-transform: #d97706;
+  --accent-transform-subtle: rgba(217, 119, 6, 0.07);
+
+  // Reporting (Blue)
+  --accent-reporting: #2563eb;
+  --accent-reporting-subtle: rgba(37, 99, 235, 0.07);
+
+  // Export (Rose)
+  --accent-export: #db2777;
+  --accent-export-subtle: rgba(219, 39, 119, 0.07);
+
+  // Users (Slate)
+  --accent-users: #475569;
+  --accent-users-subtle: rgba(71, 85, 105, 0.07);
+}

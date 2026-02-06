@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { TransformStep } from '@proto/api-interfaces';
-import { APP_ENVIRONMENT } from '@proto/environment';
+import { APP_ENVIRONMENT, AppEnvironment } from '@proto/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StepsService {
-  private http = inject(HttpClient);
-  private env = inject(APP_ENVIRONMENT);
+  private readonly http: HttpClient = inject(HttpClient);
+  private readonly env: AppEnvironment = inject(APP_ENVIRONMENT);
 
   all(pipelineId: string) {
     return this.http.get<TransformStep[]>(`${this.env.transformationApiUrl}/pipelines/${pipelineId}/steps`);

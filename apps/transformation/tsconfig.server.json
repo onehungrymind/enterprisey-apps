@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.app.json",
-  "compilerOptions": {
-    "outDir": "../../dist/out-tsc",
-    "target": "ES2020",
-    "types": ["node"]
-  },
-  "files": ["server.ts"]
-}

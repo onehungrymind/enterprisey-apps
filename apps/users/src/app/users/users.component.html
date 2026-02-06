@@ -1,14 +1,115 @@
-<div class="flex m-20">
-  <div class="w-1/2 mr-10">
-    <proto-users-list
-      [users]="(users$ | async)!"
-      (selected)="selectUser($event)"
-      (deleted)="deleteUser($event)"></proto-users-list>
-  </div>
-  <div class="w-1/2 ml-10">
-    <proto-user-details
-      [user]="selectedUser$ | async"
-      (saved)="saveUser($event)"
-      (cancelled)="reset()"></proto-user-details>
-  </div>
+<div class="app-shell">
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo-dot"></div>
+      <h1 class="app-title">
+        <span class="accent">Users</span>
+        <span class="subtitle">Management</span>
+      </h1>
+    </div>
+
+    <div class="header-right">
+      <!-- Tab Navigation -->
+      <nav class="tab-nav">
+        @for (tab of tabs; track tab.id) {
+          <button
+            class="tab-btn"
+            [class.active]="activeTab() === tab.id"
+            (click)="setActiveTab(tab.id)"
+          >
+            {{ tab.label }}
+          </button>
+        }
+      </nav>
+
+      <div class="header-divider"></div>
+
+      <!-- Invite Button -->
+      <ui-action-button variant="primary" (clicked)="null">
+        + Invite User
+      </ui-action-button>
+
+      <!-- Theme Toggle -->
+      <ui-theme-toggle />
+    </div>
+  </header>
+
+  <!-- Content Area -->
+  <main class="app-content">
+    @if (activeTab() === 'users') {
+      <div class="users-layout">
+        <!-- Users List Panel -->
+        <div class="users-panel">
+          <!-- Stats Bar -->
+          <div class="stats-bar">
+            <div class="stats-group">
+              @for (stat of stats(); track stat.label) {
+                <div class="stat-item">
+                  <span class="stat-label">{{ stat.label }}</span>
+                  <span class="stat-value" [style.color]="'var(' + stat.colorVar + ')'">
+                    {{ stat.value }}
+                  </span>
+                </div>
+              }
+            </div>
+            <div class="filters-group">
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Search users..."
+                [value]="searchQuery()"
+                (input)="setSearchQuery($any($event.target).value)"
+              />
+              <select
+                class="company-select"
+                [value]="filterCompany()"
+                (change)="setFilterCompany($any($event.target).value)"
+              >
+                <option value="all">All Companies</option>
+                @for (company of companies(); track company) {
+                  <option [value]="company">{{ company }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <!-- Role Filter Chips -->
+          <div class="role-chips">
+            @for (filter of roleFilters(); track filter.key) {
+              <ui-filter-chip
+                [active]="filterRole() === filter.key"
+                (clicked)="setFilterRole(filter.key)"
+              >
+                {{ filter.label }}
+              </ui-filter-chip>
+            }
+          </div>
+
+          <!-- Users List -->
+          <proto-users-list
+            [users]="filteredUsers()"
+            [selectedUserId]="selectedUserId()"
+            (userSelected)="selectUser($event)"
+          />
+        </div>
+
+        <!-- User Details Panel -->
+        <aside class="details-panel">
+          <proto-user-details [user]="selectedUser()" />
+        </aside>
+      </div>
+    }
+
+    @if (activeTab() === 'roles') {
+      <proto-roles-tab
+        [roleConfigs]="roleConfigs"
+        [getUserCount]="getUserCountByRole.bind(this)"
+      />
+    }
+
+    @if (activeTab() === 'audit') {
+      <proto-audit-tab [auditLog]="auditLog" />
+    }
+  </main>
 </div>
