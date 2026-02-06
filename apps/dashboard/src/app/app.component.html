@@ -1,33 +1,45 @@
-<section class="text-white">
-  <div class="container mx-auto py-4 flex justify-between items-center">
-    <a routerLink="/" class="text-6xl font-black">DASHBOARD</a>
-    <nav>
-      <ul class="inline-flex">
-        <li>
-          <button routerLink="/"
-            class="bg-transparent border hover:border-transparent hover:bg-white hover:text-black font-bold py-2 w-40">
+<div class="page" data-theme="dashboard">
+  <!-- Header -->
+  <header class="page-header">
+    <div class="container">
+      <div class="header-content">
+        <a routerLink="/" class="logo">
+          <span>Enterprisey</span> Apps
+        </a>
+
+        <nav class="nav">
+          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
             Home
-          </button>
-        </li>
-        @for (feature of features$ | async; track feature) {
-          <li>
-            <button routerLink="{{feature.slug}}"
-              class="bg-transparent border hover:border-transparent hover:bg-white hover:text-black font-bold py-2 w-40">
-              {{feature.slug | titlecase}}
-            </button>
-          </li>
-        }
-      </ul>
-    </nav>
-  </div>
-</section>
+          </a>
+          @for (feature of features$ | async; track feature.id) {
+            <a [routerLink]="feature.slug" routerLinkActive="active" class="nav-link">
+              {{ feature.title }}
+            </a>
+          }
+        </nav>
+      </div>
+    </div>
+  </header>
 
-<section class="py-20">
-  <router-outlet></router-outlet>
-</section>
+  <!-- Main Content -->
+  <main class="page-content">
+    <router-outlet></router-outlet>
+  </main>
 
-<footer class="p-16 py-10 bg-white mt-auto">
-  <div class="grid grid-cols-2">
-    <div class="text-4xl font-black px-4 md:px-8 md:pb-3">ENTERPRISEY APPS</div>
-  </div>
-</footer>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="logo"><span>Enterprisey</span> Apps</span>
+          <p class="footer-tagline">Enterprise-grade data pipeline management</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/onehungrymind/enterprisey-apps" target="_blank" class="footer-link">
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

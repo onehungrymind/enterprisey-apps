@@ -1,0 +1,77 @@
+/**
+ * Design System Variables
+ *
+ * Spacing, shadows, borders, transitions, and other design tokens.
+ */
+
+:root {
+  // ───────────────────────────────────────────────────────────────────────────
+  // Spacing Scale (based on 4px grid)
+  // ───────────────────────────────────────────────────────────────────────────
+  --space-0: 0;
+  --space-1: 0.25rem;   // 4px
+  --space-2: 0.5rem;    // 8px
+  --space-3: 0.75rem;   // 12px
+  --space-4: 1rem;      // 16px
+  --space-5: 1.25rem;   // 20px
+  --space-6: 1.5rem;    // 24px
+  --space-8: 2rem;      // 32px
+  --space-10: 2.5rem;   // 40px
+  --space-12: 3rem;     // 48px
+  --space-16: 4rem;     // 64px
+  --space-20: 5rem;     // 80px
+  --space-24: 6rem;     // 96px
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // Border Radius
+  // ───────────────────────────────────────────────────────────────────────────
+  --radius-none: 0;
+  --radius-sm: 0.25rem;   // 4px
+  --radius-md: 0.5rem;    // 8px
+  --radius-lg: 0.75rem;   // 12px
+  --radius-xl: 1rem;      // 16px
+  --radius-2xl: 1.5rem;   // 24px
+  --radius-full: 9999px;
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // Shadows (soft, modern aesthetic)
+  // ───────────────────────────────────────────────────────────────────────────
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+  // Primary-colored shadows for cards
+  --shadow-primary-sm: 0 1px 2px 0 var(--color-primary-500) / 0.1;
+  --shadow-primary-md: 0 4px 14px -2px color-mix(in srgb, var(--color-primary-500) 20%, transparent);
+  --shadow-primary-lg: 0 10px 30px -4px color-mix(in srgb, var(--color-primary-500) 25%, transparent);
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // Transitions
+  // ───────────────────────────────────────────────────────────────────────────
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 350ms ease;
+  --transition-slower: 500ms ease;
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // Layout
+  // ───────────────────────────────────────────────────────────────────────────
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // Z-Index Scale
+  // ───────────────────────────────────────────────────────────────────────────
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+}

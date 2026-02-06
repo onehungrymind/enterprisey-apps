@@ -1,0 +1,26 @@
+/**
+ * Enterprisey UI Theme
+ *
+ * A modern, clean design system inspired by Eyedrop.ai.
+ * Import this file in your app's global styles to apply the theme.
+ *
+ * Usage:
+ *   @import '@proto/ui-theme';
+ *
+ * Domain theming:
+ *   Add data-theme attribute to body or any container:
+ *   <body data-theme="ingress">  // Green theme
+ *   <body data-theme="reporting"> // Blue theme
+ *
+ *   Or use theme classes:
+ *   <div class="theme-transformation"> // Amber theme
+ */
+
+// Google Fonts - Inter
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+// Core styles
+@import 'variables';
+@import 'colors';
+@import 'typography';
+@import 'components';

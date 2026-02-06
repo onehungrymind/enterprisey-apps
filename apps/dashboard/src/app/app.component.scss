@@ -1,0 +1,60 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page-content {
+  flex: 1;
+}
+
+// Footer styles
+.footer {
+  background-color: var(--color-gray-900);
+  color: var(--color-gray-300);
+  padding: var(--space-12) 0;
+  margin-top: auto;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-brand {
+  .logo {
+    color: var(--color-white);
+
+    span {
+      color: var(--color-primary-400);
+    }
+  }
+}
+
+.footer-tagline {
+  font-size: var(--text-sm);
+  color: var(--color-gray-500);
+  margin: var(--space-2) 0 0 0;
+}
+
+.footer-links {
+  display: flex;
+  gap: var(--space-6);
+}
+
+.footer-link {
+  color: var(--color-gray-400);
+  font-size: var(--text-sm);
+  transition: color var(--transition-fast);
+
+  &:hover {
+    color: var(--color-white);
+  }
+}

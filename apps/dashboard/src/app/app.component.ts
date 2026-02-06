@@ -1,4 +1,4 @@
-import { AsyncPipe, TitleCasePipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Route, Router, RouterModule } from '@angular/router';
 import { loadRemoteModule } from '@nx/angular/mf';
@@ -8,7 +8,7 @@ import { Observable, tap } from 'rxjs';
 import { HomeComponent } from './home/home.component';
 
 @Component({
-    imports: [RouterModule, AsyncPipe, TitleCasePipe],
+    imports: [RouterModule, AsyncPipe],
     selector: 'proto-root',
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'

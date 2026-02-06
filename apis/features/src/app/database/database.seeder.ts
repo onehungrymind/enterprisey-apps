@@ -1,37 +1,72 @@
-import { Faker, faker } from '@faker-js/faker';
 import { DataSource, DataSourceOptions, getMetadataArgsStorage } from 'typeorm';
 import {
   Seeder,
   SeederOptions,
   SeederFactoryManager,
   runSeeders,
-  setSeederFactory,
 } from 'typeorm-extension';
 
 import { Feature } from './entities/feature.entity';
 
-const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
-
-export const FeaturesFactory = setSeederFactory(Feature, (faker: Faker) => {
-  const feature = new Feature();
-  feature.slug = faker.word.noun();
-  feature.title = capitalizeFirstLetter(feature.slug);
-  feature.description = faker.lorem.sentence();
-  feature.remote_uri = faker.internet.url();
-  feature.api_uri = faker.lorem.sentences(3);
-  feature.healthy = faker.datatype.boolean();
-
-  return feature;
-});
+/**
+ * Real features for the data pipeline platform.
+ * These map to the Module Federation remotes.
+ */
+const FEATURES: Partial<Feature>[] = [
+  {
+    slug: 'ingress',
+    title: 'Ingress',
+    description: 'Connect and manage data sources. Monitor connection health and discover schemas.',
+    remote_uri: 'http://localhost:4202',
+    api_uri: 'http://localhost:3100/api',
+    healthy: true,
+  },
+  {
+    slug: 'transformation',
+    title: 'Transformation',
+    description: 'Build data pipelines with configurable transform steps. Preview output schemas in real-time.',
+    remote_uri: 'http://localhost:4203',
+    api_uri: 'http://localhost:3200/api',
+    healthy: true,
+  },
+  {
+    slug: 'reporting',
+    title: 'Reporting',
+    description: 'Create dashboards with customizable widgets. Visualize your data with charts and tables.',
+    remote_uri: 'http://localhost:4204',
+    api_uri: 'http://localhost:3300/api',
+    healthy: true,
+  },
+  {
+    slug: 'export',
+    title: 'Export',
+    description: 'Export data in multiple formats. Track job progress and manage scheduled exports.',
+    remote_uri: 'http://localhost:4205',
+    api_uri: 'http://localhost:3400/api',
+    healthy: true,
+  },
+  {
+    slug: 'users',
+    title: 'Users',
+    description: 'Manage user accounts, roles, and permissions.',
+    remote_uri: 'http://localhost:4201',
+    api_uri: 'http://localhost:3500/api',
+    healthy: true,
+  },
+];
 
 export class MainSeeder implements Seeder {
   public async run(
     dataSource: DataSource,
     factoryManager: SeederFactoryManager
   ): Promise<any> {
-    const featuresFactory = factoryManager.get(Feature);
     const featuresRepository = dataSource.getRepository(Feature);
-    const features = await featuresFactory.saveMany(9);
+
+    for (const featureData of FEATURES) {
+      const feature = featuresRepository.create(featureData);
+      await featuresRepository.save(feature);
+      console.log(`Seeded feature: ${feature.title}`);
+    }
   }
 }
 
@@ -41,7 +76,6 @@ const options: DataSourceOptions & SeederOptions = {
   synchronize: true,
   logging: true,
   entities: getMetadataArgsStorage().tables.map((tbl) => tbl.target),
-  factories: [FeaturesFactory],
   seeds: [MainSeeder],
 };
 

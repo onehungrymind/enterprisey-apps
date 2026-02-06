@@ -35,9 +35,14 @@
       "@proto/export-state": ["libs/export-state/src/index.ts"],
       "users/Routes": ["apps/users/src/app/remote-entry/entry.routes.ts"],
       "ingress/Routes": ["apps/ingress/src/app/remote-entry/entry.routes.ts"],
-      "transformation/Routes": ["apps/transformation/src/app/remote-entry/entry.routes.ts"],
-      "reporting/Routes": ["apps/reporting/src/app/remote-entry/entry.routes.ts"],
-      "export/Routes": ["apps/export/src/app/remote-entry/entry.routes.ts"]
+      "transformation/Routes": [
+        "apps/transformation/src/app/remote-entry/entry.routes.ts"
+      ],
+      "reporting/Routes": [
+        "apps/reporting/src/app/remote-entry/entry.routes.ts"
+      ],
+      "export/Routes": ["apps/export/src/app/remote-entry/entry.routes.ts"],
+      "@proto/ui-theme": ["libs/ui-theme/src/index.ts"]
     }
   },
   "ts-node": {

@@ -1,0 +1,127 @@
+// Hero Section
+.hero {
+  text-align: center;
+  padding: var(--space-16) 0 var(--space-12);
+}
+
+.hero-title {
+  font-size: var(--text-6xl);
+  font-weight: var(--font-extrabold);
+  color: var(--color-gray-900);
+  margin-bottom: var(--space-6);
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.2;
+
+  span {
+    color: var(--color-primary);
+  }
+}
+
+.hero-subtitle {
+  font-size: var(--text-xl);
+  color: var(--color-gray-500);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: var(--leading-relaxed);
+}
+
+// Domain Cards Section
+.domains {
+  padding: var(--space-8) 0 var(--space-16);
+}
+
+.domain-card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-8);
+  background: var(--color-white);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+  transition:
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+
+  // Accent bar at top
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-primary-400), var(--color-primary-600));
+  }
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+
+    .domain-icon {
+      transform: scale(1.1);
+    }
+
+    .domain-cta {
+      color: var(--color-primary);
+    }
+  }
+}
+
+.domain-icon {
+  width: 48px;
+  height: 48px;
+  padding: var(--space-3);
+  background: var(--color-primary-50);
+  border-radius: var(--radius-xl);
+  color: var(--color-primary);
+  margin-bottom: var(--space-4);
+  transition: transform var(--transition-normal);
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.domain-title {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  color: var(--color-gray-900);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.domain-description {
+  font-size: var(--text-sm);
+  color: var(--color-gray-500);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+  flex: 1;
+}
+
+.domain-cta {
+  display: inline-block;
+  margin-top: var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-gray-400);
+  transition: color var(--transition-fast);
+}
+
+// Responsive adjustments
+@media (max-width: 1024px) {
+  .hero-title {
+    font-size: var(--text-5xl);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: var(--text-4xl);
+  }
+
+  .hero-subtitle {
+    font-size: var(--text-lg);
+  }
+}

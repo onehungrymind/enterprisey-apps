@@ -4,9 +4,113 @@ A micro-frontend monorepo demonstrating a **data pipeline architecture** built w
 
 ## Architecture Overview
 
+```mermaid
+flowchart TB
+    subgraph Shell["Dashboard Shell :4200"]
+        Router[Router]
+        FeaturesState[Features State]
+    end
+
+    subgraph MicroFrontends["Micro-Frontends (Module Federation)"]
+        direction LR
+        Ingress["🟢 Ingress\n:4202"]
+        Transform["🟡 Transformation\n:4203"]
+        Report["🔵 Reporting\n:4204"]
+        Export["🔴 Export\n:4205"]
+        Users["⚫ Users\n:4201"]
+    end
+
+    subgraph APIs["NestJS APIs"]
+        direction LR
+        FeaturesAPI["Features API\n:3000"]
+        IngressAPI["Ingress API\n:3100"]
+        TransformAPI["Transform API\n:3200"]
+        ReportAPI["Reporting API\n:3300"]
+        ExportAPI["Export API\n:3400"]
+        UsersAPI["Users API\n:3500"]
+    end
+
+    subgraph SharedLibs["Shared Libraries"]
+        direction LR
+        ApiInterfaces[api-interfaces]
+        StateLibs[domain-state libs]
+        DataLibs[domain-data libs]
+        UITheme[ui-theme]
+        Guards[guards]
+    end
+
+    subgraph Storage["SQLite Databases"]
+        direction LR
+        DB1[(features.db)]
+        DB2[(ingress.db)]
+        DB3[(transform.db)]
+        DB4[(reporting.db)]
+        DB5[(export.db)]
+        DB6[(users.db)]
+    end
+
+    %% Shell connections
+    Router -->|"loadRemoteModule()"| MicroFrontends
+    FeaturesState -->|HTTP| FeaturesAPI
+
+    %% Frontend to API connections
+    Ingress -->|HTTP| IngressAPI
+    Transform -->|HTTP| TransformAPI
+    Report -->|HTTP| ReportAPI
+    Export -->|HTTP| ExportAPI
+    Users -->|HTTP| UsersAPI
+
+    %% API to DB connections
+    FeaturesAPI --> DB1
+    IngressAPI --> DB2
+    TransformAPI --> DB3
+    ReportAPI --> DB4
+    ExportAPI --> DB5
+    UsersAPI --> DB6
+
+    %% Cross-domain data flow
+    IngressAPI -.->|"schema"| TransformAPI
+    TransformAPI -.->|"pipeline"| ReportAPI
+    ReportAPI -.->|"query"| ExportAPI
+
+    %% Shared libs usage
+    SharedLibs -.-> MicroFrontends
+    SharedLibs -.-> APIs
 ```
-Ingress --> Transformation --> Reporting --> Export
-(sources)    (pipelines)      (dashboards)   (jobs)
+
+### Data Flow
+
+```mermaid
+flowchart LR
+    subgraph Ingress["🟢 Ingress"]
+        Sources[Data Sources]
+        Schemas[Schemas]
+    end
+
+    subgraph Transformation["🟡 Transformation"]
+        Pipelines[Pipelines]
+        Steps[Transform Steps]
+    end
+
+    subgraph Reporting["🔵 Reporting"]
+        Dashboards[Dashboards]
+        Widgets[Widgets]
+        Queries[Queries]
+    end
+
+    subgraph Export["🔴 Export"]
+        Jobs[Export Jobs]
+        Files[Output Files]
+    end
+
+    Sources -->|"discover"| Schemas
+    Schemas -->|"input schema"| Pipelines
+    Pipelines --> Steps
+    Steps -->|"output schema"| Queries
+    Queries --> Widgets
+    Widgets --> Dashboards
+    Queries -->|"data"| Jobs
+    Jobs -->|"generate"| Files
 ```
 
 The dashboard shell dynamically loads each domain as a Module Federation remote, registered through a features API. Each domain has its own NestJS backend with SQLite persistence and its own Angular frontend with dedicated state management.
@@ -52,31 +156,42 @@ npm install
 
 ### Running Locally
 
-Start a backend and its corresponding frontend:
+Quick start (dashboard + features API):
 
 ```bash
-# Start the features registry (required for dashboard)
-npx nx serve features-api
+npm start
+```
 
-# Start the dashboard shell
-npx nx serve dashboard
+Or start a domain with its backend:
 
-# Start a domain (backend + frontend)
-npx nx serve ingress-api
-npx nx serve ingress
+```bash
+npm run serve:ingress:full        # Ingress API + frontend
+npm run serve:transformation:full # Transformation API + frontend
+npm run serve:reporting:full      # Reporting API + frontend
+npm run serve:export:full         # Export API + frontend
+npm run serve:users:full          # Users API + frontend
+npm run serve:portal:full         # Features API + Portal admin
+```
 
-npx nx serve transformation-api
-npx nx serve transformation
+Individual services:
 
-npx nx serve reporting-api
-npx nx serve reporting
+```bash
+# Frontends
+npm run serve:dashboard
+npm run serve:ingress
+npm run serve:transformation
+npm run serve:reporting
+npm run serve:export
+npm run serve:users
+npm run serve:portal
 
-npx nx serve export-api
-npx nx serve export
-
-# Users domain
-npx nx serve users-api
-npx nx serve users
+# Backends
+npm run serve:features-api
+npm run serve:ingress-api
+npm run serve:transformation-api
+npm run serve:reporting-api
+npm run serve:export-api
+npm run serve:users-api
 ```
 
 ### Docker
@@ -84,20 +199,54 @@ npx nx serve users
 Build and run the full stack:
 
 ```bash
-npm run docker:build-apis      # Build all service images
-npm run docker:run-apis        # Start with docker-compose
+npm run docker:build    # Build all service images
+npm run docker:up       # Start with docker-compose
+npm run docker:down     # Stop all containers
 ```
 
 The cluster will be available at `http://localhost:9000` via Envoy gateway.
 
+### PM2 (Process Manager)
+
+Run all services with a single command, managed by PM2:
+
+```bash
+npm install -g pm2        # First time only
+
+npm run pm2:start         # Start all 12 services
+npm run pm2:status        # View process status table
+npm run pm2:logs          # Aggregated logs (color-coded)
+npm run pm2:stop          # Stop all services
+npm run pm2:delete        # Remove all from PM2
+```
+
+Start only specific services:
+
+```bash
+pm2 start ecosystem.config.js --only features-api,dashboard,ingress-api,ingress
+```
+
+PM2 provides auto-restart on crash, aggregated logs, and easy process management. See `ecosystem.config.js` for the full configuration.
+
 ### E2E Tests (Playwright + Cucumber BDD)
 
 ```bash
-npx playwright install         # First time only
-npx bddgen && npx playwright test
+npx playwright install    # First time only
+npm run e2e               # Run all tests
+npm run e2e:headed        # Run with browser visible
+npm run e2e:ui            # Run with Playwright UI
 ```
 
 Feature files are in `e2e/features/`.
+
+### Seed Data
+
+Populate all databases with sample data:
+
+```bash
+npm run seed              # Seed all databases
+npm run seed:ingress      # Seed only ingress
+```
 
 ## Project Structure
 
