@@ -50,6 +50,13 @@
       </a>
 
       <ui-theme-toggle />
+
+      @if (isAuthenticated()) {
+        <div class="user-menu">
+          <div class="user-avatar">{{ getUserInitials() }}</div>
+          <button class="logout-btn" (click)="logout()">Sign out</button>
+        </div>
+      }
     </div>
   </nav>
 

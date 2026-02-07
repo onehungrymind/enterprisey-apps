@@ -4,6 +4,7 @@ import { Feature } from '@proto/api-interfaces';
 import { FeaturesFacade } from '@proto/features-state';
 import { ThemeService, ThemeToggleComponent, StatusDotComponent } from '@proto/ui-theme';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { AuthFacade } from '@proto/auth-state';
 
 interface FeatureNav {
   id: string;
@@ -21,9 +22,12 @@ interface FeatureNav {
 })
 export class AppComponent implements OnInit, OnDestroy {
   private readonly featuresFacade = inject(FeaturesFacade);
+  private readonly authFacade = inject(AuthFacade);
   protected readonly themeService = inject(ThemeService);
 
   protected readonly features = toSignal(this.featuresFacade.allFeatures$, { initialValue: [] as Feature[] });
+  protected readonly user = toSignal(this.authFacade.user$, { initialValue: null });
+  protected readonly isAuthenticated = toSignal(this.authFacade.isAuthenticated$, { initialValue: false });
   protected readonly currentTime = signal(new Date());
   protected readonly allHealthy = signal(true);
 
@@ -62,5 +66,15 @@ export class AppComponent implements OnInit, OnDestroy {
 
   protected formatTime(date: Date): string {
     return date.toLocaleTimeString('en-US', { hour12: false });
+  }
+
+  protected logout() {
+    this.authFacade.logout();
+  }
+
+  protected getUserInitials(): string {
+    const u = this.user();
+    if (!u) return '?';
+    return `${u.firstName?.[0] || ''}${u.lastName?.[0] || ''}`.toUpperCase() || '?';
   }
 }

@@ -44,7 +44,9 @@
       "export/Routes": ["apps/export/src/app/remote-entry/entry.routes.ts"],
       "@proto/ui-theme": ["libs/ui-theme/src/index.ts"],
       "@proto/health-data": ["libs/health-data/src/index.ts"],
-      "@proto/health-state": ["libs/health-state/src/index.ts"]
+      "@proto/health-state": ["libs/health-state/src/index.ts"],
+      "@proto/auth-state": ["libs/auth-state/src/index.ts"],
+      "@proto/auth-guard": ["libs/auth-guard/src/index.ts"]
     }
   },
   "ts-node": {

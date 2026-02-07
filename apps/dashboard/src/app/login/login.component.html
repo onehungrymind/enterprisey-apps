@@ -1,0 +1,81 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="logo">
+        <div class="logo-mark">E</div>
+        <span class="logo-text">Enterprisey</span>
+      </div>
+      <h1 class="login-title">Welcome back</h1>
+      <p class="login-subtitle">Sign in to your account to continue</p>
+    </div>
+
+    @if (error()) {
+      <div class="error-message">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ error() }}</span>
+      </div>
+    }
+
+    <form (ngSubmit)="onSubmit()" class="login-form">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="email"
+          [ngModel]="email()"
+          (ngModelChange)="email.set($event)"
+          name="email"
+          placeholder="you@example.com"
+          required
+          [disabled]="loading()"
+        />
+        <mat-icon matPrefix>email</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="showPassword() ? 'text' : 'password'"
+          [ngModel]="password()"
+          (ngModelChange)="password.set($event)"
+          name="password"
+          placeholder="Enter your password"
+          required
+          [disabled]="loading()"
+        />
+        <mat-icon matPrefix>lock</mat-icon>
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="togglePasswordVisibility()"
+          [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+        >
+          <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        class="login-button"
+        [disabled]="loading() || !email() || !password()"
+      >
+        @if (loading()) {
+          <mat-spinner diameter="20"></mat-spinner>
+          <span>Signing in...</span>
+        } @else {
+          <span>Sign in</span>
+        }
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <p class="help-text">
+        Demo: <code>Saul24&#64;yahoo.com</code> / <code>password123</code>
+      </p>
+    </div>
+  </div>
+</div>

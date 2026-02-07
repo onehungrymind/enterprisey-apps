@@ -1,0 +1,9 @@
+{
+  "name": "auth-guard",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/auth-guard/src",
+  "prefix": "proto",
+  "tags": [],
+  "projectType": "library",
+  "targets": {}
+}

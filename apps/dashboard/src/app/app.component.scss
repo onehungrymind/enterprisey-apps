@@ -134,6 +134,48 @@
   }
 }
 
+// User Menu
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 8px;
+  border-left: 1px solid var(--border-default);
+  margin-left: 4px;
+}
+
+.user-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent-dashboard);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.logout-btn {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 500;
+  background: transparent;
+  border: 1px solid var(--border-default);
+  color: var(--text-quaternary);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+
+  &:hover {
+    border-color: var(--color-danger);
+    background: var(--color-danger-subtle);
+    color: var(--color-danger);
+  }
+}
+
 // Main Content
 .main-content {
   flex: 1;

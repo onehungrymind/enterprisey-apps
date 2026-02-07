@@ -1,0 +1,9 @@
+{
+  "name": "auth-state",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/auth-state/src",
+  "prefix": "proto",
+  "tags": [],
+  "projectType": "library",
+  "targets": {}
+}
