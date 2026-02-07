@@ -8,14 +8,14 @@ import { HealthComponent } from './health/health.component';
 export const appRoutes: Route[] = [
   {
     path: '',
+    component: HealthComponent,
+  },
+  {
+    path: 'features',
     component: FeaturesComponent,
     providers: [
       provideEffects(FeaturesEffects),
       provideState(FeaturesState.FEATURES_FEATURE_KEY, FeaturesState.reducers),
     ],
-  },
-  {
-    path: 'health',
-    component: HealthComponent,
   },
 ];

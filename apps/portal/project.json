@@ -18,10 +18,12 @@
         "inlineStyleLanguage": "scss",
         "assets": ["apps/portal/src/favicon.ico", "apps/portal/src/assets"],
         "styles": [
-          "@angular/material/prebuilt-themes/indigo-pink.css",
           "apps/portal/src/styles.scss"
         ],
-        "scripts": []
+        "scripts": [],
+        "stylePreprocessorOptions": {
+          "includePaths": ["."]
+        }
       },
       "configurations": {
         "production": {

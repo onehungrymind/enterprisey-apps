@@ -1,11 +1,11 @@
-<div class="flex m-20">
-  <div class="w-1/2 mr-10">
+<div class="features-layout">
+  <div class="features-list-col">
     <proto-features-list
       [features]="(features$ | async)!"
       (selected)="selectFeature($event)"
       (deleted)="deleteFeature($event)"></proto-features-list>
   </div>
-  <div class="w-1/2 ml-10">
+  <div class="features-detail-col">
     <proto-feature-details
       [feature]="selectedFeature$ | async"
       (saved)="saveFeature($event)"

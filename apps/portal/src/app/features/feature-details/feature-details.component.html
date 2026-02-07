@@ -11,44 +11,49 @@
     </mat-card-title>
     <form #form="ngForm" (ngSubmit)="saved.emit(currentFeature)">
       <mat-form-field class="full-width">
+        <mat-label>Title</mat-label>
         <input
           matInput
           placeholder="Enter a title"
           [(ngModel)]="currentFeature.title"
-          type="input"
+          type="text"
           name="title"
           required="true" />
       </mat-form-field>
       <mat-form-field class="full-width">
+        <mat-label>Description</mat-label>
         <input
           matInput
           placeholder="Enter a description"
           [(ngModel)]="currentFeature.description"
-          type="input"
+          type="text"
           name="description" />
       </mat-form-field>
       <mat-form-field class="full-width">
+        <mat-label>Remote URI</mat-label>
         <input
           matInput
           placeholder="Enter the remote URI"
           [(ngModel)]="currentFeature.remote_uri"
-          type="input"
+          type="text"
           name="remote_uri" />
       </mat-form-field>
       <mat-form-field class="full-width">
+        <mat-label>API URI</mat-label>
         <input
           matInput
-          placeholder="Enter a API URI"
+          placeholder="Enter the API URI"
           [(ngModel)]="currentFeature.api_uri"
-          type="input"
+          type="text"
           name="api_uri" />
       </mat-form-field>
       <mat-form-field class="full-width">
+        <mat-label>Slug</mat-label>
         <input
           matInput
           placeholder="Enter a slug"
           [(ngModel)]="currentFeature.slug"
-          type="input"
+          type="text"
           name="slug" />
       </mat-form-field>
       <div class="full-width">

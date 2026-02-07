@@ -1,44 +1,59 @@
-<div class="page">
-  <!-- Header -->
-  <header class="page-header">
-    <div class="container">
-      <div class="header-content">
-        <a routerLink="/" class="logo">
-          <span>Enterprisey</span> Portal
+<div class="shell">
+  <!-- Navigation -->
+  <nav class="nav-bar">
+    <div class="nav-left">
+      <a routerLink="/" class="logo">
+        <div class="logo-mark">P</div>
+        <span class="logo-text">
+          <span class="logo-accent">Enterprisey</span>
+          <span class="logo-sub">Portal</span>
+        </span>
+      </a>
+
+      <div class="nav-links">
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="nav-item"
+          [style.--item-accent]="'var(--accent-portal)'"
+          [style.--item-subtle]="'var(--accent-portal-subtle)'"
+        >
+          Health
         </a>
-        <nav class="header-nav">
-          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">Features</a>
-          <a routerLink="/health" routerLinkActive="active" class="nav-link">Health</a>
-        </nav>
-        <span class="header-badge">Admin</span>
+        <a
+          routerLink="/features"
+          routerLinkActive="active"
+          class="nav-item"
+          [style.--item-accent]="'var(--accent-portal)'"
+          [style.--item-subtle]="'var(--accent-portal-subtle)'"
+        >
+          Features
+        </a>
       </div>
     </div>
-  </header>
+
+    <div class="nav-right">
+      <div class="status-time">
+        <span class="time">{{ formatTime(currentTime()) }}</span>
+      </div>
+
+      <a
+        href="http://localhost:4200"
+        target="_blank"
+        class="dashboard-btn"
+      >
+        Dashboard
+      </a>
+
+      <span class="admin-badge">Admin</span>
+
+      <ui-theme-toggle />
+    </div>
+  </nav>
 
   <!-- Main Content -->
-  <main class="page-content">
-    <div class="container">
-      <router-outlet></router-outlet>
-    </div>
+  <main class="main-content">
+    <router-outlet />
   </main>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-brand">
-          <span class="logo"><span>Enterprisey</span> Portal</span>
-          <p class="footer-tagline">Manage features and configuration</p>
-        </div>
-        <div class="footer-links">
-          <a href="http://localhost:4200" class="footer-link">
-            Dashboard
-          </a>
-          <a href="https://github.com/onehungrymind/enterprisey-apps" target="_blank" class="footer-link">
-            GitHub
-          </a>
-        </div>
-      </div>
-    </div>
-  </footer>
 </div>

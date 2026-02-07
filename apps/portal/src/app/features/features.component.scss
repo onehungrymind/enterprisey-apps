@@ -1,0 +1,16 @@
+.features-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.features-list-col,
+.features-detail-col {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .features-layout {
+    grid-template-columns: 1fr;
+  }
+}

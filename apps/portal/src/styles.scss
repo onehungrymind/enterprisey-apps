@@ -1,57 +1,221 @@
 // Import the shared UI theme
-@import '../../../libs/ui-theme/src/lib/styles/theme';
+@import 'libs/ui-theme/src/lib/styles/theme';
 
-// Set domain theme - purple for admin portal
-:root {
-  @include generate-color-vars('purple');
-}
-
-// Angular Material theme
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
-
-// Tailwind utilities
-@tailwind utilities;
+// ─────────────────────────────────────────────────────────────────────────────
+// Portal App Global Styles
+// ─────────────────────────────────────────────────────────────────────────────
 
 // Ensure the page fills the viewport
 html, body {
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-// Angular Material overrides
+// Set the default accent color for this app (cyan/teal for portal/admin)
+:root {
+  --accent-portal: #22d3d3;
+  --accent-portal-subtle: rgba(34, 211, 211, 0.1);
+  --accent: var(--accent-portal);
+  --accent-subtle: var(--accent-portal-subtle);
+}
+
+// Scrollbar styles
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+// Selection color
+::selection {
+  background: var(--accent-portal);
+  color: var(--text-inverse);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Angular Material Dark Theme Overrides
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Card
 .mat-mdc-card {
-  border-radius: var(--radius-xl) !important;
-  box-shadow: var(--shadow-md) !important;
-}
-
-.mdc-list-item {
-  display: flex !important;
-  border-radius: var(--radius-md);
-  transition: background-color var(--transition-fast);
-}
-
-.mdc-list-item:hover {
-  cursor: pointer !important;
-  background-color: var(--color-gray-50);
-}
-
-.mdc-list-item:not(:first-of-type) {
-  border-top: 1px solid var(--color-border);
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  color: var(--text-primary) !important;
 }
 
 .mat-mdc-card-title {
-  margin: 10px;
+  color: var(--text-primary) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  padding: 16px !important;
+  margin: 0 !important;
+  border-bottom: 1px solid var(--border-default);
 }
 
-.mat-mdc-card-actions {
-  .mdc-button {
-    margin: 10px;
+.mat-mdc-card-content {
+  padding: 0 !important;
+}
+
+// List
+.mat-mdc-list {
+  background: transparent !important;
+  padding: 8px !important;
+}
+
+.mat-mdc-list-item {
+  background: var(--bg-elevated) !important;
+  border-radius: 8px !important;
+  margin-bottom: 6px !important;
+  border: 1px solid var(--border-subtle) !important;
+  transition: all 0.15s ease !important;
+
+  &:hover {
+    background: var(--bg-surface-hover) !important;
+    border-color: var(--border-default) !important;
+    cursor: pointer !important;
+  }
+
+  &:not(:first-of-type) {
+    border-top: 1px solid var(--border-subtle) !important;
+  }
+
+  .mdc-list-item__primary-text {
+    color: var(--text-primary) !important;
+    font-size: 13px !important;
   }
 }
 
+// Form Fields
+.mat-mdc-form-field {
+  width: 100%;
+  margin-bottom: 12px;
+
+  .mdc-text-field {
+    background: var(--bg-input) !important;
+    border-radius: 8px !important;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background: var(--bg-input) !important;
+  }
+
+  // Floating label - always visible
+  .mdc-floating-label,
+  mat-label {
+    color: var(--text-tertiary) !important;
+    font-size: 14px !important;
+  }
+
+  // Label when floated (has value or focused)
+  .mdc-floating-label--float-above {
+    color: var(--accent-portal) !important;
+    transform: translateY(-106%) scale(0.85) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  .mat-mdc-form-field-focus-overlay {
+    background: transparent !important;
+  }
+
+  .mdc-text-field__input {
+    color: var(--text-primary) !important;
+    caret-color: var(--accent-portal) !important;
+  }
+
+  .mdc-line-ripple::before {
+    border-bottom-color: var(--border-default) !important;
+  }
+
+  .mdc-line-ripple::after {
+    border-bottom-color: var(--accent-portal) !important;
+  }
+}
+
+// Buttons
+.mat-mdc-button {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+
+  &.mat-primary {
+    background: var(--accent-portal) !important;
+    color: #fff !important;
+  }
+
+  &:not(.mat-primary) {
+    color: var(--text-secondary) !important;
+    background: var(--bg-input) !important;
+    border: 1px solid var(--border-default) !important;
+
+    &:hover {
+      background: var(--bg-surface-hover) !important;
+    }
+  }
+}
+
+.mat-mdc-icon-button {
+  color: var(--text-tertiary) !important;
+
+  &:hover {
+    background: var(--bg-surface-hover) !important;
+  }
+
+  &[color="warn"] {
+    color: var(--color-danger) !important;
+
+    &:hover {
+      background: var(--color-danger-subtle) !important;
+    }
+  }
+}
+
+// Checkbox
+.mat-mdc-checkbox {
+  .mdc-checkbox__background {
+    border-color: var(--border-strong) !important;
+  }
+
+  &.mat-mdc-checkbox-checked .mdc-checkbox__background {
+    background-color: var(--accent-portal) !important;
+    border-color: var(--accent-portal) !important;
+  }
+
+  .mdc-label {
+    color: var(--text-secondary) !important;
+    font-size: 13px !important;
+  }
+}
+
+// Card Actions
+.mat-mdc-card-actions {
+  padding: 16px !important;
+  border-top: 1px solid var(--border-default) !important;
+  display: flex;
+  gap: 8px;
+}
+
+// Icon
+.mat-icon {
+  color: inherit !important;
+}
+
+// Utility classes
 .full-width {
   width: 100%;
+  padding: 0 16px;
 }
 
 .checkbox-margin {
-  margin: 0 10px;
+  margin: 8px 0 16px;
 }
