@@ -44,6 +44,9 @@ export { WidgetComponent } from './lib/components/widget/widget.component';
 // Action Button Component
 export { ActionButtonComponent } from './lib/components/action-button/action-button.component';
 
+// Confirm Dialog Component
+export { ConfirmDialogComponent } from './lib/components/confirm-dialog/confirm-dialog.component';
+
 // Domain theme configuration
 export type DomainTheme =
   | 'dashboard'

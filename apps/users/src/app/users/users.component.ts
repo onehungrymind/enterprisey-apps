@@ -1,6 +1,6 @@
 import { Component, signal, computed, inject, ChangeDetectionStrategy } from '@angular/core';
-import { ThemeService, ThemeToggleComponent, AvatarComponent, FilterChipComponent, ActionButtonComponent } from '@proto/ui-theme';
-import { User, UserRoleEnum } from '@proto/api-interfaces';
+import { ThemeService, ThemeToggleComponent, AvatarComponent, FilterChipComponent, ActionButtonComponent, ConfirmDialogComponent } from '@proto/ui-theme';
+import { User, UserRoleEnum, Company } from '@proto/api-interfaces';
 import { UsersFacade } from '@proto/users-state';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -8,6 +8,7 @@ import { UsersListComponent } from './users-list/users-list.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { RolesTabComponent } from './roles-tab/roles-tab.component';
 import { AuditTabComponent } from './audit-tab/audit-tab.component';
+import { UserFormComponent } from './user-form/user-form.component';
 
 export type TabId = 'users' | 'roles' | 'audit';
 
@@ -94,6 +95,8 @@ export interface ExtendedUser extends User {
     UserDetailsComponent,
     RolesTabComponent,
     AuditTabComponent,
+    UserFormComponent,
+    ConfirmDialogComponent,
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
@@ -122,12 +125,16 @@ export class UsersComponent {
   // Users from facade
   private readonly rawUsers = toSignal(this.usersFacade.allUsers$, { initialValue: [] as User[] });
 
+  // Companies from facade
+  protected readonly allCompanies = toSignal(this.usersFacade.allCompanies$, { initialValue: [] as Company[] });
+
   // Extended users with additional UI data
   protected readonly users = computed<ExtendedUser[]>(() => {
     const avatarColors = ['#60a5fa', '#34d399', '#fbbf24', '#c084fc', '#f472b6', '#fb923c', '#818cf8', '#f87171', '#94a3b8'];
     const statuses: ('active' | 'inactive' | 'invited')[] = ['active', 'active', 'active', 'active', 'active', 'active', 'active', 'active', 'active', 'inactive', 'invited', 'active'];
     const lastLogins = ['2 min ago', '14 min ago', '1 hour ago', '3 hours ago', '30 min ago', '2 hours ago', '45 min ago', '5 hours ago', '1 day ago', '2 weeks ago', 'Never', '20 min ago'];
     const sessions = [847, 1203, 524, 312, 678, 189, 456, 87, 234, 42, 0, 156];
+    const companiesMap = new Map(this.allCompanies().map(c => [c.id, c.name]));
 
     return this.rawUsers().map((user, index) => ({
       ...user,
@@ -135,7 +142,7 @@ export class UsersComponent {
       lastLogin: lastLogins[index % lastLogins.length],
       sessions: sessions[index % sessions.length],
       avatarColor: avatarColors[index % avatarColors.length],
-      companyName: 'Acme Corp' // Default company name
+      companyName: companiesMap.get(user.company_id) || 'Unknown'
     }));
   });
 
@@ -160,6 +167,14 @@ export class UsersComponent {
     if (!id) return null;
     return this.users().find(u => u.id === id) ?? null;
   });
+
+  // Form modal state
+  protected readonly showUserForm = signal(false);
+  protected readonly editingUser = signal<User | null>(null);
+
+  // Delete confirmation dialog state
+  protected readonly showDeleteConfirm = signal(false);
+  protected readonly deletingUser = signal<User | null>(null);
 
   // Companies for filter
   protected readonly companies = computed(() => {
@@ -189,6 +204,7 @@ export class UsersComponent {
 
   constructor() {
     this.usersFacade.loadUsers();
+    this.usersFacade.loadCompanies();
   }
 
   protected setActiveTab(tab: TabId): void {
@@ -217,5 +233,45 @@ export class UsersComponent {
 
   protected getUserCountByRole(role: UserRoleEnum): number {
     return this.users().filter(u => u.role === role).length;
+  }
+
+  // Form modal handlers
+  protected openInviteForm(): void {
+    this.editingUser.set(null);
+    this.showUserForm.set(true);
+  }
+
+  protected openEditForm(user: User): void {
+    this.editingUser.set(user);
+    this.showUserForm.set(true);
+  }
+
+  protected closeForm(): void {
+    this.showUserForm.set(false);
+    this.editingUser.set(null);
+  }
+
+  protected saveUser(user: User): void {
+    this.usersFacade.saveUser(user);
+    this.closeForm();
+  }
+
+  protected deleteUser(user: User): void {
+    this.deletingUser.set(user);
+    this.showDeleteConfirm.set(true);
+  }
+
+  protected confirmDelete(): void {
+    const user = this.deletingUser();
+    if (user) {
+      this.usersFacade.deleteUser(user);
+      this.selectedUserId.set(null);
+    }
+    this.cancelDelete();
+  }
+
+  protected cancelDelete(): void {
+    this.showDeleteConfirm.set(false);
+    this.deletingUser.set(null);
   }
 }

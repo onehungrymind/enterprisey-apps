@@ -26,7 +26,7 @@
       <div class="header-divider"></div>
 
       <!-- Invite Button -->
-      <ui-action-button variant="primary" (clicked)="null">
+      <ui-action-button variant="primary" (clicked)="openInviteForm()">
         + Invite User
       </ui-action-button>
 
@@ -96,7 +96,11 @@
 
         <!-- User Details Panel -->
         <aside class="details-panel">
-          <proto-user-details [user]="selectedUser()" />
+          <proto-user-details
+            [user]="selectedUser()"
+            (edit)="openEditForm($event)"
+            (delete)="deleteUser($event)"
+          />
         </aside>
       </div>
     }
@@ -113,3 +117,27 @@
     }
   </main>
 </div>
+
+<!-- User Form Modal -->
+@if (showUserForm()) {
+  <proto-user-form
+    [user]="editingUser()"
+    [companies]="allCompanies()"
+    (save)="saveUser($event)"
+    (cancel)="closeForm()"
+  />
+}
+
+<!-- Delete Confirmation Dialog -->
+@if (showDeleteConfirm() && deletingUser(); as user) {
+  <ui-confirm-dialog
+    title="Delete User"
+    [message]="'Are you sure you want to delete this user?'"
+    [details]="user.firstName + ' ' + user.lastName + ' (' + user.email + ')'"
+    confirmLabel="Delete User"
+    cancelLabel="Cancel"
+    confirmVariant="danger"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()"
+  />
+}

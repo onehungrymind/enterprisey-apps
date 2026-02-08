@@ -1,6 +1,6 @@
-import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output, computed } from '@angular/core';
 import { AvatarComponent, ActionButtonComponent } from '@proto/ui-theme';
-import { UserRoleEnum } from '@proto/api-interfaces';
+import { User, UserRoleEnum } from '@proto/api-interfaces';
 import { ExtendedUser, ROLE_CONFIGS } from '../users.component';
 
 @Component({
@@ -13,6 +13,8 @@ import { ExtendedUser, ROLE_CONFIGS } from '../users.component';
 })
 export class UserDetailsComponent {
   readonly user = input<ExtendedUser | null>(null);
+  readonly edit = output<User>();
+  readonly delete = output<User>();
 
   protected readonly roleConfig = computed(() => {
     const u = this.user();
@@ -45,4 +47,18 @@ export class UserDetailsComponent {
       { label: 'Role', value: role.label }
     ];
   });
+
+  protected onEdit(): void {
+    const u = this.user();
+    if (u) {
+      this.edit.emit(u);
+    }
+  }
+
+  protected onDelete(): void {
+    const u = this.user();
+    if (u) {
+      this.delete.emit(u);
+    }
+  }
 }

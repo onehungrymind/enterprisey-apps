@@ -1,9 +1,13 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { User } from '@proto/api-interfaces';
+import { User, Company } from '@proto/api-interfaces';
 
 export const UsersActions = createActionGroup({
   source: 'Users API',
   events: {
+    // Companies
+    'Load Companies': emptyProps(),
+    'Load Companies Success': props<{ companies: Company[] }>(),
+    'Load Companies Failure': props<{ error: any }>(),
     'Logout User': emptyProps(),
     'Login User': props<{ email: string; password: string }>(),
     'Login User Success': props<{ user: User }>(),

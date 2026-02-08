@@ -1,6 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
-import { User } from '@proto/api-interfaces';
+import { User, Company } from '@proto/api-interfaces';
 
 import { UsersActions } from './users.actions';
 
@@ -8,12 +8,16 @@ export interface UsersState extends EntityState<User> {
   selectedId?: string | undefined;
   error?: string | null;
   loaded: boolean;
+  companies: Company[];
+  companiesLoaded: boolean;
 }
 
 export const usersAdapter: EntityAdapter<User> = createEntityAdapter<User>();
 
 export const initialUsersState: UsersState = usersAdapter.getInitialState({
   loaded: false,
+  companies: [],
+  companiesLoaded: false,
 });
 
 const onFailure = (state: UsersState, { error }: any) => {
@@ -23,7 +27,22 @@ const onFailure = (state: UsersState, { error }: any) => {
 
 export const reducer = createReducer(
   initialUsersState,
-  // TBD
+  // Companies
+  on(UsersActions.loadCompanies, (state) => ({
+    ...state,
+    companiesLoaded: false,
+  })),
+  on(UsersActions.loadCompaniesSuccess, (state, { companies }) => ({
+    ...state,
+    companies,
+    companiesLoaded: true,
+  })),
+  on(UsersActions.loadCompaniesFailure, (state, { error }) => ({
+    ...state,
+    error,
+    companiesLoaded: false,
+  })),
+  // Users
   on(UsersActions.loadUsers, (state) => ({
     ...state,
     loaded: false,

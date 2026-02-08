@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { User } from '@proto/api-interfaces';
-import { UsersService } from '@proto/users-data';
+import { User, Company } from '@proto/api-interfaces';
+import { UsersService, CompaniesService } from '@proto/users-data';
 import { of } from 'rxjs';
 import { catchError, exhaustMap, map } from 'rxjs/operators';
 
@@ -109,6 +109,21 @@ export const deleteUser = createEffect(
           catchError((error) => of(UsersActions.deleteUserFailure({ error })))
         );
       })
+    );
+  },
+  { functional: true }
+);
+
+export const loadCompanies = createEffect(
+  (actions$ = inject(Actions), companiesService = inject(CompaniesService)) => {
+    return actions$.pipe(
+      ofType(UsersActions.loadCompanies),
+      exhaustMap(() =>
+        companiesService.all().pipe(
+          map((companies: Company[]) => UsersActions.loadCompaniesSuccess({ companies })),
+          catchError((error) => of(UsersActions.loadCompaniesFailure({ error })))
+        )
+      )
     );
   },
   { functional: true }

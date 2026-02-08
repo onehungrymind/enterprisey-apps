@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Action, Store, select } from '@ngrx/store';
-import { User } from '@proto/api-interfaces';
+import { User, Company } from '@proto/api-interfaces';
 import { UsersActions } from './users.actions';
 import * as UsersSelectors from './users.selectors';
 
@@ -13,6 +13,10 @@ export class UsersFacade {
   loaded$ = this.store.pipe(select(UsersSelectors.getUsersLoaded));
   allUsers$ = this.store.pipe(select(UsersSelectors.getAllUsers));
   selectedUser$ = this.store.pipe(select(UsersSelectors.getSelectedUser));
+
+  // Companies
+  allCompanies$ = this.store.pipe(select(UsersSelectors.getAllCompanies));
+  companiesLoaded$ = this.store.pipe(select(UsersSelectors.getCompaniesLoaded));
 
   login(email:string, password: string) {
     this.dispatch(UsersActions.loginUser({ email, password}));
@@ -36,6 +40,10 @@ export class UsersFacade {
 
   loadUsers() {
     this.dispatch(UsersActions.loadUsers());
+  }
+
+  loadCompanies() {
+    this.dispatch(UsersActions.loadCompanies());
   }
 
   loadUser(userId: string) {

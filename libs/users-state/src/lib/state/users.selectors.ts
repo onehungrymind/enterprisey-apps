@@ -32,3 +32,14 @@ export const getSelectedUser = createSelector(
   getSelectedUserId,
   (entities, selectedId) => selectedId && entities[selectedId]
 );
+
+// Companies selectors
+export const getAllCompanies = createSelector(
+  getUsersSlice,
+  (state: UsersState) => state.companies
+);
+
+export const getCompaniesLoaded = createSelector(
+  getUsersSlice,
+  (state: UsersState) => state.companiesLoaded
+);
