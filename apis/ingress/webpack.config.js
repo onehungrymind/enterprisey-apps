@@ -14,6 +14,18 @@ module.exports = {
       assets: ['./src/assets'],
       optimization: false,
       outputHashing: 'none',
+      externalDependencies: [
+        'pg',
+        'pg-native',
+        'csv-parse',
+        'better-sqlite3',
+        'bindings',
+        '@nestjs/websockets',
+        '@nestjs/websockets/socket-module',
+        '@nestjs/microservices',
+        '@nestjs/microservices/microservices-module',
+        'class-transformer/storage',
+      ],
     }),
   ],
 };

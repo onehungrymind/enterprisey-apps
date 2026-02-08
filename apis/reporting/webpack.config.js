@@ -14,6 +14,15 @@ module.exports = {
       assets: ['./src/assets'],
       optimization: false,
       outputHashing: 'none',
+      externalDependencies: [
+        'better-sqlite3',
+        'bindings',
+        '@nestjs/websockets',
+        '@nestjs/websockets/socket-module',
+        '@nestjs/microservices',
+        '@nestjs/microservices/microservices-module',
+        'class-transformer/storage',
+      ],
     }),
   ],
 };

@@ -1,4 +1,5 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { tokenInterceptor, errorInterceptor } from '@proto/auth-guard';
 import { ApplicationConfig, isDevMode } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
@@ -6,10 +7,11 @@ import {
   withEnabledBlockingInitialNavigation,
 } from '@angular/router';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
-import { provideStore } from '@ngrx/store';
+import { provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideEffects } from '@ngrx/effects';
 import { provideEnvironment } from '@proto/environment';
+import { PipelinesState, PipelinesEffects } from '@proto/transformation-state';
 import { appRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -29,9 +31,11 @@ export const appConfig: ApplicationConfig = {
         },
       }
     ),
+    provideState(PipelinesState.PIPELINES_FEATURE_KEY, PipelinesState.reducers),
+    provideEffects(PipelinesEffects),
     provideRouterStore(),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([tokenInterceptor, errorInterceptor])),
     provideAnimationsAsync(),
     provideEnvironment(),
   ],

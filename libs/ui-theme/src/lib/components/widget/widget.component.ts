@@ -1,14 +1,14 @@
-import { Component, ChangeDetectionStrategy, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
 
 @Component({
   selector: 'ui-widget',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[style.grid-column]': 'gridColumn()',
+  },
   template: `
-    <div
-      class="widget"
-      [style.grid-column]="'span ' + span()"
-    >
+    <div class="widget">
       <div class="header">
         <span class="title">{{ title() }}</span>
         <button type="button" class="menu-btn">⋯</button>
@@ -77,4 +77,5 @@ import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 export class WidgetComponent {
   readonly title = input.required<string>();
   readonly span = input(1);
+  protected readonly gridColumn = computed(() => `span ${this.span()}`);
 }

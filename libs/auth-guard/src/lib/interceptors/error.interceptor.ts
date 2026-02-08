@@ -11,8 +11,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      // Handle 401 Unauthorized
-      if (error.status === 401 && !req.url.includes('/auth/login')) {
+      // Handle 401 Unauthorized or 403 Forbidden
+      if ((error.status === 401 || error.status === 403) && !req.url.includes('/auth/login')) {
         // Clear stored auth data
         localStorage.removeItem(AUTH_TOKEN_KEY);
         localStorage.removeItem(AUTH_USER_KEY);

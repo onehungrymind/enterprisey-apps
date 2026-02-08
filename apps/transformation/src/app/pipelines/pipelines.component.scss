@@ -1,8 +1,4 @@
-:host {
-  display: block;
-  height: 100vh;
-  overflow: hidden;
-}
+:host { display: block; height: 100vh; overflow: hidden; }
 
 .shell {
   height: 100vh;
@@ -10,15 +6,9 @@
   flex-direction: column;
   background: var(--bg-root);
   color: var(--text-primary);
-  transition: background 0.4s, color 0.4s;
 }
 
-// Header actions
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+.header-actions { display: flex; align-items: center; gap: 10px; }
 
 .history-btn {
   padding: 7px 14px;
@@ -30,81 +20,88 @@
   border: 1px solid var(--border-default);
   color: var(--text-tertiary);
   font-family: 'DM Sans', sans-serif;
-  transition: all 0.15s;
   display: flex;
   align-items: center;
   gap: 6px;
-
-  .icon {
-    font-size: 13px;
-  }
-
-  &:hover {
-    border-color: var(--border-strong);
-  }
-
-  &.active {
-    background: var(--accent-subtle);
-    border-color: var(--border-strong);
-    color: var(--accent);
-  }
+  .icon { font-size: 13px; }
+  &:hover { border-color: var(--border-strong); }
+  &.active { background: var(--accent-subtle); border-color: var(--border-strong); color: var(--accent); }
 }
 
-// Main Layout
-.main-layout {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
-}
+.stacked-layout { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
-// Canvas Area
-.canvas-area {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
+.canvas-section { flex: 35; display: flex; flex-direction: column; overflow: hidden; min-height: 200px; }
 
 .pipeline-header {
-  padding: 10px 20px;
+  padding: 12px 24px;
   border-bottom: 1px solid var(--border-subtle);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--nav-bg);
-  transition: background 0.4s;
+  background: var(--bg-surface);
+  flex-shrink: 0;
 }
 
-.pipeline-info {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
+.pipeline-info { display: flex; align-items: center; gap: 16px; }
+.pipeline-name { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+.pipeline-stats { display: flex; gap: 20px; font-size: 11px; color: var(--text-quaternary); font-family: 'JetBrains Mono', monospace; }
+.empty-canvas { flex: 1; display: flex; align-items: center; justify-content: center; color: var(--text-ghost); font-size: 14px; }
 
-.pipeline-name {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text-primary);
-}
+.panels-strip { flex: 65; min-height: 300px; display: flex; border-top: 1px solid var(--border-default); background: var(--bg-surface); overflow: hidden; }
+.panel-col { display: flex; flex-direction: column; overflow: hidden; }
+.pipeline-list-col { width: 280px; flex-shrink: 0; border-right: 1px solid var(--border-default); }
+.step-details-col { flex: 1; min-width: 0; padding: 16px 24px; overflow: auto; }
 
-.pipeline-stats {
-  display: flex;
-  gap: 16px;
-  font-size: 10px;
-  color: var(--text-quaternary);
-  font-family: 'JetBrains Mono', monospace;
+.step-details-content { display: flex; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+.step-header-info { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 
-  .stat {
-    display: flex;
-    align-items: center;
-  }
-}
-
-.empty-canvas {
-  flex: 1;
+.step-icon {
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  background: var(--bg-surface-hover);
+  border: 1px solid var(--border-default);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-ghost);
-  font-size: 12px;
+  font-size: 18px;
+  color: var(--accent);
+}
+
+.step-meta {
+  .step-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+  .step-type { font-size: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; }
+}
+
+.step-config {
+  flex: 1; min-width: 200px; max-width: 320px;
+  .config-label { font-size: 9px; color: var(--text-quaternary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; font-weight: 600; }
+  .config-code { background: var(--bg-code); border-radius: 6px; border: 1px solid var(--border-default); padding: 10px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-secondary); line-height: 1.6; white-space: pre-wrap; max-height: 100px; overflow: auto; }
+}
+
+.step-metrics {
+  display: flex; gap: 12px; flex-shrink: 0;
+  .metric { background: var(--bg-root); border: 1px solid var(--border-default); border-radius: 6px; padding: 8px 12px; min-width: 80px; }
+  .metric-label { font-size: 8px; color: var(--text-quaternary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+  .metric-value { font-size: 14px; font-weight: 700; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace; }
+}
+
+.step-actions {
+  display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;
+  .action-btn { padding: 8px 14px; border-radius: 6px; font-size: 11px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
+  .action-btn.primary { background: var(--accent-subtle); border: 1px solid var(--accent); color: var(--accent); }
+  .action-btn.secondary { background: var(--bg-surface-hover); border: 1px solid var(--border-default); color: var(--text-tertiary); }
+  .action-btn:hover { filter: brightness(1.1); }
+}
+
+.empty-step-details { display: flex; align-items: center; justify-content: center; height: 100%; color: var(--text-ghost); font-size: 12px; text-align: center; line-height: 1.6; }
+
+.add-step-col { width: 130px; flex-shrink: 0; border-left: 1px solid var(--border-default); padding: 16px; background: var(--bg-root); }
+.add-step-header { font-size: 10px; font-weight: 600; color: var(--text-quaternary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+.add-step-buttons { display: flex; flex-direction: column; gap: 6px; }
+
+.add-step-btn {
+  padding: 8px 10px; border-radius: 6px; background: var(--bg-surface); border: 1px solid var(--border-default);
+  display: flex; align-items: center; gap: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--text-tertiary);
+  .icon { font-size: 12px; color: var(--accent); }
+  &:hover { background: var(--bg-surface-hover); border-color: var(--border-strong); }
 }

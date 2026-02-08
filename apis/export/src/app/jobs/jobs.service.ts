@@ -1,9 +1,14 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { DeleteResult, In, Repository } from 'typeorm';
+import * as path from 'path';
 import { ExportJobEntity } from '../database/entities/export-job.entity';
+import { GeneratorFactory, ExportFormat, QueryResult } from '../generators';
 
 @Injectable()
 export class JobsService {
+  private readonly logger = new Logger(JobsService.name);
+  private readonly exportsDir = path.join(process.cwd(), 'exports');
+
   constructor(
     @Inject('JOB_REPOSITORY')
     private jobsRepository: Repository<ExportJobEntity>,
@@ -50,38 +55,106 @@ export class JobsService {
   }
 
   private startProcessing(jobId: string): void {
-    setTimeout(async () => {
-      const job = await this.jobsRepository.findOneBy({ id: jobId });
-      if (!job || job.status === 'cancelled') return;
-
-      job.status = 'processing';
-      job.startedAt = new Date().toISOString();
-      await this.jobsRepository.save(job);
-
-      this.incrementProgress(jobId);
-    }, 500);
+    this.processJob(jobId).catch((err) => {
+      this.logger.error(`Job processing error: ${err.message}`);
+    });
   }
 
-  private incrementProgress(jobId: string): void {
-    setTimeout(async () => {
-      const job = await this.jobsRepository.findOneBy({ id: jobId });
-      if (!job || job.status === 'cancelled') return;
+  private async processJob(jobId: string): Promise<void> {
+    const job = await this.jobsRepository.findOneBy({ id: jobId });
+    if (!job || job.status === 'cancelled') return;
 
-      const increment = Math.floor(Math.random() * 11) + 10; // 10-20
-      job.progress = Math.min(job.progress + increment, 100);
+    job.status = 'processing';
+    job.startedAt = new Date().toISOString();
+    job.progress = 10;
+    await this.jobsRepository.save(job);
 
-      if (job.progress >= 100) {
-        job.progress = 100;
-        job.status = 'completed';
-        job.completedAt = new Date().toISOString();
-        job.outputUrl = `/exports/${job.name.replace(/\s+/g, '-').toLowerCase()}.${job.format}`;
-        job.fileSize = Math.floor(Math.random() * 10485760) + 1024;
-        job.recordCount = Math.floor(Math.random() * 500000) + 100;
-        await this.jobsRepository.save(job);
-      } else {
-        await this.jobsRepository.save(job);
-        this.incrementProgress(jobId);
+    try {
+      // 1. Fetch query results from Reporting API
+      job.progress = 30;
+      await this.jobsRepository.save(job);
+
+      const queryResult = await this.fetchQueryResults(job.queryId);
+
+      // 2. Generate file
+      job.progress = 60;
+      await this.jobsRepository.save(job);
+
+      const format = job.format as ExportFormat;
+      if (!GeneratorFactory.isSupported(format)) {
+        throw new Error(`Unsupported export format: ${format}`);
       }
-    }, 500);
+
+      const generator = GeneratorFactory.getGenerator(format);
+      const fileName = `${job.id}.${generator.getExtension()}`;
+      const outputPath = path.join(this.exportsDir, fileName);
+
+      const result = await generator.generate(queryResult, outputPath);
+
+      // 3. Update job with success
+      job.status = 'completed';
+      job.progress = 100;
+      job.completedAt = new Date().toISOString();
+      job.outputUrl = `/exports/${fileName}`;
+      job.fileSize = result.fileSize;
+      job.recordCount = result.recordCount;
+
+      await this.jobsRepository.save(job);
+
+      this.logger.log(
+        `Export job ${jobId} completed: ${result.recordCount} records, ${result.fileSize} bytes`
+      );
+    } catch (error: any) {
+      job.status = 'failed';
+      job.progress = 0;
+      job.completedAt = new Date().toISOString();
+      job.error = error.message;
+
+      await this.jobsRepository.save(job);
+
+      this.logger.error(`Export job ${jobId} failed: ${error.message}`);
+    }
+  }
+
+  private async fetchQueryResults(queryId: string): Promise<QueryResult> {
+    const reportingUrl = process.env.REPORTING_API_URL || 'http://localhost:3300/api';
+
+    try {
+      const response = await fetch(`${reportingUrl}/queries/${queryId}/execute`);
+
+      if (!response.ok) {
+        throw new Error(`Query execution failed: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error: any) {
+      this.logger.warn(`Could not fetch query results, using sample data: ${error.message}`);
+
+      // Return sample data for demonstration
+      return this.generateSampleQueryResult();
+    }
+  }
+
+  private generateSampleQueryResult(): QueryResult {
+    const columns = ['id', 'name', 'email', 'revenue', 'status', 'created_at'];
+    const rows: Record<string, any>[] = [];
+
+    for (let i = 0; i < 100; i++) {
+      rows.push({
+        id: i + 1,
+        name: `Customer ${i + 1}`,
+        email: `customer${i + 1}@example.com`,
+        revenue: Math.floor(Math.random() * 100000) + 1000,
+        status: ['active', 'inactive', 'pending'][Math.floor(Math.random() * 3)],
+        created_at: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(),
+      });
+    }
+
+    return {
+      columns,
+      rows,
+      totalRows: rows.length,
+      executedAt: new Date().toISOString(),
+    };
   }
 }

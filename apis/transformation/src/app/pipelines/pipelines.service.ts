@@ -1,11 +1,15 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { DeleteResult, Repository } from 'typeorm';
 import { PipelineEntity } from '../database/entities/pipeline.entity';
 import { PipelineRunEntity } from '../database/entities/pipeline-run.entity';
 import { StepsService } from '../steps/steps.service';
+import { PipelineExecutor } from '../engine';
 
 @Injectable()
 export class PipelinesService {
+  private readonly logger = new Logger(PipelinesService.name);
+  private readonly executor = new PipelineExecutor();
+
   constructor(
     @Inject('PIPELINE_REPOSITORY')
     private pipelinesRepository: Repository<PipelineEntity>,
@@ -44,6 +48,7 @@ export class PipelinesService {
 
   async run(id: string): Promise<PipelineRunEntity> {
     const pipeline = await this.get(id);
+    const steps = await this.stepsService.findByPipelineId(pipeline.id);
 
     const run = new PipelineRunEntity();
     run.pipelineId = pipeline.id;
@@ -54,26 +59,64 @@ export class PipelinesService {
 
     const savedRun = await this.runsRepository.save(run);
 
-    // Simulate async processing
-    setTimeout(async () => {
-      const success = Math.random() > 0.2;
-      savedRun.status = success ? 'completed' : 'failed';
-      savedRun.completedAt = new Date().toISOString();
-      savedRun.recordsProcessed = success ? Math.floor(Math.random() * 10000) + 100 : 0;
-      if (!success) {
-        savedRun.errors = [`Pipeline run failed at step ${Math.floor(Math.random() * 3) + 1}`];
-      }
-      await this.runsRepository.save(savedRun);
-
-      // Update pipeline lastRunAt
-      pipeline.lastRunAt = new Date().toISOString();
-      if (!success) {
-        pipeline.status = 'error';
-      }
-      await this.pipelinesRepository.save(pipeline);
-    }, 2000);
+    // Execute pipeline asynchronously
+    this.executePipeline(pipeline, steps || [], savedRun).catch((err) => {
+      this.logger.error(`Pipeline execution error: ${err.message}`);
+    });
 
     return savedRun;
+  }
+
+  private async executePipeline(
+    pipeline: PipelineEntity,
+    steps: any[],
+    run: PipelineRunEntity
+  ): Promise<void> {
+    try {
+      const result = await this.executor.execute(
+        pipeline.id,
+        pipeline.sourceId,
+        steps.map((s) => ({
+          id: s.id,
+          pipelineId: s.pipelineId,
+          order: s.order,
+          type: s.type,
+          config: s.config,
+          inputSchema: s.inputSchema,
+          outputSchema: s.outputSchema,
+        }))
+      );
+
+      run.status = result.success ? 'completed' : 'failed';
+      run.completedAt = new Date().toISOString();
+      run.recordsProcessed = result.recordsProcessed;
+
+      if (!result.success) {
+        run.errors = [result.error || 'Unknown error'];
+        pipeline.status = 'error';
+      } else {
+        pipeline.status = 'active';
+      }
+
+      pipeline.lastRunAt = new Date().toISOString();
+
+      await this.runsRepository.save(run);
+      await this.pipelinesRepository.save(pipeline);
+
+      this.logger.log(
+        `Pipeline ${pipeline.id} execution ${result.success ? 'completed' : 'failed'}: ` +
+        `${result.recordsProcessed} records in ${result.executionTimeMs}ms`
+      );
+    } catch (error: any) {
+      run.status = 'failed';
+      run.completedAt = new Date().toISOString();
+      run.errors = [error.message];
+      pipeline.status = 'error';
+      pipeline.lastRunAt = new Date().toISOString();
+
+      await this.runsRepository.save(run);
+      await this.pipelinesRepository.save(pipeline);
+    }
   }
 
   async preview(id: string): Promise<{ name: string; type: string; nullable: boolean; sampleValues: string[] }[]> {

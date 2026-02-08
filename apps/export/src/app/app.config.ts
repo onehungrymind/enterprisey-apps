@@ -1,4 +1,5 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { tokenInterceptor, errorInterceptor } from '@proto/auth-guard';
 import { ApplicationConfig, isDevMode } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
@@ -31,7 +32,7 @@ export const appConfig: ApplicationConfig = {
     ),
     provideRouterStore(),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([tokenInterceptor, errorInterceptor])),
     provideAnimationsAsync(),
     provideEnvironment(),
   ],

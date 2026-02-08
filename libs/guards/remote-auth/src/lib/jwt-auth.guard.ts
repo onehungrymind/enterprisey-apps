@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import * as process from 'process';
 
-const auth_url = process.env['AUTH_URL'] || 'http://localhost:3400';
+const auth_url = process.env['AUTH_URL'] || 'http://localhost:3500';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {

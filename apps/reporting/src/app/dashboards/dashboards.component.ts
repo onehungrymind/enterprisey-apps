@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, signal, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, computed, inject, OnInit } from '@angular/core';
 import {
   ThemeService,
   ThemeToggleComponent,
@@ -6,7 +6,7 @@ import {
   FilterChipComponent,
   ActionButtonComponent,
 } from '@proto/ui-theme';
-import { inject } from '@angular/core';
+import { DashboardsStore } from '@proto/reporting-state';
 
 import { DashboardListComponent, DashboardItem } from './dashboard-list/dashboard-list.component';
 import { DashboardViewerComponent } from './dashboard-viewer/dashboard-viewer.component';
@@ -56,7 +56,7 @@ type DateRange = '7d' | '30d' | '90d' | '12m';
         <aside class="sidebar">
           <proto-dashboard-list
             [dashboards]="dashboards()"
-            [activeDashboardId]="activeDashboardId()"
+            [activeDashboardId]="activeDashboardId() ?? ''"
             [loading]="loading()"
             (selected)="selectDashboard($event)"
           />
@@ -64,7 +64,9 @@ type DateRange = '7d' | '30d' | '90d' | '12m';
 
         <!-- Content Area -->
         <main class="content">
-          <proto-dashboard-viewer [dashboardId]="activeDashboardId()" />
+          @if (activeDashboardId(); as dashboardId) {
+            <proto-dashboard-viewer [dashboardId]="dashboardId" />
+          }
         </main>
       </div>
     </div>
@@ -122,24 +124,27 @@ type DateRange = '7d' | '30d' | '90d' | '12m';
     }
   `]
 })
-export class DashboardsComponent {
+export class DashboardsComponent implements OnInit {
   protected readonly themeService = inject(ThemeService);
+  protected readonly store = inject(DashboardsStore);
 
   // State
-  protected readonly loading = signal(false);
-  protected readonly activeDashboardId = signal('db-001');
+  protected readonly loading = computed(() => this.store.loading());
+  protected readonly activeDashboardId = signal<string | null>(null);
   protected readonly selectedRange = signal<DateRange>('12m');
 
   // Date range options
   protected readonly dateRanges: DateRange[] = ['7d', '30d', '90d', '12m'];
 
-  // Mock dashboard data
-  protected readonly dashboards = signal<DashboardItem[]>([
-    { id: 'db-001', name: 'Revenue Overview', widgets: 8, updatedAt: '2 min ago' },
-    { id: 'db-002', name: 'Customer Health', widgets: 6, updatedAt: '1 hour ago' },
-    { id: 'db-003', name: 'Developer Activity', widgets: 5, updatedAt: '15 min ago' },
-    { id: 'db-004', name: 'Pipeline Performance', widgets: 4, updatedAt: '30 min ago' },
-  ]);
+  // Dashboard data from store, mapped to DashboardItem format
+  protected readonly dashboards = computed<DashboardItem[]>(() => {
+    return this.store.entities().map(d => ({
+      id: d.id,
+      name: d.name,
+      widgets: d.widgets?.length || 0,
+      updatedAt: this.formatRelativeTime(d),
+    }));
+  });
 
   // Selected dashboard
   protected readonly selectedDashboard = computed(() => {
@@ -147,8 +152,17 @@ export class DashboardsComponent {
     return this.dashboards().find(d => d.id === id);
   });
 
+  ngOnInit(): void {
+    // Auto-select first dashboard when entities load
+    const entities = this.store.entities();
+    if (entities.length && !this.activeDashboardId()) {
+      this.activeDashboardId.set(entities[0].id);
+    }
+  }
+
   protected selectDashboard(id: string): void {
     this.activeDashboardId.set(id);
+    this.store.select(id);
   }
 
   protected selectRange(range: DateRange): void {
@@ -156,7 +170,11 @@ export class DashboardsComponent {
   }
 
   protected createDashboard(): void {
-    // TODO: Implement dashboard creation
     console.log('Create new dashboard');
+  }
+
+  private formatRelativeTime(dashboard: { id: string }): string {
+    // For now return a placeholder - in production, would use dashboard.updatedAt
+    return 'Recently';
   }
 }

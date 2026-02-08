@@ -1,8 +1,13 @@
-import { Component, ChangeDetectionStrategy, input, signal, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, signal, computed, inject, effect } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { of, switchMap, catchError } from 'rxjs';
 import {
   WidgetComponent,
   MetricCardComponent,
 } from '@proto/ui-theme';
+import { DashboardsStore } from '@proto/reporting-state';
+import { WidgetsService, QueriesService } from '@proto/reporting-data';
+import { Widget } from '@proto/api-interfaces';
 import {
   AreaChartComponent,
   DonutChartComponent,
@@ -84,9 +89,7 @@ import {
     </div>
   `,
   styles: [`
-    :host {
-      display: block;
-    }
+    :host { display: block; }
 
     .metrics-grid {
       display: grid;
@@ -98,61 +101,77 @@ import {
     .widget-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: masonry;
       gap: 12px;
-      grid-auto-rows: minmax(200px, auto);
+      align-items: start;
     }
 
-    .centered {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-    }
-
-    .animate-fade-up {
-      animation: fadeUp 0.4s ease both;
-    }
-
+    .centered { display: flex; align-items: center; justify-content: center; height: 100%; }
+    .animate-fade-up { animation: fadeUp 0.4s ease both; }
     @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @media (max-width: 1400px) {
-      .metrics-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .widget-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .widget-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 900px) {
-      .metrics-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .widget-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .widget-grid > * {
-        grid-column: span 1 !important;
-      }
+      .metrics-grid { grid-template-columns: 1fr; }
+      .widget-grid { grid-template-columns: 1fr; }
+      .widget-grid > * { grid-column: span 1 !important; }
     }
   `]
 })
 export class DashboardViewerComponent {
   readonly dashboardId = input<string>();
 
-  // Metrics data
+  private readonly store = inject(DashboardsStore);
+  private readonly widgetsService = inject(WidgetsService);
+  private readonly queriesService = inject(QueriesService);
+
+  // Widgets from API
+  protected readonly widgets = signal<Widget[]>([]);
+  protected readonly loading = signal(false);
+
+  constructor() {
+    // Load widgets when dashboardId changes
+    effect(() => {
+      const id = this.dashboardId();
+      if (id) {
+        this.loadWidgets(id);
+      }
+    });
+  }
+
+  private async loadWidgets(dashboardId: string) {
+    this.loading.set(true);
+    try {
+      const widgets = await new Promise<Widget[]>((resolve, reject) => {
+        this.widgetsService.allForDashboard(dashboardId).subscribe({
+          next: resolve,
+          error: reject,
+        });
+      });
+      this.widgets.set(widgets);
+    } catch (error) {
+      console.error('Failed to load widgets:', error);
+      this.widgets.set([]);
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  // Dashboard from store
+  protected readonly currentDashboard = computed(() => {
+    const id = this.dashboardId();
+    if (!id) return null;
+    return this.store.entities().find(d => d.id === id) || null;
+  });
+
+  // Metrics data - fallback to default when no API data available
   protected readonly metrics = signal([
     {
       label: 'Monthly Revenue',

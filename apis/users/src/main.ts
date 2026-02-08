@@ -18,7 +18,7 @@ const configureSwagger = (app) => {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
-  const port = process.env.PORT || 3400;
+  const port = process.env.PORT || 3500;
 
   app.enableCors();
   app.setGlobalPrefix(globalPrefix);

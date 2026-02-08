@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { UsersService } from '@proto/users-data';
@@ -9,12 +9,17 @@ import { AuthActions } from './auth.actions';
 const AUTH_TOKEN_KEY = 'auth_token';
 const AUTH_USER_KEY = 'auth_user';
 
-export const login = createEffect(
-  (actions$ = inject(Actions), usersService = inject(UsersService)) => {
-    return actions$.pipe(
+@Injectable()
+export class AuthEffects {
+  private actions$ = inject(Actions);
+  private usersService = inject(UsersService);
+  private router = inject(Router);
+
+  login$ = createEffect(() =>
+    this.actions$.pipe(
       ofType(AuthActions.login),
       exhaustMap(({ email, password }) =>
-        usersService.login(email, password).pipe(
+        this.usersService.login(email, password).pipe(
           map((response: any) => {
             const { user, access_token } = response;
             // Store in localStorage
@@ -27,41 +32,35 @@ export const login = createEffect(
           )
         )
       )
-    );
-  },
-  { functional: true }
-);
+    )
+  );
 
-export const loginSuccess = createEffect(
-  (actions$ = inject(Actions), router = inject(Router)) => {
-    return actions$.pipe(
-      ofType(AuthActions.loginSuccess),
-      tap(() => {
-        router.navigate(['/']);
-      })
-    );
-  },
-  { functional: true, dispatch: false }
-);
+  loginSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.loginSuccess),
+        tap(() => {
+          // Use replaceUrl to avoid view transition conflicts
+          this.router.navigate(['/'], { replaceUrl: true });
+        })
+      ),
+    { dispatch: false }
+  );
 
-export const logout = createEffect(
-  (actions$ = inject(Actions), router = inject(Router)) => {
-    return actions$.pipe(
+  logout$ = createEffect(() =>
+    this.actions$.pipe(
       ofType(AuthActions.logout),
       tap(() => {
         localStorage.removeItem(AUTH_TOKEN_KEY);
         localStorage.removeItem(AUTH_USER_KEY);
-        router.navigate(['/login']);
+        this.router.navigate(['/login'], { replaceUrl: true });
       }),
       map(() => AuthActions.logoutComplete())
-    );
-  },
-  { functional: true }
-);
+    )
+  );
 
-export const checkAuth = createEffect(
-  (actions$ = inject(Actions)) => {
-    return actions$.pipe(
+  checkAuth$ = createEffect(() =>
+    this.actions$.pipe(
       ofType(AuthActions.checkAuth),
       map(() => {
         const token = localStorage.getItem(AUTH_TOKEN_KEY);
@@ -77,7 +76,6 @@ export const checkAuth = createEffect(
         }
         return AuthActions.checkAuthFailure();
       })
-    );
-  },
-  { functional: true }
-);
+    )
+  );
+}

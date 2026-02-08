@@ -17,21 +17,13 @@
     </div>
   </ui-page-header>
 
-  <!-- Main Layout -->
-  <div class="main-layout">
-    <!-- Left Sidebar: Pipeline List -->
-    <proto-pipeline-sidebar
-      [pipelines]="pipelines()"
-      [selectedId]="selectedPipelineId()"
-      (pipelineSelected)="selectPipeline($event)"
-      (searchChanged)="onSearch($event)"
-    />
-
-    <!-- Center: Canvas or Run History -->
-    @if (showRunHistory()) {
-      <proto-run-history-panel [runs]="runHistory()" />
-    } @else {
-      <div class="canvas-area">
+  <!-- Stacked Layout -->
+  <div class="stacked-layout">
+    <!-- Top: Full-width Canvas -->
+    <div class="canvas-section">
+      @if (showRunHistory()) {
+        <proto-run-history-panel [runs]="runHistory()" />
+      } @else {
         <!-- Pipeline Header Bar -->
         @if (currentPipeline(); as pipeline) {
           <div class="pipeline-header">
@@ -63,16 +55,76 @@
             @if (currentPipeline()?.status === 'draft') {
               <span>This pipeline has no steps yet.</span>
             } @else {
-              <span>No visual data available.</span>
+              <span>Select a pipeline to view its flow.</span>
             }
           </div>
         }
-      </div>
-    }
+      }
+    </div>
 
-    <!-- Right Panel: Step Inspector -->
+    <!-- Bottom: Three Column Panel -->
     @if (!showRunHistory()) {
-      <proto-step-inspector [step]="selectedStep()" />
+      <div class="panels-strip">
+        <!-- Column 1: Pipeline List -->
+        <div class="panel-col pipeline-list-col">
+          <proto-pipeline-sidebar
+            [pipelines]="pipelines()"
+            [selectedId]="selectedPipelineId()"
+            (pipelineSelected)="selectPipeline($event)"
+            (searchChanged)="onSearch($event)"
+          />
+        </div>
+
+        <!-- Column 2: Step Details -->
+        <div class="panel-col step-details-col">
+          @if (selectedStep(); as step) {
+            <div class="step-details-content">
+              <div class="step-header-info">
+                <div class="step-icon">{{ getStepIcon(step.type) }}</div>
+                <div class="step-meta">
+                  <div class="step-name">{{ step.name }}</div>
+                  <div class="step-type">{{ step.type | uppercase }} STEP</div>
+                </div>
+              </div>
+              <div class="step-config">
+                <div class="config-label">Configuration</div>
+                <div class="config-code">{{ step.config }}</div>
+              </div>
+              <div class="step-metrics">
+                <div class="metric">
+                  <div class="metric-label">Input Records</div>
+                  <div class="metric-value">{{ formatRecords(step.records) }}</div>
+                </div>
+                <div class="metric">
+                  <div class="metric-label">Avg Duration</div>
+                  <div class="metric-value">---</div>
+                </div>
+              </div>
+              <div class="step-actions">
+                <button class="action-btn primary">Edit Step</button>
+                <button class="action-btn secondary">Preview Data</button>
+              </div>
+            </div>
+          } @else {
+            <div class="empty-step-details">
+              Click a node to<br />inspect configuration
+            </div>
+          }
+        </div>
+
+        <!-- Column 3: Add Step -->
+        <div class="panel-col add-step-col">
+          <div class="add-step-header">Add Step</div>
+          <div class="add-step-buttons">
+            <button class="add-step-btn"><span class="icon">&#8856;</span> Filter</button>
+            <button class="add-step-btn"><span class="icon">&#8674;</span> Map</button>
+            <button class="add-step-btn"><span class="icon">&#931;</span> Aggregate</button>
+            <button class="add-step-btn"><span class="icon">&#8904;</span> Join</button>
+            <button class="add-step-btn"><span class="icon">&#8597;</span> Sort</button>
+            <button class="add-step-btn"><span class="icon">&#8860;</span> Dedupe</button>
+          </div>
+        </div>
+      </div>
     }
   </div>
 </div>

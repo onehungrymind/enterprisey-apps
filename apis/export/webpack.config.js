@@ -14,6 +14,16 @@ module.exports = {
       assets: ['./src/assets'],
       optimization: false,
       outputHashing: 'none',
+      externalDependencies: [
+        'csv-writer',
+        'better-sqlite3',
+        'bindings',
+        '@nestjs/websockets',
+        '@nestjs/websockets/socket-module',
+        '@nestjs/microservices',
+        '@nestjs/microservices/microservices-module',
+        'class-transformer/storage',
+      ],
     }),
   ],
 };

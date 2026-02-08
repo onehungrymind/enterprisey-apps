@@ -1,5 +1,8 @@
 import { Component, ChangeDetectionStrategy, signal, computed, OnInit, OnDestroy, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { PageHeaderComponent, ThemeToggleComponent, ActionButtonComponent, ThemeService } from '@proto/ui-theme';
+import { SourcesFacade } from '@proto/ingress-state';
+import { DataSource } from '@proto/api-interfaces';
 import { SourceListComponent } from './source-list/source-list.component';
 import { SourceDetailComponent } from './source-detail/source-detail.component';
 import { ThroughputChartComponent, ThroughputDataPoint } from './throughput-chart/throughput-chart.component';
@@ -157,152 +160,21 @@ import { SourceData } from './source-card/source-card.component';
 })
 export class SourcesComponent implements OnInit, OnDestroy {
   protected readonly themeService = inject(ThemeService);
+  private readonly sourcesFacade = inject(SourcesFacade);
 
   protected readonly currentTime = signal(new Date());
-  protected readonly selectedId = signal<string | null>('ds-001');
+  protected readonly selectedId = signal<string | null>(null);
 
   private timeInterval?: ReturnType<typeof setInterval>;
 
-  // Mock data from the design file
-  protected readonly sources = signal<SourceData[]>([
-    {
-      id: 'ds-001',
-      name: 'Production PostgreSQL',
-      type: 'database',
-      host: 'db-prod-us-east.rds.amazonaws.com',
-      status: 'connected',
-      lastSync: '2 min ago',
-      nextSync: '58 min',
-      frequency: 'Hourly',
-      recordsIngested: 2_847_392,
-      tablesDiscovered: 47,
-      schemaVersion: 3,
-      errorRate: 0.02,
-      avgLatency: 124,
-      uptime: 99.97,
-      fields: [
-        { name: 'user_id', type: 'UUID', nullable: false },
-        { name: 'email', type: 'VARCHAR(255)', nullable: false },
-        { name: 'created_at', type: 'TIMESTAMP', nullable: false },
-        { name: 'plan_tier', type: 'ENUM', nullable: true },
-        { name: 'last_login', type: 'TIMESTAMP', nullable: true },
-      ],
-    },
-    {
-      id: 'ds-002',
-      name: 'Stripe Payments API',
-      type: 'rest_api',
-      host: 'api.stripe.com/v1',
-      status: 'syncing',
-      lastSync: 'Running...',
-      nextSync: '\u2014',
-      frequency: 'Every 15 min',
-      recordsIngested: 589_120,
-      tablesDiscovered: 12,
-      schemaVersion: 1,
-      errorRate: 0.0,
-      avgLatency: 340,
-      uptime: 100.0,
-      fields: [
-        { name: 'payment_id', type: 'STRING', nullable: false },
-        { name: 'amount', type: 'INTEGER', nullable: false },
-        { name: 'currency', type: 'STRING', nullable: false },
-        { name: 'status', type: 'ENUM', nullable: false },
-        { name: 'customer_id', type: 'STRING', nullable: true },
-      ],
-    },
-    {
-      id: 'ds-003',
-      name: 'Salesforce CRM Export',
-      type: 'csv_file',
-      host: 'sftp.corp.internal/salesforce/',
-      status: 'connected',
-      lastSync: '4 hours ago',
-      nextSync: '20 hours',
-      frequency: 'Daily',
-      recordsIngested: 124_800,
-      tablesDiscovered: 3,
-      schemaVersion: 2,
-      errorRate: 1.2,
-      avgLatency: 890,
-      uptime: 98.1,
-      fields: [
-        { name: 'account_id', type: 'STRING', nullable: false },
-        { name: 'company_name', type: 'STRING', nullable: false },
-        { name: 'deal_stage', type: 'STRING', nullable: true },
-        { name: 'arr_value', type: 'DECIMAL', nullable: true },
-        { name: 'close_date', type: 'DATE', nullable: true },
-      ],
-    },
-    {
-      id: 'ds-004',
-      name: 'GitHub Webhook Events',
-      type: 'webhook',
-      host: 'hooks.enterprisey.dev/github',
-      status: 'connected',
-      lastSync: '12 sec ago',
-      nextSync: 'On event',
-      frequency: 'Real-time',
-      recordsIngested: 1_203_847,
-      tablesDiscovered: 8,
-      schemaVersion: 5,
-      errorRate: 0.08,
-      avgLatency: 23,
-      uptime: 99.99,
-      fields: [
-        { name: 'event_type', type: 'STRING', nullable: false },
-        { name: 'repo_name', type: 'STRING', nullable: false },
-        { name: 'actor', type: 'STRING', nullable: false },
-        { name: 'payload', type: 'JSONB', nullable: false },
-        { name: 'received_at', type: 'TIMESTAMP', nullable: false },
-      ],
-    },
-    {
-      id: 'ds-005',
-      name: 'Snowflake Data Warehouse',
-      type: 'database',
-      host: 'acme.us-east-1.snowflakecomputing.com',
-      status: 'error',
-      lastSync: 'Failed 23 min ago',
-      nextSync: 'Retry in 7 min',
-      frequency: 'Every 30 min',
-      recordsIngested: 5_420_100,
-      tablesDiscovered: 92,
-      schemaVersion: 4,
-      errorRate: 14.3,
-      avgLatency: 2100,
-      uptime: 87.2,
-      fields: [
-        { name: 'event_id', type: 'BIGINT', nullable: false },
-        { name: 'session_id', type: 'STRING', nullable: false },
-        { name: 'event_name', type: 'STRING', nullable: false },
-        { name: 'properties', type: 'VARIANT', nullable: true },
-      ],
-      lastError: 'Connection timeout after 30s \u2014 authentication token expired',
-    },
-    {
-      id: 'ds-006',
-      name: 'HubSpot Marketing',
-      type: 'rest_api',
-      host: 'api.hubapi.com/crm/v3',
-      status: 'disconnected',
-      lastSync: '3 days ago',
-      nextSync: '\u2014',
-      frequency: 'Paused',
-      recordsIngested: 45_200,
-      tablesDiscovered: 6,
-      schemaVersion: 1,
-      errorRate: 0.0,
-      avgLatency: 0,
-      uptime: 0,
-      fields: [
-        { name: 'contact_id', type: 'STRING', nullable: false },
-        { name: 'email', type: 'STRING', nullable: false },
-        { name: 'lifecycle_stage', type: 'STRING', nullable: true },
-      ],
-      lastError: 'Integration paused by admin (jsmith@acme.co) on Jan 28',
-    },
-  ]);
+  // Sources from API via facade
+  private readonly apiSources = toSignal(this.sourcesFacade.allSources$, { initialValue: [] });
+  private readonly selectedApiSource = toSignal(this.sourcesFacade.selectedSource$);
+
+  // Map API DataSource to UI SourceData format
+  protected readonly sources = computed<SourceData[]>(() => {
+    return this.apiSources().map(source => this.mapToSourceData(source));
+  });
 
   protected readonly throughputData = signal<ThroughputDataPoint[]>([
     { time: '12:00', value: 4200 },
@@ -346,6 +218,9 @@ export class SourcesComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit() {
+    // Load sources from API
+    this.sourcesFacade.loadSources();
+
     this.timeInterval = setInterval(() => {
       this.currentTime.set(new Date());
     }, 1000);
@@ -359,6 +234,9 @@ export class SourcesComponent implements OnInit, OnDestroy {
 
   protected selectSource(source: SourceData) {
     this.selectedId.set(source.id);
+    this.sourcesFacade.selectSource(source.id);
+    // Load schema for selected source
+    this.sourcesFacade.loadSchema(source.id);
   }
 
   protected addNewSource() {
@@ -366,7 +244,7 @@ export class SourcesComponent implements OnInit, OnDestroy {
   }
 
   protected handleSyncNow(id: string) {
-    console.log('Sync now:', id);
+    this.sourcesFacade.syncSource(id);
   }
 
   protected handleConfigure(id: string) {
@@ -374,6 +252,78 @@ export class SourcesComponent implements OnInit, OnDestroy {
   }
 
   protected handleTestConnection(id: string) {
-    console.log('Test connection:', id);
+    this.sourcesFacade.testConnection(id);
+  }
+
+  // Map API DataSource to UI SourceData format
+  private mapToSourceData(source: DataSource): SourceData {
+    const config = source.connectionConfig || {};
+    const host = config['host'] || config['url'] || config['endpoint'] || 'Unknown';
+    const lastSyncAt = source.lastSyncAt;
+
+    return {
+      id: source.id || '',
+      name: source.name,
+      type: source.type,
+      host,
+      status: source.status,
+      lastSync: lastSyncAt ? this.formatRelativeTime(lastSyncAt) : 'Never',
+      nextSync: this.calculateNextSync(source.syncFrequency, lastSyncAt),
+      frequency: source.syncFrequency || 'Manual',
+      recordsIngested: parseInt(config['recordsIngested'] || '0', 10),
+      tablesDiscovered: parseInt(config['tablesDiscovered'] || '0', 10),
+      schemaVersion: parseInt(config['schemaVersion'] || '1', 10),
+      errorRate: parseFloat(config['errorRate'] || '0'),
+      avgLatency: parseInt(config['avgLatency'] || '0', 10),
+      uptime: parseFloat(config['uptime'] || '0'),
+      fields: [], // Will be populated when schema is loaded
+      lastError: source.errorLog?.length ? source.errorLog[source.errorLog.length - 1] : undefined,
+    };
+  }
+
+  private formatRelativeTime(dateStr: string): string {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+
+    if (diffSec < 60) return `${diffSec} sec ago`;
+    if (diffMin < 60) return `${diffMin} min ago`;
+    if (diffHour < 24) return `${diffHour} hours ago`;
+    return `${diffDay} days ago`;
+  }
+
+  private calculateNextSync(frequency: string, lastSyncAt: string | null): string {
+    if (!frequency || frequency === 'Manual') return '—';
+    if (!lastSyncAt) return 'Pending';
+
+    // Parse frequency (e.g., "Hourly", "Daily", "Every 15 min")
+    const lastSync = new Date(lastSyncAt);
+    let nextSync: Date;
+
+    if (frequency.toLowerCase() === 'hourly') {
+      nextSync = new Date(lastSync.getTime() + 60 * 60 * 1000);
+    } else if (frequency.toLowerCase() === 'daily') {
+      nextSync = new Date(lastSync.getTime() + 24 * 60 * 60 * 1000);
+    } else if (frequency.toLowerCase().includes('min')) {
+      const minutes = parseInt(frequency.match(/\d+/)?.[0] || '30', 10);
+      nextSync = new Date(lastSync.getTime() + minutes * 60 * 1000);
+    } else if (frequency.toLowerCase() === 'real-time') {
+      return 'On event';
+    } else {
+      return '—';
+    }
+
+    const now = new Date();
+    if (nextSync <= now) return 'Now';
+
+    const diffMs = nextSync.getTime() - now.getTime();
+    const diffMin = Math.floor(diffMs / (60 * 1000));
+    if (diffMin < 60) return `${diffMin} min`;
+    const diffHour = Math.floor(diffMin / 60);
+    return `${diffHour} hours`;
   }
 }

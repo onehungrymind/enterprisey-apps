@@ -1,10 +1,14 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { DeleteResult, Repository } from 'typeorm';
 
 import { ReportQuery } from '../database/entities/report-query.entity';
+import { QueryExecutor, QueryResult } from '../engine';
 
 @Injectable()
 export class QueriesService {
+  private readonly logger = new Logger(QueriesService.name);
+  private readonly queryExecutor = new QueryExecutor();
+
   constructor(
     @Inject('REPORT_QUERY_REPOSITORY')
     private queriesRepository: Repository<ReportQuery>,
@@ -38,19 +42,49 @@ export class QueriesService {
     return await this.queriesRepository.delete(id);
   }
 
-  async execute(id: string): Promise<any> {
+  async execute(id: string): Promise<QueryResult> {
     const query = await this.queriesRepository.findOneBy({ id });
     if (!query) throw new NotFoundException();
 
-    return {
-      columns: ['month', 'total_revenue', 'count'],
-      rows: [
-        { month: '2025-01', total_revenue: 50000, count: 150 },
-        { month: '2025-02', total_revenue: 62000, count: 180 },
-        { month: '2025-03', total_revenue: 48000, count: 130 },
-      ],
-      totalRows: 3,
-      executedAt: new Date().toISOString(),
-    };
+    this.logger.log(`Executing query ${id}: ${query.name}`);
+
+    // Check cache
+    if (query.cachedAt && query.cacheDuration) {
+      const cacheExpiry = new Date(query.cachedAt).getTime() + query.cacheDuration * 1000;
+      if (Date.now() < cacheExpiry) {
+        this.logger.log(`Returning cached result for query ${id}`);
+        // In production, return cached data from a cache store
+      }
+    }
+
+    const result = await this.queryExecutor.execute({
+      id: query.id,
+      name: query.name,
+      pipelineId: query.pipelineId,
+      aggregation: query.aggregation || { groupBy: [], metrics: [] },
+      filters: query.filters || [],
+    });
+
+    // Update cache timestamp
+    query.cachedAt = new Date().toISOString();
+    await this.queriesRepository.save(query);
+
+    return result;
+  }
+
+  /**
+   * Get the generated SQL for a query (for debugging/preview)
+   */
+  async getSQL(id: string): Promise<string> {
+    const query = await this.queriesRepository.findOneBy({ id });
+    if (!query) throw new NotFoundException();
+
+    return this.queryExecutor.generateSQL({
+      id: query.id,
+      name: query.name,
+      pipelineId: query.pipelineId,
+      aggregation: query.aggregation || { groupBy: [], metrics: [] },
+      filters: query.filters || [],
+    });
   }
 }

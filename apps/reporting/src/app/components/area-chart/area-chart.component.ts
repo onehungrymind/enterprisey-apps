@@ -11,7 +11,7 @@ export interface DataPoint {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="chart-container" [style.height.px]="height()">
-      <svg [attr.viewBox]="'-2 -4 ' + viewWidth + ' ' + (viewHeight + 8)" preserveAspectRatio="none">
+      <svg [attr.viewBox]="'0 -4 ' + viewWidth + ' ' + (viewHeight + 8)" preserveAspectRatio="none">
         <defs>
           <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.2"/>
@@ -65,35 +65,11 @@ export interface DataPoint {
     </div>
   `,
   styles: [`
-    :host {
-      display: block;
-    }
-
-    .chart-container {
-      position: relative;
-      padding-bottom: 24px;
-    }
-
-    svg {
-      width: 100%;
-      height: 100%;
-    }
-
-    .labels {
-      display: flex;
-      justify-content: space-between;
-      padding: 0 2px;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
-
-    .label {
-      font-size: 8px;
-      color: var(--text-ghost);
-      font-family: 'JetBrains Mono', monospace;
-    }
+    :host { display: block; }
+    .chart-container { position: relative; padding-bottom: 20px; }
+    svg { width: 100%; height: 100%; display: block; }
+    .labels { display: flex; justify-content: space-between; position: absolute; bottom: 0; left: 0; right: 0; }
+    .label { font-size: 8px; color: var(--text-ghost); font-family: 'JetBrains Mono', monospace; }
   `]
 })
 export class AreaChartComponent {

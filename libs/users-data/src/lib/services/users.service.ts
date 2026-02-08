@@ -50,7 +50,7 @@ export class UsersService {
   }
 
   private getLoginUrl() {
-    return `${this.env.usersApiUrl}/auth/login`;
+    return `${this.env.usersApiUrl}/users/auth/login`;
   }
 
   private getUrlWithEmail(email: string) {
