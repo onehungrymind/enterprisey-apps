@@ -105,6 +105,36 @@
       </div>
     }
 
+    @if (activeTab() === 'companies') {
+      <div class="companies-layout">
+        <!-- Companies List Panel -->
+        <div class="companies-panel">
+          <div class="panel-header">
+            <h3 class="panel-title">Companies</h3>
+            <ui-action-button variant="primary" (clicked)="openAddCompanyForm()">
+              + Add
+            </ui-action-button>
+          </div>
+          <proto-companies-list
+            [companies]="allCompanies()"
+            [selectedCompanyId]="selectedCompanyId()"
+            [userCounts]="userCountsByCompany()"
+            (companySelected)="selectCompany($event)"
+          />
+        </div>
+
+        <!-- Company Details Panel -->
+        <aside class="details-panel">
+          <proto-company-details
+            [company]="selectedCompany()"
+            [users]="users()"
+            (edit)="openEditCompanyForm($event)"
+            (delete)="deleteCompany($event)"
+          />
+        </aside>
+      </div>
+    }
+
     @if (activeTab() === 'roles') {
       <proto-roles-tab
         [roleConfigs]="roleConfigs"
@@ -128,7 +158,7 @@
   />
 }
 
-<!-- Delete Confirmation Dialog -->
+<!-- Delete User Confirmation Dialog -->
 @if (showDeleteConfirm() && deletingUser(); as user) {
   <ui-confirm-dialog
     title="Delete User"
@@ -139,5 +169,28 @@
     confirmVariant="danger"
     (confirm)="confirmDelete()"
     (cancel)="cancelDelete()"
+  />
+}
+
+<!-- Company Form Modal -->
+@if (showCompanyForm()) {
+  <proto-company-form
+    [company]="editingCompany()"
+    (save)="saveCompany($event)"
+    (cancel)="closeCompanyForm()"
+  />
+}
+
+<!-- Delete Company Confirmation Dialog -->
+@if (showCompanyDeleteConfirm() && deletingCompany(); as company) {
+  <ui-confirm-dialog
+    title="Delete Company"
+    [message]="'Are you sure you want to delete this company?'"
+    [details]="company.name"
+    confirmLabel="Delete Company"
+    cancelLabel="Cancel"
+    confirmVariant="danger"
+    (confirm)="confirmCompanyDelete()"
+    (cancel)="cancelCompanyDelete()"
   />
 }

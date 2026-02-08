@@ -128,3 +128,48 @@ export const loadCompanies = createEffect(
   },
   { functional: true }
 );
+
+export const createCompany = createEffect(
+  (actions$ = inject(Actions), companiesService = inject(CompaniesService)) => {
+    return actions$.pipe(
+      ofType(UsersActions.createCompany),
+      exhaustMap((action) =>
+        companiesService.create(action.company).pipe(
+          map((company: Company) => UsersActions.createCompanySuccess({ company })),
+          catchError((error) => of(UsersActions.createCompanyFailure({ error })))
+        )
+      )
+    );
+  },
+  { functional: true }
+);
+
+export const updateCompany = createEffect(
+  (actions$ = inject(Actions), companiesService = inject(CompaniesService)) => {
+    return actions$.pipe(
+      ofType(UsersActions.updateCompany),
+      exhaustMap((action) =>
+        companiesService.update(action.company).pipe(
+          map((company: Company) => UsersActions.updateCompanySuccess({ company })),
+          catchError((error) => of(UsersActions.updateCompanyFailure({ error })))
+        )
+      )
+    );
+  },
+  { functional: true }
+);
+
+export const deleteCompany = createEffect(
+  (actions$ = inject(Actions), companiesService = inject(CompaniesService)) => {
+    return actions$.pipe(
+      ofType(UsersActions.deleteCompany),
+      exhaustMap((action) =>
+        companiesService.delete(action.company).pipe(
+          map(() => UsersActions.deleteCompanySuccess({ company: action.company })),
+          catchError((error) => of(UsersActions.deleteCompanyFailure({ error })))
+        )
+      )
+    );
+  },
+  { functional: true }
+);

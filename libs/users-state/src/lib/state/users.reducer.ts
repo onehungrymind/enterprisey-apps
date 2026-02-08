@@ -42,6 +42,18 @@ export const reducer = createReducer(
     error,
     companiesLoaded: false,
   })),
+  on(UsersActions.createCompanySuccess, (state, { company }) => ({
+    ...state,
+    companies: [...state.companies, company],
+  })),
+  on(UsersActions.updateCompanySuccess, (state, { company }) => ({
+    ...state,
+    companies: state.companies.map(c => c.id === company.id ? company : c),
+  })),
+  on(UsersActions.deleteCompanySuccess, (state, { company }) => ({
+    ...state,
+    companies: state.companies.filter(c => c.id !== company.id),
+  })),
   // Users
   on(UsersActions.loadUsers, (state) => ({
     ...state,

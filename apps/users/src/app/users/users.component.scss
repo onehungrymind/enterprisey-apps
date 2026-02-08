@@ -192,3 +192,31 @@
   overflow: auto;
   flex-shrink: 0;
 }
+
+// Companies Tab Layout
+.companies-layout {
+  display: flex;
+  height: calc(100vh - 53px);
+}
+
+.companies-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.panel-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}

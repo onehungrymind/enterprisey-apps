@@ -9,8 +9,11 @@ import { UserDetailsComponent } from './user-details/user-details.component';
 import { RolesTabComponent } from './roles-tab/roles-tab.component';
 import { AuditTabComponent } from './audit-tab/audit-tab.component';
 import { UserFormComponent } from './user-form/user-form.component';
+import { CompaniesListComponent } from './companies-list/companies-list.component';
+import { CompanyDetailsComponent } from './company-details/company-details.component';
+import { CompanyFormComponent } from './company-form/company-form.component';
 
-export type TabId = 'users' | 'roles' | 'audit';
+export type TabId = 'users' | 'companies' | 'roles' | 'audit';
 
 export interface RoleConfig {
   key: UserRoleEnum;
@@ -91,12 +94,15 @@ export interface ExtendedUser extends User {
     AvatarComponent,
     FilterChipComponent,
     ActionButtonComponent,
+    ConfirmDialogComponent,
     UsersListComponent,
     UserDetailsComponent,
     RolesTabComponent,
     AuditTabComponent,
     UserFormComponent,
-    ConfirmDialogComponent,
+    CompaniesListComponent,
+    CompanyDetailsComponent,
+    CompanyFormComponent,
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
@@ -110,6 +116,7 @@ export class UsersComponent {
   protected readonly activeTab = signal<TabId>('users');
   protected readonly tabs: { id: TabId; label: string }[] = [
     { id: 'users', label: 'Users' },
+    { id: 'companies', label: 'Companies' },
     { id: 'roles', label: 'Roles' },
     { id: 'audit', label: 'Audit' }
   ];
@@ -175,6 +182,30 @@ export class UsersComponent {
   // Delete confirmation dialog state
   protected readonly showDeleteConfirm = signal(false);
   protected readonly deletingUser = signal<User | null>(null);
+
+  // Company state
+  protected readonly selectedCompanyId = signal<string | null>(null);
+  protected readonly showCompanyForm = signal(false);
+  protected readonly editingCompany = signal<Company | null>(null);
+  protected readonly showCompanyDeleteConfirm = signal(false);
+  protected readonly deletingCompany = signal<Company | null>(null);
+
+  // Selected company
+  protected readonly selectedCompany = computed(() => {
+    const id = this.selectedCompanyId();
+    if (!id) return null;
+    return this.allCompanies().find(c => c.id === id) ?? null;
+  });
+
+  // User counts by company
+  protected readonly userCountsByCompany = computed(() => {
+    const counts = new Map<string, number>();
+    for (const user of this.users()) {
+      const count = counts.get(user.company_id) || 0;
+      counts.set(user.company_id, count + 1);
+    }
+    return counts;
+  });
 
   // Companies for filter
   protected readonly companies = computed(() => {
@@ -273,5 +304,49 @@ export class UsersComponent {
   protected cancelDelete(): void {
     this.showDeleteConfirm.set(false);
     this.deletingUser.set(null);
+  }
+
+  // Company handlers
+  protected selectCompany(companyId: string): void {
+    this.selectedCompanyId.set(companyId);
+  }
+
+  protected openAddCompanyForm(): void {
+    this.editingCompany.set(null);
+    this.showCompanyForm.set(true);
+  }
+
+  protected openEditCompanyForm(company: Company): void {
+    this.editingCompany.set(company);
+    this.showCompanyForm.set(true);
+  }
+
+  protected closeCompanyForm(): void {
+    this.showCompanyForm.set(false);
+    this.editingCompany.set(null);
+  }
+
+  protected saveCompany(company: Company): void {
+    this.usersFacade.saveCompany(company);
+    this.closeCompanyForm();
+  }
+
+  protected deleteCompany(company: Company): void {
+    this.deletingCompany.set(company);
+    this.showCompanyDeleteConfirm.set(true);
+  }
+
+  protected confirmCompanyDelete(): void {
+    const company = this.deletingCompany();
+    if (company) {
+      this.usersFacade.deleteCompany(company);
+      this.selectedCompanyId.set(null);
+    }
+    this.cancelCompanyDelete();
+  }
+
+  protected cancelCompanyDelete(): void {
+    this.showCompanyDeleteConfirm.set(false);
+    this.deletingCompany.set(null);
   }
 }

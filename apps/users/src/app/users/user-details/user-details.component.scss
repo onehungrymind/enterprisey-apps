@@ -143,11 +143,18 @@
 // Actions
 .actions {
   display: flex;
-  gap: 6px;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-default);
+}
 
-  ui-action-button {
-    flex: 1;
-  }
+.btn-icon {
+  margin-right: 4px;
+}
+
+.btn-icon-delete {
+  filter: grayscale(100%) brightness(0);
 }
 
 // Empty state

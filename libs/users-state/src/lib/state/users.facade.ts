@@ -46,6 +46,26 @@ export class UsersFacade {
     this.dispatch(UsersActions.loadCompanies());
   }
 
+  saveCompany(company: Company) {
+    if (company.id) {
+      this.updateCompany(company);
+    } else {
+      this.createCompany(company);
+    }
+  }
+
+  createCompany(company: Company) {
+    this.dispatch(UsersActions.createCompany({ company }));
+  }
+
+  updateCompany(company: Company) {
+    this.dispatch(UsersActions.updateCompany({ company }));
+  }
+
+  deleteCompany(company: Company) {
+    this.dispatch(UsersActions.deleteCompany({ company }));
+  }
+
   loadUser(userId: string) {
     this.dispatch(UsersActions.loadUser({ userId }));
   }

@@ -11,7 +11,9 @@ type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
       type="button"
       class="action-btn"
       [class]="variant()"
-      (click)="clicked.emit()"
+      [class.disabled]="disabled()"
+      [disabled]="disabled()"
+      (click)="!disabled() && clicked.emit()"
     >
       <ng-content />
     </button>
@@ -64,13 +66,22 @@ type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
     }
 
     .action-btn.danger {
-      background: var(--color-danger-subtle);
-      border-color: var(--border-default);
-      color: var(--color-danger);
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      color: var(--text-inverse);
+      font-weight: 700;
+    }
+
+    .action-btn.disabled,
+    .action-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+      filter: none !important;
     }
   `]
 })
 export class ActionButtonComponent {
   readonly variant = input<ButtonVariant>('secondary');
+  readonly disabled = input<boolean>(false);
   readonly clicked = output<void>();
 }
