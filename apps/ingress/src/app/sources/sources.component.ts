@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, signal, computed, OnInit, OnDestroy, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { PageHeaderComponent, ThemeToggleComponent, ActionButtonComponent, ThemeService } from '@proto/ui-theme';
+import { PageHeaderComponent, ThemeToggleComponent, ActionButtonComponent, ConfirmDialogComponent, ThemeService } from '@proto/ui-theme';
 import { SourcesFacade } from '@proto/ingress-state';
 import { DataSource } from '@proto/api-interfaces';
 import { SourceListComponent } from './source-list/source-list.component';
@@ -8,6 +8,7 @@ import { SourceDetailComponent } from './source-detail/source-detail.component';
 import { ThroughputChartComponent, ThroughputDataPoint } from './throughput-chart/throughput-chart.component';
 import { ActivityLogComponent, ActivityLogEntry } from './activity-log/activity-log.component';
 import { SourceData } from './source-card/source-card.component';
+import { SourceFormComponent } from './source-form/source-form.component';
 
 @Component({
   selector: 'proto-sources',
@@ -17,10 +18,12 @@ import { SourceData } from './source-card/source-card.component';
     PageHeaderComponent,
     ThemeToggleComponent,
     ActionButtonComponent,
+    ConfirmDialogComponent,
     SourceListComponent,
     SourceDetailComponent,
     ThroughputChartComponent,
     ActivityLogComponent,
+    SourceFormComponent,
   ],
   template: `
     <div class="app-shell">
@@ -53,6 +56,7 @@ import { SourceData } from './source-card/source-card.component';
             (syncNow)="handleSyncNow($event)"
             (configure)="handleConfigure($event)"
             (testConnection)="handleTestConnection($event)"
+            (delete)="handleDelete($event)"
           />
         </div>
 
@@ -71,6 +75,29 @@ import { SourceData } from './source-card/source-card.component';
         </div>
       </div>
     </div>
+
+    <!-- Source Form Modal -->
+    @if (showSourceForm()) {
+      <proto-source-form
+        [source]="editingSource()"
+        (save)="saveSource($event)"
+        (cancel)="closeForm()"
+      />
+    }
+
+    <!-- Delete Confirmation Dialog -->
+    @if (showDeleteConfirm() && deletingSource(); as source) {
+      <ui-confirm-dialog
+        title="Delete Source"
+        [message]="'Are you sure you want to delete this data source?'"
+        [details]="source.name"
+        confirmLabel="Delete Source"
+        cancelLabel="Cancel"
+        confirmVariant="danger"
+        (confirm)="confirmDelete()"
+        (cancel)="cancelDelete()"
+      />
+    }
   `,
   styles: [`
     :host {
@@ -165,11 +192,20 @@ export class SourcesComponent implements OnInit, OnDestroy {
   protected readonly currentTime = signal(new Date());
   protected readonly selectedId = signal<string | null>(null);
 
+  // Form modal state
+  protected readonly showSourceForm = signal(false);
+  protected readonly editingSource = signal<DataSource | null>(null);
+
+  // Delete confirmation state
+  protected readonly showDeleteConfirm = signal(false);
+  protected readonly deletingSource = signal<DataSource | null>(null);
+
   private timeInterval?: ReturnType<typeof setInterval>;
 
   // Sources from API via facade
   private readonly apiSources = toSignal(this.sourcesFacade.allSources$, { initialValue: [] });
   private readonly selectedApiSource = toSignal(this.sourcesFacade.selectedSource$);
+  private readonly currentSchema = toSignal(this.sourcesFacade.currentSchema$);
 
   // Map API DataSource to UI SourceData format
   protected readonly sources = computed<SourceData[]>(() => {
@@ -204,7 +240,22 @@ export class SourcesComponent implements OnInit, OnDestroy {
   protected readonly selectedSource = computed(() => {
     const id = this.selectedId();
     if (!id) return null;
-    return this.sources().find(s => s.id === id) || null;
+    const source = this.sources().find(s => s.id === id);
+    if (!source) return null;
+
+    // Merge schema fields if available
+    const schema = this.currentSchema();
+    if (schema && schema.sourceId === id) {
+      return {
+        ...source,
+        fields: schema.fields.map(f => ({
+          name: f.name,
+          type: f.type,
+          nullable: f.nullable,
+        })),
+      };
+    }
+    return source;
   });
 
   protected readonly formattedTime = computed(() => {
@@ -240,7 +291,8 @@ export class SourcesComponent implements OnInit, OnDestroy {
   }
 
   protected addNewSource() {
-    console.log('Add new source');
+    this.editingSource.set(null);
+    this.showSourceForm.set(true);
   }
 
   protected handleSyncNow(id: string) {
@@ -248,11 +300,47 @@ export class SourcesComponent implements OnInit, OnDestroy {
   }
 
   protected handleConfigure(id: string) {
-    console.log('Configure:', id);
+    const source = this.apiSources().find(s => s.id === id);
+    if (source) {
+      this.editingSource.set(source);
+      this.showSourceForm.set(true);
+    }
   }
 
   protected handleTestConnection(id: string) {
     this.sourcesFacade.testConnection(id);
+  }
+
+  protected handleDelete(id: string) {
+    const source = this.apiSources().find(s => s.id === id);
+    if (source) {
+      this.deletingSource.set(source);
+      this.showDeleteConfirm.set(true);
+    }
+  }
+
+  protected saveSource(source: DataSource) {
+    this.sourcesFacade.saveSource(source);
+    this.closeForm();
+  }
+
+  protected closeForm() {
+    this.showSourceForm.set(false);
+    this.editingSource.set(null);
+  }
+
+  protected confirmDelete() {
+    const source = this.deletingSource();
+    if (source) {
+      this.sourcesFacade.deleteSource(source);
+      this.selectedId.set(null);
+    }
+    this.cancelDelete();
+  }
+
+  protected cancelDelete() {
+    this.showDeleteConfirm.set(false);
+    this.deletingSource.set(null);
   }
 
   // Map API DataSource to UI SourceData format

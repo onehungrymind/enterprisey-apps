@@ -19,7 +19,7 @@ export class StepsController {
   ) {}
 
   @Post()
-  @Roles(['admin', 'engineer'])
+  @Roles(['admin', 'manager'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   create(@Body() step: TransformStepEntity): Promise<TransformStepEntity> {
     return this.stepsService.create(step);
@@ -36,21 +36,21 @@ export class StepsController {
   }
 
   @Patch(':id')
-  @Roles(['admin', 'engineer'])
+  @Roles(['admin', 'manager'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   update(@Param('id') id: string, @Body() step: TransformStepEntity) {
     return this.stepsService.update(step);
   }
 
   @Delete(':id')
-  @Roles(['admin', 'engineer'])
+  @Roles(['admin', 'manager'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   remove(@Param('id') id: string) {
     return this.stepsService.remove(id);
   }
 
   @Patch(':id/reorder')
-  @Roles(['admin', 'engineer'])
+  @Roles(['admin', 'manager'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   reorder(@Param('id') id: string, @Body('order') order: number) {
     return this.stepsService.reorder(id, order);

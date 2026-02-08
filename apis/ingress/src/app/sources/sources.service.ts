@@ -1,6 +1,8 @@
 import { Inject, Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { DeleteResult, Repository } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 import { DataSourceEntity } from '../database/entities/data-source.entity';
+import { SourceDataEntity } from '../database/entities/source-data.entity';
 import { SchemasService } from '../schemas/schemas.service';
 import { ConnectorFactory, ConnectorType } from '../connectors';
 
@@ -11,6 +13,8 @@ export class SourcesService {
   constructor(
     @Inject('SOURCE_REPOSITORY')
     private sourcesRepository: Repository<DataSourceEntity>,
+    @Inject('SOURCE_DATA_REPOSITORY')
+    private sourceDataRepository: Repository<SourceDataEntity>,
     private schemasService: SchemasService,
   ) {}
 
@@ -124,6 +128,13 @@ export class SourcesService {
       // Fetch data from source
       const data = await connector.fetchData(config, { limit: 10000 });
 
+      // Store the fetched data
+      const batchId = uuidv4();
+      await this.storeSourceData(source.id, data, batchId);
+
+      // Discover/update schema from the fetched data
+      await this.schemasService.discoverSchema(source.id);
+
       // Update sync metadata
       source.status = 'connected';
       source.lastSyncAt = new Date().toISOString();
@@ -131,11 +142,12 @@ export class SourcesService {
         ...source.connectionConfig,
         recordsIngested: String(data.length),
         _lastSyncRecordCount: String(data.length),
+        _lastBatchId: batchId,
       };
 
       await this.sourcesRepository.save(source);
 
-      this.logger.log(`Sync completed for source ${source.id}: ${data.length} records`);
+      this.logger.log(`Sync completed for source ${source.id}: ${data.length} records stored`);
     } catch (error: any) {
       source.status = 'error';
       source.errorLog = [
@@ -144,6 +156,51 @@ export class SourcesService {
       ];
       await this.sourcesRepository.save(source);
     }
+  }
+
+  /**
+   * Store fetched data in the source_data table
+   */
+  private async storeSourceData(sourceId: string, data: any[], batchId: string): Promise<void> {
+    // Clear previous data for this source (replace strategy)
+    await this.sourceDataRepository.delete({ sourceId });
+
+    // Insert new data in batches
+    const batchSize = 100;
+    for (let i = 0; i < data.length; i += batchSize) {
+      const batch = data.slice(i, i + batchSize);
+      const entities = batch.map((row) => ({
+        sourceId,
+        batchId,
+        data: JSON.stringify(row),
+      }));
+      await this.sourceDataRepository.insert(entities);
+    }
+  }
+
+  /**
+   * Get stored data for a source
+   */
+  async getSourceData(
+    sourceId: string,
+    options?: { limit?: number; offset?: number }
+  ): Promise<{ rows: any[]; total: number }> {
+    const [entities, total] = await this.sourceDataRepository.findAndCount({
+      where: { sourceId },
+      take: options?.limit || 1000,
+      skip: options?.offset || 0,
+      order: { ingestedAt: 'DESC' },
+    });
+
+    const rows = entities.map((e) => JSON.parse(e.data));
+    return { rows, total };
+  }
+
+  /**
+   * Clear stored data for a source
+   */
+  async clearSourceData(sourceId: string): Promise<void> {
+    await this.sourceDataRepository.delete({ sourceId });
   }
 
   /**

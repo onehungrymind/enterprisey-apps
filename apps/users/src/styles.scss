@@ -10,10 +10,10 @@
   // Role colors
   --role-admin: #f87171;
   --role-admin-bg: rgba(248, 113, 113, 0.08);
-  --role-mentor: #c084fc;
-  --role-mentor-bg: rgba(192, 132, 252, 0.08);
-  --role-apprentice: #60a5fa;
-  --role-apprentice-bg: rgba(96, 165, 250, 0.08);
+  --role-manager: #c084fc;
+  --role-manager-bg: rgba(192, 132, 252, 0.08);
+  --role-lead: #60a5fa;
+  --role-lead-bg: rgba(96, 165, 250, 0.08);
   --role-user: #64748b;
   --role-user-bg: rgba(100, 116, 139, 0.08);
 
@@ -35,10 +35,10 @@
 html[data-theme="light"] {
   --role-admin: #dc2626;
   --role-admin-bg: rgba(220, 38, 38, 0.06);
-  --role-mentor: #7c3aed;
-  --role-mentor-bg: rgba(124, 58, 237, 0.06);
-  --role-apprentice: #2563eb;
-  --role-apprentice-bg: rgba(37, 99, 235, 0.06);
+  --role-manager: #7c3aed;
+  --role-manager-bg: rgba(124, 58, 237, 0.06);
+  --role-lead: #2563eb;
+  --role-lead-bg: rgba(37, 99, 235, 0.06);
   --role-user: #475569;
   --role-user-bg: rgba(71, 85, 105, 0.06);
 

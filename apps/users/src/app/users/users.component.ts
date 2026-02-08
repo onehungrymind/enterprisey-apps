@@ -34,20 +34,20 @@ export const ROLE_CONFIGS: RoleConfig[] = [
     permissions: ['Full access', 'User management', 'System config', 'All features']
   },
   {
-    key: UserRoleEnum.MENTOR,
-    label: 'Mentor',
+    key: UserRoleEnum.MANAGER,
+    label: 'Manager',
     icon: '\u25C8',
-    colorVar: '--role-mentor',
-    bgVar: '--role-mentor-bg',
-    permissions: ['Create pipelines', 'Edit dashboards', 'Export data', 'View users']
+    colorVar: '--role-manager',
+    bgVar: '--role-manager-bg',
+    permissions: ['Create pipelines', 'Edit dashboards', 'Export data', 'Manage team']
   },
   {
-    key: UserRoleEnum.APPRENTICE,
-    label: 'Apprentice',
+    key: UserRoleEnum.LEAD,
+    label: 'Lead',
     icon: '\u25C7',
-    colorVar: '--role-apprentice',
-    bgVar: '--role-apprentice-bg',
-    permissions: ['View dashboards', 'Run exports', 'View pipelines']
+    colorVar: '--role-lead',
+    bgVar: '--role-lead-bg',
+    permissions: ['Create pipelines', 'View dashboards', 'Run exports']
   },
   {
     key: UserRoleEnum.USER,

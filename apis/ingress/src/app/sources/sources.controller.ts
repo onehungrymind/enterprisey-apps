@@ -6,12 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { DataSourceEntity } from '../database/entities/data-source.entity';
 import { SourcesService } from './sources.service';
 import { SchemasService } from '../schemas/schemas.service';
-import { JwtAuthGuard, Roles, RolesGuard } from '@proto/guards/remote-auth';
+import { JwtAuthGuard } from '@proto/guards/remote-auth';
 
 @Controller('sources')
 export class SourcesController {
@@ -21,8 +22,7 @@ export class SourcesController {
   ) {}
 
   @Post()
-  @Roles(['admin', 'engineer'])
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard)
   create(@Body() source: DataSourceEntity): Promise<DataSourceEntity> {
     return this.sourcesService.create(source);
   }
@@ -38,29 +38,25 @@ export class SourcesController {
   }
 
   @Patch(':id')
-  @Roles(['admin', 'engineer'])
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard)
   update(@Param('id') id: string, @Body() source: DataSourceEntity) {
     return this.sourcesService.update(source);
   }
 
   @Delete(':id')
-  @Roles(['admin', 'engineer'])
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {
     return this.sourcesService.remove(id);
   }
 
   @Post(':id/test-connection')
-  @Roles(['admin', 'engineer'])
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard)
   testConnection(@Param('id') id: string) {
     return this.sourcesService.testConnection(id);
   }
 
   @Post(':id/sync')
-  @Roles(['admin', 'engineer'])
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard)
   sync(@Param('id') id: string) {
     return this.sourcesService.sync(id);
   }
@@ -68,5 +64,23 @@ export class SourcesController {
   @Get(':id/schema')
   getSchema(@Param('id') id: string) {
     return this.schemasService.findBySourceId(id);
+  }
+
+  @Get(':id/data')
+  getData(
+    @Param('id') id: string,
+    @Query('limit') limit?: string,
+    @Query('offset') offset?: string,
+  ) {
+    return this.sourcesService.getSourceData(id, {
+      limit: limit ? parseInt(limit, 10) : undefined,
+      offset: offset ? parseInt(offset, 10) : undefined,
+    });
+  }
+
+  @Delete(':id/data')
+  @UseGuards(JwtAuthGuard)
+  clearData(@Param('id') id: string) {
+    return this.sourcesService.clearSourceData(id);
   }
 }

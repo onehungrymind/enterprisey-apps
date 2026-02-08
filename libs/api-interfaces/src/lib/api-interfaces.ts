@@ -217,8 +217,8 @@ export interface User extends BaseEntity {
 
 export enum UserRoleEnum {
   ADMIN = 'admin',
-  MENTOR = 'mentor',
-  APPRENTICE = 'apprentice',
+  MANAGER = 'manager',
+  LEAD = 'lead',
   USER = 'user',
 }
 

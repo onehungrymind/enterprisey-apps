@@ -19,14 +19,14 @@ export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}
 
   @Get()
-  @Roles(['admin', 'user', 'mentor', 'apprentice'])
+  @Roles(['admin', 'user', 'manager', 'lead'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   findAll(): Promise<Company[]> {
     return this.companiesService.findAll();
   }
 
   @Get(':id')
-  @Roles(['admin', 'user', 'mentor', 'apprentice'])
+  @Roles(['admin', 'user', 'manager', 'lead'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   findOne(@Param('id') id: string): Promise<Company> {
     return this.companiesService.get(id);

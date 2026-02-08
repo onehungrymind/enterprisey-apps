@@ -2,8 +2,8 @@ import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { DataSource, DataSchema } from '@proto/api-interfaces';
 import { SourcesService } from '@proto/ingress-data';
-import { of, timer } from 'rxjs';
-import { catchError, exhaustMap, map, switchMap, takeUntil } from 'rxjs/operators';
+import { EMPTY, of, timer } from 'rxjs';
+import { catchError, exhaustMap, map, switchMap, takeUntil, takeWhile } from 'rxjs/operators';
 import { SourcesActions } from './sources.actions';
 
 export const loadSources = createEffect(
@@ -132,6 +132,53 @@ export const syncSource = createEffect(
           catchError((error) => of(SourcesActions.syncSourceFailure({ error })))
         )
       )
+    );
+  },
+  { functional: true }
+);
+
+// After sync dispatches, poll for status updates until sync completes
+export const pollAfterSync = createEffect(
+  (actions$ = inject(Actions), sourcesService = inject(SourcesService)) => {
+    return actions$.pipe(
+      ofType(SourcesActions.syncSourceSuccess),
+      switchMap((action) =>
+        timer(1000, 1000).pipe(
+          takeUntil(actions$.pipe(ofType(SourcesActions.loadSources, SourcesActions.resetSources))),
+          switchMap(() =>
+            sourcesService.find(action.source.id as string).pipe(
+              map((source) => {
+                // Keep polling while syncing, stop when status changes
+                return SourcesActions.statusUpdate({ source });
+              }),
+              catchError(() => of(SourcesActions.loadSourcesFailure({ error: 'Poll failed' })))
+            )
+          ),
+          // Stop polling once status is no longer 'syncing'
+          takeWhile((action) => {
+            const src = (action as any).source;
+            return src?.status === 'syncing';
+          }, true)
+        )
+      )
+    );
+  },
+  { functional: true }
+);
+
+// Reload schema after sync completes (status changes from syncing to connected)
+export const reloadSchemaAfterSync = createEffect(
+  (actions$ = inject(Actions)) => {
+    return actions$.pipe(
+      ofType(SourcesActions.statusUpdate),
+      map((action) => {
+        if (action.source.status === 'connected') {
+          return SourcesActions.loadSchema({ sourceId: action.source.id as string });
+        }
+        return null;
+      }),
+      // Filter out nulls
+      switchMap((action) => action ? of(action) : EMPTY),
     );
   },
   { functional: true }

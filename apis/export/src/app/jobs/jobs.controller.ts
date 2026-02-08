@@ -18,7 +18,7 @@ export class JobsController {
   ) {}
 
   @Post()
-  @Roles(['admin', 'engineer'])
+  @Roles(['admin', 'manager'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   create(@Body() job: ExportJobEntity): Promise<ExportJobEntity> {
     return this.jobsService.create(job);
@@ -40,14 +40,14 @@ export class JobsController {
   }
 
   @Post(':id/cancel')
-  @Roles(['admin', 'engineer'])
+  @Roles(['admin', 'manager'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   cancel(@Param('id') id: string): Promise<ExportJobEntity> {
     return this.jobsService.cancel(id);
   }
 
   @Delete(':id')
-  @Roles(['admin', 'engineer'])
+  @Roles(['admin', 'manager'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   remove(@Param('id') id: string) {
     return this.jobsService.remove(id);

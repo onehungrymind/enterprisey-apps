@@ -19,7 +19,7 @@ export class PipelinesController {
   ) {}
 
   @Post()
-  @Roles(['admin', 'engineer'])
+  @Roles(['admin', 'manager'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   create(@Body() pipeline: PipelineEntity): Promise<PipelineEntity> {
     return this.pipelinesService.create(pipeline);
@@ -36,21 +36,21 @@ export class PipelinesController {
   }
 
   @Patch(':id')
-  @Roles(['admin', 'engineer'])
+  @Roles(['admin', 'manager'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   update(@Param('id') id: string, @Body() pipeline: PipelineEntity) {
     return this.pipelinesService.update(pipeline);
   }
 
   @Delete(':id')
-  @Roles(['admin', 'engineer'])
+  @Roles(['admin', 'manager'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   remove(@Param('id') id: string) {
     return this.pipelinesService.remove(id);
   }
 
   @Post(':id/run')
-  @Roles(['admin', 'engineer'])
+  @Roles(['admin', 'manager'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   run(@Param('id') id: string) {
     return this.pipelinesService.run(id);

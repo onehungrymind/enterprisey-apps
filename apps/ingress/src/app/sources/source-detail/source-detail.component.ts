@@ -29,14 +29,17 @@ const TYPE_CONFIG: Record<string, { icon: string; label: string }> = {
           <div class="action-buttons">
             @if (src.status !== 'syncing') {
               <ui-action-button variant="primary" (clicked)="syncNow.emit(src.id)">
-                \u25B6 Sync Now
+                ▶ Sync Now
               </ui-action-button>
             }
             <ui-action-button variant="secondary" (clicked)="configure.emit(src.id)">
-              \u2699 Configure
+              ⚙ Configure
             </ui-action-button>
             <ui-action-button variant="secondary" (clicked)="testConnection.emit(src.id)">
-              \u21BB Test Connection
+              ↻ Test
+            </ui-action-button>
+            <ui-action-button variant="danger" (clicked)="delete.emit(src.id)">
+              <span class="btn-icon-delete">🗑</span> Delete
             </ui-action-button>
           </div>
         </div>
@@ -168,6 +171,10 @@ const TYPE_CONFIG: Record<string, { icon: string; label: string }> = {
     .action-buttons {
       display: flex;
       gap: 8px;
+    }
+
+    .btn-icon-delete {
+      filter: grayscale(100%) brightness(0);
     }
 
     .metrics-grid {
@@ -316,6 +323,7 @@ export class SourceDetailComponent {
   readonly syncNow = output<string>();
   readonly configure = output<string>();
   readonly testConnection = output<string>();
+  readonly delete = output<string>();
 
   protected readonly typeConfig = computed(() => {
     const src = this.source();
