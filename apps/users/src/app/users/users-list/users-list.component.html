@@ -1,5 +1,5 @@
 <!-- Column Headers -->
-<div class="list-header">
+<div class="list-header" data-testid="users-list-header">
   <span class="col-avatar"></span>
   <span class="col-user">User</span>
   <span class="col-role">Role</span>
@@ -8,7 +8,7 @@
 </div>
 
 <!-- User Rows -->
-<div class="user-list">
+<div class="user-list" data-testid="users-list-rows">
   @for (user of users(); track user.id; let i = $index) {
     @let roleConfig = getRoleConfig(user.role);
     @let statusConfig = getStatusConfig(user.status);
@@ -18,6 +18,9 @@
       [class.selected]="selectedUserId() === user.id"
       [style.animation-delay.ms]="i * 30"
       (click)="selectUser(user.id)"
+      [attr.data-testid]="'user-row-' + user.id"
+      [attr.data-user-email]="user.email"
+      [attr.data-user-role]="user.role"
     >
       <div class="col-avatar">
         <ui-avatar
@@ -25,12 +28,13 @@
           [lastName]="user.lastName"
           [color]="user.avatarColor"
           [size]="34"
+          data-testid="user-avatar"
         />
       </div>
 
       <div class="col-user">
-        <div class="user-name">{{ user.firstName }} {{ user.lastName }}</div>
-        <div class="user-email">{{ user.email }}</div>
+        <div class="user-name" data-testid="user-name">{{ user.firstName }} {{ user.lastName }}</div>
+        <div class="user-email" data-testid="user-email">{{ user.email }}</div>
       </div>
 
       <div class="col-role">
@@ -38,25 +42,26 @@
           class="role-badge"
           [style.color]="'var(' + roleConfig.colorVar + ')'"
           [style.background]="'var(' + roleConfig.bgVar + ')'"
+          data-testid="user-role-badge"
         >
           {{ roleConfig.icon }} {{ roleConfig.label }}
         </span>
       </div>
 
       <div class="col-status">
-        <span class="status-text" [style.color]="'var(' + statusConfig.colorVar + ')'">
+        <span class="status-text" [style.color]="'var(' + statusConfig.colorVar + ')'" data-testid="user-status">
           {{ statusConfig.label }}
         </span>
       </div>
 
       <div class="col-login">
-        <span class="login-time">{{ user.lastLogin }}</span>
+        <span class="login-time" data-testid="user-last-login">{{ user.lastLogin }}</span>
       </div>
     </div>
   }
 
   @if (users().length === 0) {
-    <div class="empty-state">
+    <div class="empty-state" data-testid="empty-users-list">
       No users found
     </div>
   }

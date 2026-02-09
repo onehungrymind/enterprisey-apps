@@ -1,5 +1,5 @@
-<div class="login-container">
-  <div class="login-card">
+<div class="login-container" data-testid="login-container">
+  <div class="login-card" data-testid="login-card">
     <div class="login-header">
       <div class="logo">
         <div class="logo-mark">E</div>
@@ -10,13 +10,13 @@
     </div>
 
     @if (error()) {
-      <div class="error-message">
+      <div class="error-message" data-testid="login-error">
         <mat-icon>error_outline</mat-icon>
         <span>{{ error() }}</span>
       </div>
     }
 
-    <form (ngSubmit)="onSubmit()" class="login-form">
+    <form (ngSubmit)="onSubmit()" class="login-form" data-testid="login-form">
       <mat-form-field appearance="fill" class="full-width">
         <mat-label>Email</mat-label>
         <input
@@ -28,6 +28,7 @@
           placeholder="you@example.com"
           required
           [disabled]="loading()"
+          data-testid="email-input"
         />
         <mat-icon matPrefix>email</mat-icon>
       </mat-form-field>
@@ -43,6 +44,7 @@
           placeholder="Enter your password"
           required
           [disabled]="loading()"
+          data-testid="password-input"
         />
         <mat-icon matPrefix>lock</mat-icon>
         <button
@@ -51,6 +53,7 @@
           type="button"
           (click)="togglePasswordVisibility()"
           [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+          data-testid="toggle-password"
         >
           <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
@@ -62,6 +65,7 @@
         type="submit"
         class="login-button"
         [disabled]="loading() || !email() || !password()"
+        data-testid="sign-in-button"
       >
         @if (loading()) {
           <mat-spinner diameter="20"></mat-spinner>

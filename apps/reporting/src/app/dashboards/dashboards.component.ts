@@ -28,7 +28,7 @@ type DateRange = '7d' | '30d' | '90d' | '12m';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="app-shell">
+    <div class="app-shell" data-testid="reporting-app">
       <!-- Header -->
       <ui-page-header title="Reporting" subtitle="Dashboards">
         <div slot="actions" class="header-actions">
@@ -37,6 +37,7 @@ type DateRange = '7d' | '30d' | '90d' | '12m';
             <ui-filter-chip
               [active]="range === selectedRange()"
               (clicked)="selectRange(range)"
+              [attr.data-testid]="'date-filter-' + range"
             >
               {{ range.toUpperCase() }}
             </ui-filter-chip>
@@ -44,7 +45,7 @@ type DateRange = '7d' | '30d' | '90d' | '12m';
 
           <div class="divider"></div>
 
-          <ui-action-button variant="primary" (clicked)="createDashboard()">
+          <ui-action-button variant="primary" (clicked)="createDashboard()" data-testid="new-dashboard-button">
             + New Dashboard
           </ui-action-button>
 
@@ -55,21 +56,23 @@ type DateRange = '7d' | '30d' | '90d' | '12m';
       <!-- Main Layout -->
       <div class="main-layout">
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" data-testid="dashboards-sidebar">
           <proto-dashboard-list
             [dashboards]="dashboards()"
             [activeDashboardId]="activeDashboardId() ?? ''"
             [loading]="loading()"
             (selected)="selectDashboard($event)"
+            data-testid="dashboards-list"
           />
         </aside>
 
         <!-- Content Area -->
-        <main class="content">
+        <main class="content" data-testid="dashboard-content">
           @if (activeDashboardId(); as dashboardId) {
             <proto-dashboard-viewer
               [dashboardId]="dashboardId"
               [dateRange]="selectedRange()"
+              data-testid="dashboard-viewer"
             />
           }
         </main>
@@ -80,6 +83,7 @@ type DateRange = '7d' | '30d' | '90d' | '12m';
         <proto-create-dashboard-dialog
           (created)="onDashboardCreated($event)"
           (cancelled)="showCreateDialog.set(false)"
+          data-testid="create-dashboard-dialog"
         />
       }
     </div>

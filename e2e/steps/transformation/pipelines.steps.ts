@@ -5,66 +5,13 @@ import { Given, When, Then } from '../fixtures';
  * Transformation-specific step definitions
  */
 
-Given('there is a draft pipeline {string}', async ({ apiClient }, name: string) => {
-  await apiClient.login();
-  await apiClient.createPipeline({
-    name,
-    status: 'draft',
-  });
-});
-
-Given('there is an active pipeline {string}', async ({ apiClient }, name: string) => {
-  await apiClient.login();
-  await apiClient.createPipeline({
-    name,
-    status: 'active',
-  });
-});
-
-Given('there is a pipeline {string} with steps', async ({ apiClient }, name: string) => {
-  await apiClient.login();
-  await apiClient.createPipeline({
-    name,
-    status: 'active',
-    steps: [
-      { type: 'filter', config: {} },
-      { type: 'map', config: {} },
-    ],
-  });
-});
-
-Given('there is a pipeline {string} with run history', async ({ apiClient }, name: string) => {
-  await apiClient.login();
-  await apiClient.createPipeline({
-    name,
-    status: 'active',
-    runs: [
-      { status: 'completed', startedAt: new Date().toISOString() },
-    ],
-  });
-});
-
-Given('there is a completed run for {string}', async ({ apiClient }, name: string) => {
-  await apiClient.login();
-  await apiClient.createPipeline({
-    name,
-    status: 'active',
-    runs: [
-      { status: 'completed', startedAt: new Date().toISOString(), completedAt: new Date().toISOString() },
-    ],
-  });
-});
-
-Given('there is a failed run for {string}', async ({ apiClient }, name: string) => {
-  await apiClient.login();
-  await apiClient.createPipeline({
-    name,
-    status: 'active',
-    runs: [
-      { status: 'failed', startedAt: new Date().toISOString(), error: 'Test error' },
-    ],
-  });
-});
+// Note: Pipeline creation steps are handled by catchall.steps.ts
+// - "there is a draft pipeline {string}"
+// - "there is an active pipeline {string}"
+// - "there is a pipeline {string} with steps"
+// - "there is a pipeline {string} with run history"
+// - "there is a completed run for {string}"
+// - "there is a failed run for {string}"
 
 Given('the pipeline has steps {string} then {string}', async ({ page }, step1: string, step2: string) => {
   // Steps already exist in the canvas

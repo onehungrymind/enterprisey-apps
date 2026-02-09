@@ -31,10 +31,7 @@ Given('there is a table widget {string}', async ({ page }, title: string) => {
   await expect(page.getByText(title)).toBeVisible();
 });
 
-When('the dashboard is loading', async ({ page }) => {
-  // Trigger a refresh and look for loading state
-  await page.reload();
-});
+// Note: "When the dashboard is loading" is handled by catchall.steps.ts
 
 When('widgets have loaded', async ({ page }) => {
   await page.waitForLoadState('networkidle');

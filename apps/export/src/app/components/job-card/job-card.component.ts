@@ -40,6 +40,9 @@ const STATUS_CONFIGS: Record<JobStatus, StatusConfig> = {
       class="job-card"
       [class.selected]="selected()"
       (click)="cardClicked.emit()"
+      [attr.data-testid]="'job-card-' + job().id"
+      [attr.data-job-name]="job().name"
+      [attr.data-job-status]="job().status"
     >
       @if (selected()) {
         <div class="selection-indicator"></div>
@@ -47,19 +50,21 @@ const STATUS_CONFIGS: Record<JobStatus, StatusConfig> = {
 
       <div class="header">
         <div class="info">
-          <div class="name">{{ job().name }}</div>
-          <div class="query">{{ job().queryId }}</div>
+          <div class="name" data-testid="job-name">{{ job().name }}</div>
+          <div class="query" data-testid="job-query">{{ job().queryId }}</div>
         </div>
         <div class="badges">
           <span
             class="format-badge"
             [style.color]="'var(' + formatConfig().cssVar + ')'"
+            data-testid="job-format"
           >
             {{ formatConfig().label }}
           </span>
           <span
             class="status-badge"
             [style.color]="statusConfig().color"
+            data-testid="job-status"
           >
             {{ statusConfig().icon }} {{ statusConfig().label }}
           </span>
@@ -67,23 +72,24 @@ const STATUS_CONFIGS: Record<JobStatus, StatusConfig> = {
       </div>
 
       @if (showProgress()) {
-        <div class="progress-section">
+        <div class="progress-section" data-testid="job-progress-section">
           <ui-progress-bar
             [progress]="animatedProgress()"
             [status]="job().status === 'processing' ? 'processing' : 'queued'"
+            data-testid="job-progress-bar"
           />
           <div class="progress-info">
-            <span class="progress-percent">{{ animatedProgress() | number:'1.0-0' }}%</span>
-            <span class="progress-estimate">{{ estimatedTime() }}</span>
+            <span class="progress-percent" data-testid="job-progress-percent">{{ animatedProgress() | number:'1.0-0' }}%</span>
+            <span class="progress-estimate" data-testid="job-progress-estimate">{{ estimatedTime() }}</span>
           </div>
         </div>
       }
 
       <div class="footer">
-        <span class="schedule-type">
+        <span class="schedule-type" data-testid="job-schedule-type">
           {{ job().scheduleCron ? '\u27f3 Scheduled' : '\u2299 One-time' }}
         </span>
-        <span class="timestamp">{{ displayTime() }}</span>
+        <span class="timestamp" data-testid="job-timestamp">{{ displayTime() }}</span>
       </div>
     </div>
   `,

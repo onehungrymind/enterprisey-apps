@@ -12,7 +12,7 @@
 </section>
 
 <!-- Feature Cards - Top Row (3 cards) -->
-<section class="feature-grid top-row">
+<section class="feature-grid top-row" data-testid="feature-grid">
   @for (feature of topRowCards(); track feature.id; let i = $index) {
     <a
       [routerLink]="'/' + feature.id"
@@ -23,6 +23,7 @@
       [style.animation-delay]="(0.1 + i * 0.08) + 's'"
       (mouseenter)="hoveredFeature.set(feature.id)"
       (mouseleave)="hoveredFeature.set(null)"
+      [attr.data-testid]="'feature-' + feature.id"
     >
       <div class="card-gradient"></div>
 
@@ -65,6 +66,7 @@
       [style.animation-delay]="(0.35 + i * 0.08) + 's'"
       (mouseenter)="hoveredFeature.set(feature.id)"
       (mouseleave)="hoveredFeature.set(null)"
+      [attr.data-testid]="'feature-' + feature.id"
     >
       <div class="card-gradient"></div>
 

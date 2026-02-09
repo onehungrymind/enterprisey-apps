@@ -26,7 +26,7 @@ const STATUS_MAP: Record<PipelineStatus, StatusConfig> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormsModule],
   template: `
-    <aside class="sidebar">
+    <aside class="sidebar" data-testid="pipeline-sidebar">
       <!-- Search -->
       <div class="search-box">
         <input
@@ -35,11 +35,12 @@ const STATUS_MAP: Record<PipelineStatus, StatusConfig> = {
           class="search-input"
           [ngModel]="searchValue()"
           (ngModelChange)="onSearchChange($event)"
+          data-testid="pipeline-search-input"
         />
       </div>
 
       <!-- Pipeline List -->
-      <div class="pipeline-list">
+      <div class="pipeline-list" data-testid="pipeline-list">
         @for (pipeline of pipelines(); track pipeline.id) {
           @let status = getStatusConfig(pipeline.status);
           @let isActive = pipeline.id === selectedId();
@@ -48,23 +49,27 @@ const STATUS_MAP: Record<PipelineStatus, StatusConfig> = {
             class="pipeline-item"
             [class.active]="isActive"
             (click)="pipelineSelected.emit(pipeline)"
+            [attr.data-testid]="'pipeline-item-' + pipeline.id"
+            [attr.data-pipeline-name]="pipeline.name"
+            [attr.data-pipeline-status]="pipeline.status"
           >
             <div class="item-header">
-              <span class="item-name">{{ pipeline.name }}</span>
+              <span class="item-name" data-testid="pipeline-item-name">{{ pipeline.name }}</span>
               <span
                 class="status-badge"
                 [style.color]="status.color"
+                data-testid="pipeline-item-status"
               >
                 {{ status.label }}
               </span>
             </div>
             <div class="item-meta">
-              <span class="source">{{ getSourceName(pipeline.description) }}</span>
-              <span class="runs">{{ getRunsLabel(pipeline) }}</span>
+              <span class="source" data-testid="pipeline-item-source">{{ getSourceName(pipeline.description) }}</span>
+              <span class="runs" data-testid="pipeline-item-runs">{{ getRunsLabel(pipeline) }}</span>
             </div>
           </button>
         } @empty {
-          <div class="empty-list">No pipelines found</div>
+          <div class="empty-list" data-testid="empty-pipeline-list">No pipelines found</div>
         }
       </div>
     </aside>

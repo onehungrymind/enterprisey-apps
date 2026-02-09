@@ -64,9 +64,7 @@ Given('there is a synced source {string}', async ({ apiClient }, name: string) =
   });
 });
 
-When('I click on the schema tab', async ({ page }) => {
-  await page.getByRole('tab', { name: /schema/i }).click();
-});
+// Note: "I click on the schema tab" is handled by catchall.steps.ts with "I click on the {word} tab"
 
 Then('I should see the discovered fields', async ({ page }) => {
   await expect(page.locator('[data-testid="schema-fields"], .schema-fields')).toBeVisible();

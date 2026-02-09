@@ -37,6 +37,9 @@ const TYPE_CONFIG: Record<string, { icon: string; label: string }> = {
       class="source-card"
       [class.selected]="isSelected()"
       (click)="select.emit()"
+      [attr.data-testid]="'source-card-' + source().id"
+      [attr.data-source-name]="source().name"
+      [attr.data-source-status]="source().status"
     >
       @if (isSelected()) {
         <div class="selected-indicator"></div>
@@ -44,35 +47,35 @@ const TYPE_CONFIG: Record<string, { icon: string; label: string }> = {
 
       <div class="card-header">
         <div class="source-info">
-          <div class="icon-container">{{ typeConfig().icon }}</div>
+          <div class="icon-container" data-testid="source-type-icon">{{ typeConfig().icon }}</div>
           <div class="source-meta">
-            <div class="source-name">{{ source().name }}</div>
-            <div class="source-host">
+            <div class="source-name" data-testid="source-name">{{ source().name }}</div>
+            <div class="source-host" data-testid="source-host">
               {{ typeConfig().label }} · {{ truncatedHost() }}
             </div>
           </div>
         </div>
-        <ui-status-dot [status]="statusType()" [showLabel]="true" />
+        <ui-status-dot [status]="statusType()" [showLabel]="true" data-testid="source-status" />
       </div>
 
-      <div class="metrics-grid">
+      <div class="metrics-grid" data-testid="source-metrics">
         <div class="metric">
           <div class="metric-label">Records</div>
-          <div class="metric-value">{{ formattedRecords() }}</div>
+          <div class="metric-value" data-testid="records-count">{{ formattedRecords() }}</div>
         </div>
         <div class="metric">
           <div class="metric-label">Tables</div>
-          <div class="metric-value">{{ source().tablesDiscovered }}</div>
+          <div class="metric-value" data-testid="tables-count">{{ source().tablesDiscovered }}</div>
         </div>
         <div class="metric">
           <div class="metric-label">Latency</div>
-          <div class="metric-value">{{ source().avgLatency }}ms</div>
+          <div class="metric-value" data-testid="latency-value">{{ source().avgLatency }}ms</div>
         </div>
       </div>
 
-      <div class="sync-info">
-        <span>Last: {{ source().lastSync }}</span>
-        <span>Next: {{ source().nextSync }}</span>
+      <div class="sync-info" data-testid="sync-info">
+        <span data-testid="last-sync">Last: {{ source().lastSync }}</span>
+        <span data-testid="next-sync">Next: {{ source().nextSync }}</span>
       </div>
     </div>
   `,

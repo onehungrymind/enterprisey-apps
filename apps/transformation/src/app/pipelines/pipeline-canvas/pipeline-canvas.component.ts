@@ -56,6 +56,7 @@ const NODE_HEIGHT = 72;
       (mousemove)="onCanvasMouseMove($event)"
       (mouseup)="onCanvasMouseUp()"
       (mouseleave)="onCanvasMouseUp()"
+      data-testid="canvas-container"
     >
       <!-- Grid Background -->
       <div
@@ -64,7 +65,7 @@ const NODE_HEIGHT = 72;
       ></div>
 
       <!-- SVG for Edges -->
-      <svg class="edges-layer">
+      <svg class="edges-layer" data-testid="edges-layer">
         <defs>
           <marker
             id="arrowhead"
@@ -79,7 +80,7 @@ const NODE_HEIGHT = 72;
         </defs>
 
         @for (edge of edgePaths(); track edge.id; let i = $index) {
-          <g>
+          <g [attr.data-testid]="'edge-' + edge.id">
             <path
               [attr.d]="edge.path"
               fill="none"
@@ -108,15 +109,18 @@ const NODE_HEIGHT = 72;
           [style.left.px]="step.x + offset().x"
           [style.top.px]="step.y + offset().y"
           (click)="onNodeClick($event, step.id)"
+          [attr.data-testid]="'node-' + step.id"
+          [attr.data-node-type]="step.type"
+          [attr.data-node-name]="step.name"
         >
           <!-- Input Port -->
           @if (step.type !== 'source') {
-            <div class="port port-input"></div>
+            <div class="port port-input" data-testid="port-input"></div>
           }
 
           <!-- Output Port -->
           @if (step.type !== 'output') {
-            <div class="port port-output"></div>
+            <div class="port port-output" data-testid="port-output"></div>
           }
 
           <!-- Node Content -->
@@ -125,33 +129,36 @@ const NODE_HEIGHT = 72;
               class="node-icon"
               [style.color]="'var(' + typeConfig.colorVar + ')'"
               [innerHTML]="typeConfig.icon"
+              data-testid="node-icon"
             ></div>
             <div class="node-info">
-              <div class="node-name">{{ step.name }}</div>
+              <div class="node-name" data-testid="node-name">{{ step.name }}</div>
               <div
                 class="node-type"
                 [style.color]="'var(' + typeConfig.colorVar + ')'"
+                data-testid="node-type"
               >
                 {{ typeConfig.label }}
               </div>
             </div>
           </div>
           <div class="node-footer">
-            <span class="record-count">{{ formatRecords(step.records) }} rec</span>
+            <span class="record-count" data-testid="node-record-count">{{ formatRecords(step.records) }} rec</span>
             <span class="arrow">&#8594;</span>
           </div>
         </div>
       }
 
       <!-- Zoom Controls -->
-      <div class="zoom-controls">
-        <button type="button" class="zoom-btn" title="Zoom Out">&#8854;</button>
-        <button type="button" class="zoom-btn" title="Zoom In">&#8853;</button>
+      <div class="zoom-controls" data-testid="zoom-controls">
+        <button type="button" class="zoom-btn" title="Zoom Out" data-testid="zoom-out-btn">&#8854;</button>
+        <button type="button" class="zoom-btn" title="Zoom In" data-testid="zoom-in-btn">&#8853;</button>
         <button
           type="button"
           class="zoom-btn"
           title="Reset View"
           (click)="resetView()"
+          data-testid="zoom-reset-btn"
         >&#8982;</button>
       </div>
     </div>

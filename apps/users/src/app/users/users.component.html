@@ -1,6 +1,6 @@
-<div class="app-shell">
+<div class="app-shell" data-testid="users-app">
   <!-- Header -->
-  <header class="app-header">
+  <header class="app-header" data-testid="users-header">
     <div class="header-left">
       <div class="logo-dot"></div>
       <h1 class="app-title">
@@ -11,12 +11,13 @@
 
     <div class="header-right">
       <!-- Tab Navigation -->
-      <nav class="tab-nav">
+      <nav class="tab-nav" data-testid="tab-navigation">
         @for (tab of tabs; track tab.id) {
           <button
             class="tab-btn"
             [class.active]="activeTab() === tab.id"
             (click)="setActiveTab(tab.id)"
+            [attr.data-testid]="'tab-' + tab.id"
           >
             {{ tab.label }}
           </button>
@@ -26,7 +27,7 @@
       <div class="header-divider"></div>
 
       <!-- Invite Button -->
-      <ui-action-button variant="primary" (clicked)="openInviteForm()">
+      <ui-action-button variant="primary" (clicked)="openInviteForm()" data-testid="invite-user-button">
         + Invite User
       </ui-action-button>
 
@@ -36,16 +37,16 @@
   </header>
 
   <!-- Content Area -->
-  <main class="app-content">
+  <main class="app-content" data-testid="users-content">
     @if (activeTab() === 'users') {
-      <div class="users-layout">
+      <div class="users-layout" data-testid="users-layout">
         <!-- Users List Panel -->
-        <div class="users-panel">
+        <div class="users-panel" data-testid="users-panel">
           <!-- Stats Bar -->
-          <div class="stats-bar">
+          <div class="stats-bar" data-testid="stats-bar">
             <div class="stats-group">
               @for (stat of stats(); track stat.label) {
-                <div class="stat-item">
+                <div class="stat-item" [attr.data-testid]="'stat-' + stat.label.toLowerCase()">
                   <span class="stat-label">{{ stat.label }}</span>
                   <span class="stat-value" [style.color]="'var(' + stat.colorVar + ')'">
                     {{ stat.value }}
@@ -60,11 +61,13 @@
                 placeholder="Search users..."
                 [value]="searchQuery()"
                 (input)="setSearchQuery($any($event.target).value)"
+                data-testid="search-users-input"
               />
               <select
                 class="company-select"
                 [value]="filterCompany()"
                 (change)="setFilterCompany($any($event.target).value)"
+                data-testid="company-filter-select"
               >
                 <option value="all">All Companies</option>
                 @for (company of companies(); track company) {
@@ -75,11 +78,12 @@
           </div>
 
           <!-- Role Filter Chips -->
-          <div class="role-chips">
+          <div class="role-chips" data-testid="role-filter-chips">
             @for (filter of roleFilters(); track filter.key) {
               <ui-filter-chip
                 [active]="filterRole() === filter.key"
                 (clicked)="setFilterRole(filter.key)"
+                [attr.data-testid]="'role-filter-' + filter.key"
               >
                 {{ filter.label }}
               </ui-filter-chip>
@@ -91,27 +95,29 @@
             [users]="filteredUsers()"
             [selectedUserId]="selectedUserId()"
             (userSelected)="selectUser($event)"
+            data-testid="users-list"
           />
         </div>
 
         <!-- User Details Panel -->
-        <aside class="details-panel">
+        <aside class="details-panel" data-testid="user-details-panel">
           <proto-user-details
             [user]="selectedUser()"
             (edit)="openEditForm($event)"
             (delete)="deleteUser($event)"
+            data-testid="user-details"
           />
         </aside>
       </div>
     }
 
     @if (activeTab() === 'companies') {
-      <div class="companies-layout">
+      <div class="companies-layout" data-testid="companies-layout">
         <!-- Companies List Panel -->
-        <div class="companies-panel">
+        <div class="companies-panel" data-testid="companies-panel">
           <div class="panel-header">
             <h3 class="panel-title">Companies</h3>
-            <ui-action-button variant="primary" (clicked)="openAddCompanyForm()">
+            <ui-action-button variant="primary" (clicked)="openAddCompanyForm()" data-testid="add-company-button">
               + Add
             </ui-action-button>
           </div>
@@ -120,16 +126,18 @@
             [selectedCompanyId]="selectedCompanyId()"
             [userCounts]="userCountsByCompany()"
             (companySelected)="selectCompany($event)"
+            data-testid="companies-list"
           />
         </div>
 
         <!-- Company Details Panel -->
-        <aside class="details-panel">
+        <aside class="details-panel" data-testid="company-details-panel">
           <proto-company-details
             [company]="selectedCompany()"
             [users]="users()"
             (edit)="openEditCompanyForm($event)"
             (delete)="deleteCompany($event)"
+            data-testid="company-details"
           />
         </aside>
       </div>
@@ -139,11 +147,12 @@
       <proto-roles-tab
         [roleConfigs]="roleConfigs"
         [getUserCount]="getUserCountByRole.bind(this)"
+        data-testid="roles-tab"
       />
     }
 
     @if (activeTab() === 'audit') {
-      <proto-audit-tab [auditLog]="auditLog" />
+      <proto-audit-tab [auditLog]="auditLog" data-testid="audit-tab" />
     }
   </main>
 </div>
@@ -155,6 +164,7 @@
     [companies]="allCompanies()"
     (save)="saveUser($event)"
     (cancel)="closeForm()"
+    data-testid="user-form-modal"
   />
 }
 
@@ -169,6 +179,7 @@
     confirmVariant="danger"
     (confirm)="confirmDelete()"
     (cancel)="cancelDelete()"
+    data-testid="delete-user-dialog"
   />
 }
 
@@ -178,6 +189,7 @@
     [company]="editingCompany()"
     (save)="saveCompany($event)"
     (cancel)="closeCompanyForm()"
+    data-testid="company-form-modal"
   />
 }
 
@@ -192,5 +204,6 @@
     confirmVariant="danger"
     (confirm)="confirmCompanyDelete()"
     (cancel)="cancelCompanyDelete()"
+    data-testid="delete-company-dialog"
   />
 }

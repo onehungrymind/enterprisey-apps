@@ -13,33 +13,34 @@ interface FilterOption {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FilterChipComponent, SourceCardComponent],
   template: `
-    <div class="source-list-panel">
+    <div class="source-list-panel" data-testid="source-list-panel">
       <!-- Summary Stats -->
-      <div class="stats-bar">
-        <div class="stat">
+      <div class="stats-bar" data-testid="sources-stats-bar">
+        <div class="stat" data-testid="stat-total-records">
           <div class="stat-label">Total Records</div>
           <div class="stat-value accent">{{ formattedTotalRecords() }}</div>
         </div>
-        <div class="stat">
+        <div class="stat" data-testid="stat-active">
           <div class="stat-label">Active</div>
           <div class="stat-value success">{{ activeCount() }}</div>
         </div>
-        <div class="stat">
+        <div class="stat" data-testid="stat-errors">
           <div class="stat-label">Errors</div>
           <div class="stat-value" [class.danger]="errorCount() > 0">{{ errorCount() }}</div>
         </div>
-        <div class="stat">
+        <div class="stat" data-testid="stat-sources-count">
           <div class="stat-label">Sources</div>
           <div class="stat-value">{{ sources().length }}</div>
         </div>
       </div>
 
       <!-- Filter Chips -->
-      <div class="filter-bar">
+      <div class="filter-bar" data-testid="sources-filter-bar">
         @for (filter of filterOptions; track filter.key) {
           <ui-filter-chip
             [active]="filterType() === filter.key"
             (clicked)="filterType.set(filter.key)"
+            [attr.data-testid]="'filter-' + filter.key"
           >
             {{ filter.label }}
           </ui-filter-chip>
@@ -47,9 +48,9 @@ interface FilterOption {
       </div>
 
       <!-- Source Cards -->
-      <div class="sources-scroll">
+      <div class="sources-scroll" data-testid="sources-scroll">
         @for (source of filteredSources(); track source.id; let i = $index) {
-          <div class="source-card-wrapper" [style.animation-delay]="i * 0.05 + 's'">
+          <div class="source-card-wrapper" [style.animation-delay]="i * 0.05 + 's'" [attr.data-testid]="'source-wrapper-' + source.id">
             <proto-source-card
               [source]="source"
               [isSelected]="selectedId() === source.id"

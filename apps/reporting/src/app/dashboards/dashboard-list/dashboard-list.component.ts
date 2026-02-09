@@ -12,7 +12,7 @@ export interface DashboardItem {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="sidebar">
+    <div class="sidebar" data-testid="dashboards-list-sidebar">
       <div class="section-label">Dashboards</div>
 
       @for (dashboard of dashboards(); track dashboard.id) {
@@ -20,18 +20,20 @@ export interface DashboardItem {
           class="dash-tab"
           [class.active]="dashboard.id === activeDashboardId()"
           (click)="selected.emit(dashboard.id)"
+          [attr.data-testid]="'dashboard-item-' + dashboard.id"
+          [attr.data-dashboard-name]="dashboard.name"
         >
-          <div class="dash-name">{{ dashboard.name }}</div>
-          <div class="dash-meta">{{ dashboard.widgets }} widgets &middot; {{ dashboard.updatedAt }}</div>
+          <div class="dash-name" data-testid="dashboard-name">{{ dashboard.name }}</div>
+          <div class="dash-meta" data-testid="dashboard-meta">{{ dashboard.widgets }} widgets &middot; {{ dashboard.updatedAt }}</div>
         </div>
       }
 
       @if (loading()) {
-        <div class="loading">Loading dashboards...</div>
+        <div class="loading" data-testid="dashboards-loading">Loading dashboards...</div>
       }
 
       @if (!loading() && dashboards().length === 0) {
-        <div class="empty">No dashboards found</div>
+        <div class="empty" data-testid="dashboards-empty">No dashboards found</div>
       }
     </div>
   `,

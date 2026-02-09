@@ -26,12 +26,12 @@ import { SourceFormComponent } from './source-form/source-form.component';
     SourceFormComponent,
   ],
   template: `
-    <div class="app-shell">
+    <div class="app-shell" data-testid="ingress-app">
       <!-- Top Bar -->
       <ui-page-header title="Ingress" subtitle="Data Sources">
         <div slot="actions" class="header-actions">
           <span class="current-time">{{ formattedTime() }}</span>
-          <ui-action-button variant="primary" (clicked)="addNewSource()">
+          <ui-action-button variant="primary" (clicked)="addNewSource()" data-testid="new-source-button">
             + New Source
           </ui-action-button>
           <ui-theme-toggle />
@@ -41,36 +41,38 @@ import { SourceFormComponent } from './source-form/source-form.component';
       <!-- Main Content -->
       <div class="main-content">
         <!-- Left Panel: Source List -->
-        <div class="left-panel">
+        <div class="left-panel" data-testid="sources-list-panel">
           <proto-source-list
             [sources]="sources()"
             [selectedId]="selectedId()"
             (selected)="selectSource($event)"
+            data-testid="sources-list"
           />
         </div>
 
         <!-- Center Panel: Source Detail -->
-        <div class="center-panel">
+        <div class="center-panel" data-testid="source-detail-panel">
           <proto-source-detail
             [source]="selectedSource()"
             (syncNow)="handleSyncNow($event)"
             (configure)="handleConfigure($event)"
             (testConnection)="handleTestConnection($event)"
             (delete)="handleDelete($event)"
+            data-testid="source-detail"
           />
         </div>
 
         <!-- Right Panel: Throughput & Activity -->
         <div class="right-panel">
-          <div class="throughput-section">
+          <div class="throughput-section" data-testid="throughput-section">
             <div class="section-header">
               <span class="section-title">Throughput</span>
-              <span class="throughput-value">{{ currentThroughput() }}</span>
+              <span class="throughput-value" data-testid="throughput-value">{{ currentThroughput() }}</span>
             </div>
-            <proto-throughput-chart [data]="throughputData()" />
+            <proto-throughput-chart [data]="throughputData()" data-testid="throughput-chart" />
           </div>
-          <div class="activity-section">
-            <proto-activity-log [entries]="activityLog()" />
+          <div class="activity-section" data-testid="activity-section">
+            <proto-activity-log [entries]="activityLog()" data-testid="activity-log" />
           </div>
         </div>
       </div>
@@ -82,6 +84,7 @@ import { SourceFormComponent } from './source-form/source-form.component';
         [source]="editingSource()"
         (save)="saveSource($event)"
         (cancel)="closeForm()"
+        data-testid="source-form-modal"
       />
     }
 
@@ -96,6 +99,7 @@ import { SourceFormComponent } from './source-form/source-form.component';
         confirmVariant="danger"
         (confirm)="confirmDelete()"
         (cancel)="cancelDelete()"
+        data-testid="delete-confirm-dialog"
       />
     }
   `,

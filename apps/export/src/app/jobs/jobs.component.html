@@ -1,6 +1,6 @@
-<div class="export-app">
+<div class="export-app" data-testid="export-app">
   <!-- Header -->
-  <header class="app-header">
+  <header class="app-header" data-testid="export-header">
     <div class="header-left">
       <div class="accent-dot"></div>
       <h1 class="title">
@@ -9,11 +9,12 @@
       </h1>
     </div>
     <div class="header-right">
-      <div class="view-toggle">
+      <div class="view-toggle" data-testid="view-toggle">
         <button
           class="view-btn"
           [class.active]="viewMode() === 'jobs'"
           (click)="setViewMode('jobs')"
+          data-testid="view-jobs-button"
         >
           Jobs
         </button>
@@ -21,12 +22,13 @@
           class="view-btn"
           [class.active]="viewMode() === 'schedule'"
           (click)="setViewMode('schedule')"
+          data-testid="view-schedule-button"
         >
           Schedule
         </button>
       </div>
       <div class="header-divider"></div>
-      <ui-action-button variant="primary" (clicked)="onNewExport()">
+      <ui-action-button variant="primary" (clicked)="onNewExport()" data-testid="new-export-button">
         + New Export
       </ui-action-button>
       <ui-theme-toggle />
@@ -36,11 +38,11 @@
   <!-- Main Content -->
   <div class="main-content">
     <!-- Left Panel: Job List -->
-    <aside class="left-panel">
+    <aside class="left-panel" data-testid="jobs-list-panel">
       <!-- Summary Metrics -->
-      <div class="summary-bar">
+      <div class="summary-bar" data-testid="summary-metrics">
         @for (metric of summaryMetrics(); track metric.label) {
-          <div class="summary-metric">
+          <div class="summary-metric" [attr.data-testid]="'metric-' + metric.label.toLowerCase()">
             <div class="metric-label">{{ metric.label }}</div>
             <div class="metric-value" [style.color]="metric.color">
               {{ metric.value }}
@@ -50,11 +52,12 @@
       </div>
 
       <!-- Filters -->
-      <div class="filters-bar">
+      <div class="filters-bar" data-testid="filters-bar">
         @for (filter of statusFilters; track filter.key) {
           <ui-filter-chip
             [active]="filterStatus() === filter.key"
             (clicked)="setStatusFilter(filter.key)"
+            [attr.data-testid]="'status-filter-' + filter.key"
           >
             {{ filter.label }}
           </ui-filter-chip>
@@ -64,6 +67,7 @@
           <ui-filter-chip
             [active]="filterFormat() === filter.key"
             (clicked)="toggleFormatFilter(filter.key)"
+            [attr.data-testid]="'format-filter-' + filter.key"
           >
             <span [style.color]="filterFormat() === filter.key ? 'var(' + filter.cssVar + ')' : null">
               {{ filter.label }}
@@ -73,17 +77,18 @@
       </div>
 
       <!-- Job List -->
-      <div class="job-list">
+      <div class="job-list" data-testid="jobs-list">
         @for (job of filteredJobs(); track job.id; let i = $index) {
-          <div class="job-item" [style.animation-delay]="i * 0.04 + 's'">
+          <div class="job-item" [style.animation-delay]="i * 0.04 + 's'" [attr.data-testid]="'job-item-' + job.id">
             <app-job-card
               [job]="job"
               [selected]="selectedJobId() === job.id"
               (cardClicked)="selectJob(job.id!)"
+              [attr.data-testid]="'job-card-' + job.id"
             />
           </div>
         } @empty {
-          <div class="empty-list">
+          <div class="empty-list" data-testid="empty-jobs-list">
             No jobs match
           </div>
         }
@@ -91,23 +96,24 @@
     </aside>
 
     <!-- Center Panel: Job Detail or Schedule View -->
-    <main class="center-panel">
+    <main class="center-panel" data-testid="job-detail-panel">
       @if (viewMode() === 'jobs') {
         <app-job-detail
           [job]="selectedJob()"
           (download)="onDownload()"
           (retry)="onRetry()"
           (configure)="onConfigure()"
+          data-testid="job-detail"
         />
       } @else {
-        <app-schedule-view [jobs]="allJobs()" />
+        <app-schedule-view [jobs]="allJobs()" data-testid="schedule-view" />
       }
     </main>
 
     <!-- Right Panel: Format Stats & Recent Activity -->
-    <aside class="right-panel">
-      <app-format-stats [jobs]="allJobs()" />
-      <app-recent-activity [jobs]="allJobs()" />
+    <aside class="right-panel" data-testid="right-panel">
+      <app-format-stats [jobs]="allJobs()" data-testid="format-stats" />
+      <app-recent-activity [jobs]="allJobs()" data-testid="recent-activity" />
     </aside>
   </div>
 </div>

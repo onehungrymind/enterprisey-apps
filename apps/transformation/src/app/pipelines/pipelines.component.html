@@ -1,4 +1,4 @@
-<div class="shell">
+<div class="shell" data-testid="transformation-app">
   <!-- Header -->
   <ui-page-header title="Transformation" subtitle="Pipelines">
     <div slot="actions" class="header-actions">
@@ -7,10 +7,11 @@
         class="history-btn"
         [class.active]="showRunHistory()"
         (click)="toggleRunHistory()"
+        data-testid="run-history-button"
       >
         <span class="icon">&#9697;</span> Run History
       </button>
-      <ui-action-button variant="primary" (clicked)="createNewPipeline()">
+      <ui-action-button variant="primary" (clicked)="createNewPipeline()" data-testid="new-pipeline-button">
         + New Pipeline
       </ui-action-button>
       <ui-theme-toggle />
@@ -26,39 +27,43 @@
       } @else {
         <!-- Pipeline Header Bar -->
         @if (currentPipeline(); as pipeline) {
-          <div class="pipeline-header">
+          <div class="pipeline-header" data-testid="pipeline-header">
             <div class="pipeline-info">
-              <span class="pipeline-name">{{ pipeline.name }}</span>
+              <span class="pipeline-name" data-testid="pipeline-name">{{ pipeline.name }}</span>
               <ui-status-dot
                 [status]="getStatusType(pipeline.status)"
                 [showLabel]="true"
+                data-testid="pipeline-status"
               />
             </div>
-            <div class="pipeline-actions">
+            <div class="pipeline-actions" data-testid="pipeline-actions">
               <button
                 class="header-action-btn run-btn"
                 (click)="runPipeline()"
                 [disabled]="!pipeline.id || currentSteps().length === 0"
+                data-testid="run-pipeline-button"
               >
                 Run
               </button>
               <button
                 class="header-action-btn"
                 (click)="editPipeline(pipeline)"
+                data-testid="edit-pipeline-button"
               >
                 Edit
               </button>
               <button
                 class="header-action-btn delete-btn"
                 (click)="handleDeletePipeline(pipeline)"
+                data-testid="delete-pipeline-button"
               >
                 Delete
               </button>
             </div>
-            <div class="pipeline-stats">
-              <span class="stat">Last: {{ pipeline.lastRunAt || 'Never' }}</span>
-              <span class="stat">{{ pipeline.successRate }}% success</span>
-              <span class="stat">{{ currentSteps().length }} steps</span>
+            <div class="pipeline-stats" data-testid="pipeline-stats">
+              <span class="stat" data-testid="last-run">Last: {{ pipeline.lastRunAt || 'Never' }}</span>
+              <span class="stat" data-testid="success-rate">{{ pipeline.successRate }}% success</span>
+              <span class="stat" data-testid="step-count">{{ currentSteps().length }} steps</span>
             </div>
           </div>
         }
@@ -70,9 +75,10 @@
             [edges]="currentEdges()"
             [selectedStepId]="selectedStepId()"
             (stepSelected)="selectStep($event)"
+            data-testid="pipeline-canvas"
           />
         } @else {
-          <div class="empty-canvas">
+          <div class="empty-canvas" data-testid="empty-canvas">
             @if (currentPipeline()?.status === 'draft') {
               <span>This pipeline has no steps yet.</span>
             } @else {
@@ -87,12 +93,13 @@
     @if (!showRunHistory()) {
       <div class="panels-strip">
         <!-- Column 1: Pipeline List -->
-        <div class="panel-col pipeline-list-col">
+        <div class="panel-col pipeline-list-col" data-testid="pipelines-list-panel">
           <proto-pipeline-sidebar
             [pipelines]="pipelines()"
             [selectedId]="selectedPipelineId()"
             (pipelineSelected)="selectPipeline($event)"
             (searchChanged)="onSearch($event)"
+            data-testid="pipelines-list"
           />
         </div>
 
@@ -134,13 +141,14 @@
         </div>
 
         <!-- Column 3: Add Step -->
-        <div class="panel-col add-step-col">
+        <div class="panel-col add-step-col" data-testid="add-step-panel">
           <div class="add-step-header">Add Step</div>
-          <div class="add-step-buttons">
+          <div class="add-step-buttons" data-testid="step-type-buttons">
             <button
               class="add-step-btn"
               [disabled]="!currentPipeline()"
               (click)="addStep('filter')"
+              data-testid="add-filter-step"
             >
               <span class="icon">&#8856;</span> Filter
             </button>
@@ -148,6 +156,7 @@
               class="add-step-btn"
               [disabled]="!currentPipeline()"
               (click)="addStep('map')"
+              data-testid="add-map-step"
             >
               <span class="icon">&#8674;</span> Map
             </button>
@@ -155,6 +164,7 @@
               class="add-step-btn"
               [disabled]="!currentPipeline()"
               (click)="addStep('aggregate')"
+              data-testid="add-aggregate-step"
             >
               <span class="icon">&#931;</span> Aggregate
             </button>
@@ -162,6 +172,7 @@
               class="add-step-btn"
               [disabled]="!currentPipeline()"
               (click)="addStep('join')"
+              data-testid="add-join-step"
             >
               <span class="icon">&#8904;</span> Join
             </button>
@@ -169,6 +180,7 @@
               class="add-step-btn"
               [disabled]="!currentPipeline()"
               (click)="addStep('sort')"
+              data-testid="add-sort-step"
             >
               <span class="icon">&#8597;</span> Sort
             </button>
@@ -176,6 +188,7 @@
               class="add-step-btn"
               [disabled]="!currentPipeline()"
               (click)="addStep('deduplicate')"
+              data-testid="add-dedupe-step"
             >
               <span class="icon">&#8860;</span> Dedupe
             </button>

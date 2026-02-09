@@ -38,16 +38,16 @@ interface MetricData {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (loading()) {
-      <div class="loading-state">Loading dashboard...</div>
+      <div class="loading-state" data-testid="dashboard-loading">Loading dashboard...</div>
     } @else if (widgets().length === 0) {
-      <div class="empty-state">
+      <div class="empty-state" data-testid="dashboard-empty">
         <div class="empty-title">No widgets configured</div>
         <div class="empty-subtitle">Add widgets to this dashboard to visualize your data.</div>
       </div>
     } @else {
       <!-- Metric Cards Row -->
       @if (metricWidgets().length > 0) {
-        <div class="metrics-grid">
+        <div class="metrics-grid" data-testid="metrics-grid">
           @for (widget of metricWidgets(); track widget.id; let i = $index) {
             @let data = getWidgetData(widget);
             <ui-metric-card
@@ -58,50 +58,55 @@ interface MetricData {
               [sparkline]="data.sparkline"
               [style.animation-delay]="i * 0.08 + 's'"
               class="animate-fade-up"
+              [attr.data-testid]="'metric-widget-' + widget.id"
             />
           }
         </div>
       }
 
       <!-- Chart Widgets Grid -->
-      <div class="widget-grid">
+      <div class="widget-grid" data-testid="widget-grid">
         @for (widget of chartWidgets(); track widget.id) {
           <ui-widget
             [title]="widget.title"
             [span]="getWidgetSpan(widget)"
+            [attr.data-testid]="'chart-widget-' + widget.id"
+            [attr.data-widget-type]="widget.type"
           >
             @switch (widget.type) {
               @case ('line_chart') {
                 <app-area-chart
                   [data]="getLineChartData(widget)"
                   [height]="180"
+                  data-testid="line-chart"
                 />
               }
               @case ('bar_chart') {
                 <app-simple-bar-chart
                   [data]="getBarChartData(widget)"
                   [height]="140"
+                  data-testid="bar-chart"
                 />
               }
               @case ('pie_chart') {
                 <div class="centered">
-                  <app-donut-chart [data]="getPieChartData(widget)" />
+                  <app-donut-chart [data]="getPieChartData(widget)" data-testid="pie-chart" />
                 </div>
               }
               @case ('table') {
-                <app-customer-table [customers]="getTableData(widget)" />
+                <app-customer-table [customers]="getTableData(widget)" data-testid="data-table" />
               }
               @case ('text') {
-                <div class="text-widget">{{ getTextContent(widget) }}</div>
+                <div class="text-widget" data-testid="text-widget">{{ getTextContent(widget) }}</div>
               }
               @default {
-                <div class="widget-placeholder">
+                <div class="widget-placeholder" data-testid="widget-placeholder">
                   Widget type "{{ widget.type }}" not implemented
                 </div>
               }
             }
             @if (isWidgetLoading(widget)) {
-              <div class="widget-loading-overlay">
+              <div class="widget-loading-overlay" data-testid="widget-loading">
                 <div class="spinner"></div>
               </div>
             }
