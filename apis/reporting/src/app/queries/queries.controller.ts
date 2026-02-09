@@ -13,11 +13,11 @@ import { QueriesService } from './queries.service';
 import { JwtAuthGuard, RolesGuard } from '@proto/guards/remote-auth';
 
 @Controller('queries')
-@UseGuards(JwtAuthGuard, RolesGuard)
 export class QueriesController {
   constructor(private readonly queriesService: QueriesService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   create(@Body() query: ReportQuery): Promise<ReportQuery> {
     return this.queriesService.create(query);
   }
@@ -38,11 +38,13 @@ export class QueriesController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   update(@Param('id') id: string, @Body() query: ReportQuery) {
     return this.queriesService.update(query);
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {
     return this.queriesService.remove(id);
   }

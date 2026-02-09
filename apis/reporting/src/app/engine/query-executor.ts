@@ -145,16 +145,46 @@ export class QueryExecutor {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const segments = ['Enterprise', 'Pro', 'Starter', 'Free'];
     const statuses = ['active', 'churned', 'trial'];
+    const regions = ['North America', 'Europe', 'Asia Pacific', 'Latin America'];
+    const products = ['Analytics Pro', 'Data Pipeline', 'Report Builder', 'API Gateway', 'Dashboard Suite'];
+    const stages = ['Visitors', 'Signups', 'Activated', 'Subscribed', 'Retained'];
+    const categories = ['Billing', 'Technical', 'Feature Request', 'Bug Report', 'Account'];
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     for (let i = 0; i < count; i++) {
       data.push({
         id: i + 1,
+        // Time dimensions
         month: months[i % 12],
+        day: days[i % 7],
+        week: `Week ${(i % 4) + 1}`,
+
+        // Business dimensions
         segment: segments[Math.floor(Math.random() * segments.length)],
+        region: regions[Math.floor(Math.random() * regions.length)],
+        product: products[Math.floor(Math.random() * products.length)],
+        stage: stages[Math.floor(i / 20) % stages.length], // Funnel stages
+        category: categories[Math.floor(Math.random() * categories.length)],
         status: statuses[Math.floor(Math.random() * statuses.length)],
-        revenue: Math.floor(Math.random() * 50000) + 1000,
-        customer_count: Math.floor(Math.random() * 100) + 1,
+
+        // Financial metrics
+        revenue: Math.floor(Math.random() * 50000) + 10000,
         deal_value: Math.floor(Math.random() * 100000) + 5000,
+        units_sold: Math.floor(Math.random() * 500) + 50,
+
+        // User metrics
+        customer_count: Math.floor(Math.random() * 100) + 10,
+        active_users: Math.floor(Math.random() * 5000) + 1000,
+        users: Math.floor(Math.random() * 2000) + 500,
+
+        // Support metrics
+        ticket_count: Math.floor(Math.random() * 50) + 5,
+        response_time: Math.floor(Math.random() * 24) + 1, // Hours
+
+        // Churn metrics
+        churned: Math.floor(Math.random() * 20) + 1,
+        total: Math.floor(Math.random() * 100) + 50,
+
         created_at: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(),
       });
     }

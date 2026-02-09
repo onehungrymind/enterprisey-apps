@@ -123,6 +123,7 @@ const STATUS_MAP: Record<PipelineStatus, StatusConfig> = {
       margin-bottom: 2px;
       background: transparent;
       border: 1px solid transparent;
+      border-left: 2px solid transparent;
       cursor: pointer;
       text-align: left;
       transition: all 0.15s;
@@ -135,6 +136,7 @@ const STATUS_MAP: Record<PipelineStatus, StatusConfig> = {
       &.active {
         background: var(--accent-subtle);
         border-color: var(--border-strong);
+        border-left-color: var(--accent);
       }
     }
 

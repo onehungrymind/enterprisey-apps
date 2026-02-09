@@ -147,4 +147,10 @@ export class PipelinesService {
     await this.get(id); // ensure pipeline exists
     return await this.runsRepository.find({ where: { pipelineId: id } });
   }
+
+  async getRun(runId: string): Promise<PipelineRunEntity> {
+    const run = await this.runsRepository.findOneBy({ id: runId });
+    if (!run) throw new NotFoundException('Run not found');
+    return run;
+  }
 }

@@ -13,11 +13,11 @@ import { DashboardsService } from './dashboards.service';
 import { JwtAuthGuard, RolesGuard } from '@proto/guards/remote-auth';
 
 @Controller('dashboards')
-@UseGuards(JwtAuthGuard, RolesGuard)
 export class DashboardsController {
   constructor(private readonly dashboardsService: DashboardsService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   create(@Body() dashboard: Dashboard): Promise<Dashboard> {
     return this.dashboardsService.create(dashboard);
   }
@@ -33,11 +33,13 @@ export class DashboardsController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   update(@Param('id') id: string, @Body() dashboard: Dashboard) {
     return this.dashboardsService.update(dashboard);
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {
     return this.dashboardsService.remove(id);
   }

@@ -9,11 +9,14 @@ import {
   ActionButtonComponent,
   StatusDotComponent,
   StatusType,
+  ConfirmDialogComponent,
 } from '@proto/ui-theme';
 
 import { PipelineSidebarComponent } from './pipeline-sidebar/pipeline-sidebar.component';
 import { PipelineCanvasComponent, CanvasStep, CanvasEdge } from './pipeline-canvas/pipeline-canvas.component';
 import { RunHistoryPanelComponent } from './run-history-panel/run-history-panel.component';
+import { PipelineFormComponent } from './pipeline-form/pipeline-form.component';
+import { StepFormComponent } from './step-form/step-form.component';
 import { UpperCasePipe } from '@angular/common';
 
 export interface PipelineWithStats extends Pipeline {
@@ -31,9 +34,12 @@ export interface PipelineWithStats extends Pipeline {
     PageHeaderComponent,
     ActionButtonComponent,
     StatusDotComponent,
+    ConfirmDialogComponent,
     PipelineSidebarComponent,
     PipelineCanvasComponent,
     RunHistoryPanelComponent,
+    PipelineFormComponent,
+    StepFormComponent,
     UpperCasePipe,
   ],
   templateUrl: './pipelines.component.html',
@@ -48,6 +54,19 @@ export class PipelinesComponent implements OnInit {
   protected readonly selectedStepId = signal<string | null>(null);
   protected readonly showRunHistory = signal(false);
   protected readonly searchQuery = signal('');
+
+  // Form modal state
+  protected readonly showPipelineForm = signal(false);
+  protected readonly editingPipeline = signal<Pipeline | null>(null);
+
+  // Step form modal state
+  protected readonly showStepForm = signal(false);
+  protected readonly editingStep = signal<TransformStep | null>(null);
+  protected readonly preselectedStepType = signal<StepType | null>(null);
+
+  // Delete confirmation state
+  protected readonly showDeleteConfirm = signal(false);
+  protected readonly deletingPipeline = signal<Pipeline | null>(null);
 
   // Data from facade
   private readonly apiPipelines = toSignal(this.pipelinesFacade.allPipelines$, { initialValue: [] });
@@ -174,8 +193,96 @@ export class PipelinesComponent implements OnInit {
   }
 
   protected createNewPipeline(): void {
-    // Would open a modal or navigate to creation form
-    console.log('Create new pipeline');
+    this.editingPipeline.set(null);
+    this.showPipelineForm.set(true);
+  }
+
+  protected editPipeline(pipeline: Pipeline): void {
+    this.editingPipeline.set(pipeline);
+    this.showPipelineForm.set(true);
+  }
+
+  protected savePipeline(pipeline: Pipeline): void {
+    this.pipelinesFacade.savePipeline(pipeline);
+    this.closePipelineForm();
+  }
+
+  protected closePipelineForm(): void {
+    this.showPipelineForm.set(false);
+    this.editingPipeline.set(null);
+  }
+
+  protected addStep(type: StepType): void {
+    if (!this.currentPipeline()) {
+      return;
+    }
+    this.preselectedStepType.set(type);
+    this.editingStep.set(null);
+    this.showStepForm.set(true);
+  }
+
+  protected editStep(step: TransformStep): void {
+    this.editingStep.set(step);
+    this.preselectedStepType.set(null);
+    this.showStepForm.set(true);
+  }
+
+  protected saveStep(step: TransformStep): void {
+    if (step.id) {
+      this.pipelinesFacade.updateStep(step);
+    } else {
+      this.pipelinesFacade.createStep(step);
+    }
+    this.closeStepForm();
+  }
+
+  protected closeStepForm(): void {
+    this.showStepForm.set(false);
+    this.editingStep.set(null);
+    this.preselectedStepType.set(null);
+  }
+
+  protected getNextStepOrder(): number {
+    const steps = this.currentSteps();
+    if (steps.length === 0) return 0;
+    return Math.max(...steps.map(s => {
+      const pipeline = this.currentPipeline();
+      const apiStep = pipeline?.steps?.find(ps => ps.id === s.id);
+      return apiStep?.order ?? 0;
+    })) + 1;
+  }
+
+  protected handleDeletePipeline(pipeline: Pipeline): void {
+    this.deletingPipeline.set(pipeline);
+    this.showDeleteConfirm.set(true);
+  }
+
+  protected confirmDelete(): void {
+    const pipeline = this.deletingPipeline();
+    if (pipeline) {
+      this.pipelinesFacade.deletePipeline(pipeline);
+      if (this.selectedPipelineId() === pipeline.id) {
+        this.selectedPipelineId.set(null);
+      }
+    }
+    this.cancelDelete();
+  }
+
+  protected cancelDelete(): void {
+    this.showDeleteConfirm.set(false);
+    this.deletingPipeline.set(null);
+  }
+
+  protected handleEditStep(): void {
+    const step = this.selectedStep();
+    if (step) {
+      const pipeline = this.currentPipeline();
+      const apiStep = pipeline?.steps?.find(s => s.id === step.id);
+      if (apiStep) {
+        this.editingStep.set(apiStep);
+        this.showStepForm.set(true);
+      }
+    }
   }
 
   protected getStatusType(status: string): StatusType {

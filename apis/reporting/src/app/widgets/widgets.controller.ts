@@ -13,11 +13,11 @@ import { WidgetsService } from './widgets.service';
 import { JwtAuthGuard, RolesGuard } from '@proto/guards/remote-auth';
 
 @Controller('dashboards/:dashboardId/widgets')
-@UseGuards(JwtAuthGuard, RolesGuard)
 export class WidgetsController {
   constructor(private readonly widgetsService: WidgetsService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   create(
     @Param('dashboardId') dashboardId: string,
     @Body() widget: Widget,
@@ -37,6 +37,7 @@ export class WidgetsController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   update(
     @Param('dashboardId') dashboardId: string,
     @Param('id') id: string,
@@ -47,6 +48,7 @@ export class WidgetsController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {
     return this.widgetsService.remove(id);
   }

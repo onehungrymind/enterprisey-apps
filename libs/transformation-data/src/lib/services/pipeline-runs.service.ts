@@ -13,4 +13,8 @@ export class PipelineRunsService {
   getRunsForPipeline(pipelineId: string) {
     return this.http.get<PipelineRun[]>(`${this.env.transformationApiUrl}/pipelines/${pipelineId}/runs`);
   }
+
+  getRun(runId: string) {
+    return this.http.get<PipelineRun>(`${this.env.transformationApiUrl}/runs/${runId}`);
+  }
 }

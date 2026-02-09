@@ -50,6 +50,11 @@ function initializeRoutes(): () => Promise<void> {
           loadComponent: () => import('./login/login.component'),
         },
         {
+          path: 'test-status',
+          loadComponent: () => import('./test-status/test-status.component'),
+          canActivate: [authGuard],
+        },
+        {
           path: '',
           component: HomeComponent,
           canActivate: [authGuard],
@@ -70,6 +75,11 @@ function initializeRoutes(): () => Promise<void> {
         {
           path: 'login',
           loadComponent: () => import('./login/login.component'),
+        },
+        {
+          path: 'test-status',
+          loadComponent: () => import('./test-status/test-status.component'),
+          canActivate: [authGuard],
         },
         {
           path: '',

@@ -25,6 +25,7 @@ export const PipelinesActions = createActionGroup({
     'Run Pipeline': props<{ pipelineId: string }>(),
     'Run Pipeline Success': props<{ run: PipelineRun }>(),
     'Run Pipeline Failure': props<{ error: any }>(),
+    'Run Status Update': props<{ run: PipelineRun }>(),
     'Load Preview': props<{ pipelineId: string }>(),
     'Load Preview Success': props<{ preview: SchemaField[] }>(),
     'Load Preview Failure': props<{ error: any }>(),

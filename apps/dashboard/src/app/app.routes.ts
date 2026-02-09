@@ -9,6 +9,11 @@ export const appRoutes: Route[] = [
     canActivate: [guestGuard],
   },
   {
+    path: 'test-status',
+    loadComponent: () => import('./test-status/test-status.component'),
+    canActivate: [authGuard],
+  },
+  {
     path: '',
     component: HomeComponent,
     canActivate: [authGuard],

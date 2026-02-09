@@ -66,3 +66,13 @@ export class PipelinesController {
     return this.pipelinesService.getRuns(id);
   }
 }
+
+@Controller('runs')
+export class RunsController {
+  constructor(private readonly pipelinesService: PipelinesService) {}
+
+  @Get(':id')
+  getRun(@Param('id') id: string) {
+    return this.pipelinesService.getRun(id);
+  }
+}

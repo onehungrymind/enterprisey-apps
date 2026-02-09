@@ -62,6 +62,10 @@ export const reducer = createReducer(
     ...state,
     runs: [run, ...state.runs],
   })),
+  on(PipelinesActions.runStatusUpdate, (state, { run }) => ({
+    ...state,
+    runs: state.runs.map(r => r.id === run.id ? run : r),
+  })),
   on(PipelinesActions.loadPreviewSuccess, (state, { preview }) => ({
     ...state,
     preview,

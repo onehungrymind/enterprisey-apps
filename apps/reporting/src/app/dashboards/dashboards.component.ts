@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, signal, computed, inject, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, computed, inject, OnInit, effect } from '@angular/core';
 import {
   ThemeService,
   ThemeToggleComponent,
@@ -6,10 +6,11 @@ import {
   FilterChipComponent,
   ActionButtonComponent,
 } from '@proto/ui-theme';
-import { DashboardsStore } from '@proto/reporting-state';
+import { DashboardsStore, WidgetsStore } from '@proto/reporting-state';
 
 import { DashboardListComponent, DashboardItem } from './dashboard-list/dashboard-list.component';
 import { DashboardViewerComponent } from './dashboard-viewer/dashboard-viewer.component';
+import { CreateDashboardDialogComponent } from './create-dashboard-dialog/create-dashboard-dialog.component';
 
 type DateRange = '7d' | '30d' | '90d' | '12m';
 
@@ -23,6 +24,7 @@ type DateRange = '7d' | '30d' | '90d' | '12m';
     ActionButtonComponent,
     DashboardListComponent,
     DashboardViewerComponent,
+    CreateDashboardDialogComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -65,10 +67,21 @@ type DateRange = '7d' | '30d' | '90d' | '12m';
         <!-- Content Area -->
         <main class="content">
           @if (activeDashboardId(); as dashboardId) {
-            <proto-dashboard-viewer [dashboardId]="dashboardId" />
+            <proto-dashboard-viewer
+              [dashboardId]="dashboardId"
+              [dateRange]="selectedRange()"
+            />
           }
         </main>
       </div>
+
+      <!-- Create Dashboard Dialog -->
+      @if (showCreateDialog()) {
+        <proto-create-dashboard-dialog
+          (created)="onDashboardCreated($event)"
+          (cancelled)="showCreateDialog.set(false)"
+        />
+      }
     </div>
   `,
   styles: [`
@@ -127,21 +140,24 @@ type DateRange = '7d' | '30d' | '90d' | '12m';
 export class DashboardsComponent implements OnInit {
   protected readonly themeService = inject(ThemeService);
   protected readonly store = inject(DashboardsStore);
+  protected readonly widgetsStore = inject(WidgetsStore);
 
   // State
   protected readonly loading = computed(() => this.store.loading());
   protected readonly activeDashboardId = signal<string | null>(null);
   protected readonly selectedRange = signal<DateRange>('12m');
+  protected readonly showCreateDialog = signal(false);
 
   // Date range options
   protected readonly dateRanges: DateRange[] = ['7d', '30d', '90d', '12m'];
 
   // Dashboard data from store, mapped to DashboardItem format
   protected readonly dashboards = computed<DashboardItem[]>(() => {
+    const getWidgetCount = this.widgetsStore.getWidgetCount();
     return this.store.entities().map(d => ({
       id: d.id,
       name: d.name,
-      widgets: d.widgets?.length || 0,
+      widgets: getWidgetCount(d.id),
       updatedAt: this.formatRelativeTime(d),
     }));
   });
@@ -152,12 +168,25 @@ export class DashboardsComponent implements OnInit {
     return this.dashboards().find(d => d.id === id);
   });
 
+  constructor() {
+    // Preload widgets for all dashboards when dashboards are loaded
+    effect(() => {
+      const dashboards = this.store.entities();
+      if (dashboards.length > 0) {
+        // Load widgets for each dashboard to get counts
+        dashboards.forEach(d => {
+          this.widgetsStore.loadForDashboard(d.id);
+        });
+        // Auto-select first dashboard if none selected
+        if (!this.activeDashboardId()) {
+          this.activeDashboardId.set(dashboards[0].id);
+        }
+      }
+    });
+  }
+
   ngOnInit(): void {
-    // Auto-select first dashboard when entities load
-    const entities = this.store.entities();
-    if (entities.length && !this.activeDashboardId()) {
-      this.activeDashboardId.set(entities[0].id);
-    }
+    // Effect handles initial selection now
   }
 
   protected selectDashboard(id: string): void {
@@ -170,7 +199,25 @@ export class DashboardsComponent implements OnInit {
   }
 
   protected createDashboard(): void {
-    console.log('Create new dashboard');
+    this.showCreateDialog.set(true);
+  }
+
+  protected async onDashboardCreated(data: { name: string; description: string }): Promise<void> {
+    this.showCreateDialog.set(false);
+    await this.store.create({
+      name: data.name,
+      description: data.description,
+      widgets: [],
+      filters: [],
+      createdBy: 'user@example.com',
+      isPublic: true,
+    });
+    // Select the newly created dashboard
+    const entities = this.store.entities();
+    if (entities.length > 0) {
+      const newest = entities[entities.length - 1];
+      this.activeDashboardId.set(newest.id);
+    }
   }
 
   private formatRelativeTime(dashboard: { id: string }): string {

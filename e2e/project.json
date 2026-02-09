@@ -14,6 +14,32 @@
         ],
         "parallel": false
       }
+    },
+    "e2e:ui": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx playwright test --config e2e/playwright.config.ts --ui"
+      }
+    },
+    "e2e:smoke": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npx bddgen --config e2e/playwright.config.ts",
+          "npx playwright test --config e2e/playwright.config.ts --grep @smoke"
+        ],
+        "parallel": false
+      }
+    },
+    "e2e:headed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npx bddgen --config e2e/playwright.config.ts",
+          "npx playwright test --config e2e/playwright.config.ts --headed"
+        ],
+        "parallel": false
+      }
     }
   }
 }

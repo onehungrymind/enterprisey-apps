@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Pipeline, PipelineRun, SchemaField, TransformStep } from '@proto/api-interfaces';
-import { PipelinesService, StepsService } from '@proto/transformation-data';
-import { of } from 'rxjs';
-import { catchError, exhaustMap, map, switchMap } from 'rxjs/operators';
+import { PipelinesService, StepsService, PipelineRunsService } from '@proto/transformation-data';
+import { of, timer } from 'rxjs';
+import { catchError, exhaustMap, map, switchMap, takeUntil, takeWhile } from 'rxjs/operators';
 import { PipelinesActions } from './pipelines.actions';
 
 export const loadPipelines = createEffect(
@@ -89,6 +89,32 @@ export const runPipeline = createEffect(
         pipelinesService.run(action.pipelineId).pipe(
           map((run: PipelineRun) => PipelinesActions.runPipelineSuccess({ run })),
           catchError((error) => of(PipelinesActions.runPipelineFailure({ error })))
+        )
+      )
+    );
+  },
+  { functional: true }
+);
+
+// Poll for run status updates after starting a pipeline run
+export const pollAfterRun = createEffect(
+  (actions$ = inject(Actions), runsService = inject(PipelineRunsService)) => {
+    return actions$.pipe(
+      ofType(PipelinesActions.runPipelineSuccess),
+      switchMap((action) =>
+        timer(1000, 1000).pipe(
+          takeUntil(actions$.pipe(ofType(PipelinesActions.loadPipelines, PipelinesActions.resetPipelines))),
+          switchMap(() =>
+            runsService.getRun(action.run.id as string).pipe(
+              map((run) => PipelinesActions.runStatusUpdate({ run })),
+              catchError(() => of(PipelinesActions.loadRunsFailure({ error: 'Poll failed' })))
+            )
+          ),
+          // Stop polling once status is no longer 'running'
+          takeWhile((resultAction) => {
+            const run = (resultAction as any).run;
+            return run?.status === 'running';
+          }, true)
         )
       )
     );

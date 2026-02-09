@@ -1,0 +1,230 @@
+<!-- Hero Section -->
+<section class="hero">
+  <div class="badge">E2E Testing · Playwright BDD</div>
+  <h1 class="hero-title">
+    Test Coverage
+    <span class="hero-accent">Status Dashboard</span>
+  </h1>
+  <p class="hero-subtitle">
+    Comprehensive end-to-end tests across all domains using Playwright-BDD with Gherkin feature files.
+    {{ summary().totalScenarios }} scenarios covering CRUD, RBAC, validation, and integration workflows.
+  </p>
+</section>
+
+<!-- Summary Stats -->
+<section class="summary-panel">
+  <div class="summary-header">
+    <div class="summary-title">
+      <span class="summary-icon">📊</span>
+      Test Summary
+    </div>
+    <div class="summary-status">
+      <ui-status-dot [status]="overallStatus()" />
+      <span class="status-text">{{ getStatusText(overallStatus()) }}</span>
+    </div>
+  </div>
+
+  <div class="summary-stats">
+    <div class="summary-stat">
+      <div class="stat-value total">{{ summary().totalScenarios }}</div>
+      <div class="stat-label">Total Scenarios</div>
+    </div>
+    <div class="summary-stat">
+      <div class="stat-value passed">{{ summary().passed }}</div>
+      <div class="stat-label">Passed</div>
+    </div>
+    <div class="summary-stat">
+      <div class="stat-value failed">{{ summary().failed }}</div>
+      <div class="stat-label">Failed</div>
+    </div>
+    <div class="summary-stat">
+      <div class="stat-value skipped">{{ summary().skipped }}</div>
+      <div class="stat-label">Pending</div>
+    </div>
+    <div class="summary-stat">
+      <div class="stat-value">{{ passRate() }}%</div>
+      <div class="stat-label">Pass Rate</div>
+    </div>
+    <div class="summary-stat">
+      <div class="stat-value">{{ summary().duration }}</div>
+      <div class="stat-label">Duration</div>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-passed" [style.width.%]="(summary().passed / summary().totalScenarios) * 100"></div>
+    <div class="progress-failed" [style.width.%]="(summary().failed / summary().totalScenarios) * 100"></div>
+    <div class="progress-skipped" [style.width.%]="(summary().skipped / summary().totalScenarios) * 100"></div>
+  </div>
+
+  <div class="last-run">Last run: {{ summary().lastRun }}</div>
+</section>
+
+<!-- Domain Cards - Top Row -->
+<section class="domain-grid top-row">
+  @for (domain of topRowDomains(); track domain.domain; let i = $index) {
+    <div
+      class="domain-card"
+      [style.--card-accent]="'var(' + domain.accentVar + ')'"
+      [style.--card-subtle]="'var(' + domain.subtleVar + ')'"
+      [style.animation-delay]="(0.1 + i * 0.08) + 's'"
+    >
+      <div class="card-gradient"></div>
+
+      <div class="card-header">
+        <div class="card-icon">{{ domain.icon }}</div>
+        <div class="card-titles">
+          <div class="card-name">{{ domain.domain }}</div>
+          <div class="card-subtitle">{{ domain.totalScenarios }} scenarios</div>
+        </div>
+        <div class="card-status">
+          <ui-status-dot [status]="domain.status" />
+        </div>
+      </div>
+
+      <div class="feature-files">
+        @for (file of domain.featureFiles; track file) {
+          <span class="feature-tag">{{ file }}</span>
+        }
+      </div>
+
+      <div class="card-stats">
+        <div class="stat">
+          <div class="stat-label">Passed</div>
+          <div class="stat-value passed">{{ domain.passed }}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Failed</div>
+          <div class="stat-value failed">{{ domain.failed }}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Skipped</div>
+          <div class="stat-value skipped">{{ domain.skipped }}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Rate</div>
+          <div class="stat-value">{{ getDomainPassRate(domain) }}%</div>
+        </div>
+      </div>
+
+      <div class="domain-progress">
+        <div class="progress-passed" [style.width.%]="(domain.passed / domain.totalScenarios) * 100"></div>
+        <div class="progress-failed" [style.width.%]="(domain.failed / domain.totalScenarios) * 100"></div>
+        <div class="progress-skipped" [style.width.%]="(domain.skipped / domain.totalScenarios) * 100"></div>
+      </div>
+    </div>
+  }
+</section>
+
+<!-- Domain Cards - Bottom Row -->
+<section class="domain-grid bottom-row">
+  @for (domain of bottomRowDomains(); track domain.domain; let i = $index) {
+    <div
+      class="domain-card"
+      [style.--card-accent]="'var(' + domain.accentVar + ')'"
+      [style.--card-subtle]="'var(' + domain.subtleVar + ')'"
+      [style.animation-delay]="(0.35 + i * 0.08) + 's'"
+    >
+      <div class="card-gradient"></div>
+
+      <div class="card-header">
+        <div class="card-icon">{{ domain.icon }}</div>
+        <div class="card-titles">
+          <div class="card-name">{{ domain.domain }}</div>
+          <div class="card-subtitle">{{ domain.totalScenarios }} scenarios</div>
+        </div>
+        <div class="card-status">
+          <ui-status-dot [status]="domain.status" />
+        </div>
+      </div>
+
+      <div class="feature-files">
+        @for (file of domain.featureFiles; track file) {
+          <span class="feature-tag">{{ file }}</span>
+        }
+      </div>
+
+      <div class="card-stats">
+        <div class="stat">
+          <div class="stat-label">Passed</div>
+          <div class="stat-value passed">{{ domain.passed }}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Failed</div>
+          <div class="stat-value failed">{{ domain.failed }}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Skipped</div>
+          <div class="stat-value skipped">{{ domain.skipped }}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Rate</div>
+          <div class="stat-value">{{ getDomainPassRate(domain) }}%</div>
+        </div>
+      </div>
+
+      <div class="domain-progress">
+        <div class="progress-passed" [style.width.%]="(domain.passed / domain.totalScenarios) * 100"></div>
+        <div class="progress-failed" [style.width.%]="(domain.failed / domain.totalScenarios) * 100"></div>
+        <div class="progress-skipped" [style.width.%]="(domain.skipped / domain.totalScenarios) * 100"></div>
+      </div>
+    </div>
+  }
+</section>
+
+<!-- Coverage Categories -->
+<section class="bottom-panels">
+  <div class="panel coverage-panel">
+    <div class="panel-title">Coverage by Category</div>
+    <div class="coverage-grid">
+      @for (cat of coverageCategories; track cat.tag) {
+        <div class="coverage-item">
+          <span class="coverage-tag">{{ cat.tag }}</span>
+          <span class="coverage-name">{{ cat.name }}</span>
+          <span class="coverage-count">{{ cat.count }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="panel info-panel">
+    <div class="panel-title">Test Framework</div>
+    <div class="info-list">
+      <div class="info-row">
+        <span class="info-label">Framework</span>
+        <span class="info-value">Playwright + playwright-bdd</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Syntax</span>
+        <span class="info-value">Gherkin / Cucumber</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Feature Files</span>
+        <span class="info-value">32</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Step Definitions</span>
+        <span class="info-value">{{ testStatus().stepDefinitions }} / {{ testStatus().stepDefinitions + testStatus().missingSteps }}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Smoke Tests</span>
+        <span class="info-value">{{ testStatus().smokeTestsGenerated }} generated</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Infrastructure</span>
+        <span class="info-value">{{ testStatus().infrastructure }}</span>
+      </div>
+    </div>
+    @if (testStatus().failureReason) {
+      <div class="failure-note">
+        <span class="note-icon">⚠️</span>
+        {{ testStatus().failureReason }}
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Back Link -->
+<section class="back-section">
+  <a routerLink="/" class="back-link">← Back to Dashboard</a>
+</section>
